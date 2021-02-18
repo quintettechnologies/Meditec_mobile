@@ -1,0 +1,10 @@
+<svg id="Component_2_1" data-name="Component 2 – 1" xmlns="http://www.w3.org/2000/svg" width="414.448" height="897.49" viewBox="0 0 414.448 897.49">
+  <g id="Background" transform="translate(0 0.891)">
+    <path id="Backgroung_Shape" data-name="Backgroung Shape" d="M0,0H414V896H0Z" transform="translate(0.448)" fill="#265dd7"/>
+    <path id="Path_2" data-name="Path 2" d="M957.552,466.325s129.406-2.675,149.1-117.874,13.557-194.923,113.057-183.44S1372,228.99,1372,228.99V21.052H957.552Z" transform="translate(-957.552 -21)" fill="#2663e2"/>
+    <path id="Path_3" data-name="Path 3" d="M957.552,466.325s129.406-2.675,149.1-117.874,13.557-194.923,113.057-183.44,179.441-19.711,113.9-55.7S957.552,21.052,957.552,21.052Z" transform="translate(1372 917.325) rotate(180)" fill="#2663e2"/>
+  </g>
+  <path id="Path_1540" data-name="Path 1540" d="M978,1290.109Z" transform="translate(-978 -1290.109)" fill="#71d5d3"/>
+  <path id="Path_1542" data-name="Path 1542" d="M1231.095,1443.883s-80.729.242-112.1-57.245-45.578-96.528-127.61-96.528h239.706Z" transform="translate(-816.647 -1290.109)" fill="#71d5d3"/>
+  <path id="Path_1541" data-name="Path 1541" d="M1212.188,1998.756s57.2-17.992,68.512,52.754,62.152,95.9,62.152,95.9H1212.188Z" transform="translate(-1212.188 -1249.92)" fill="#fda31e"/>
+</svg>

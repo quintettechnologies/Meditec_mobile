@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="76" height="76" viewBox="0 0 76 76">
+  <defs>
+    <filter id="Path_13" x="0" y="0" width="76" height="76" filterUnits="userSpaceOnUse">
+      <feOffset dx="3" dy="4" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feFlood flood-opacity="0.11"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="facebook" transform="translate(-82 -703)">
+    <g transform="matrix(1, 0, 0, 1, 82, 703)" filter="url(#Path_13)">
+      <path id="Path_13-2" data-name="Path 13" d="M32,0A32,32,0,1,1,0,32,32,32,0,0,1,32,0Z" transform="translate(3 2)" fill="rgba(255,255,255,0.87)"/>
+    </g>
+    <path id="fb-2" data-name="fb" d="M18.567,19.059l.941-6.132H13.624V8.948c0-1.678.822-3.313,3.457-3.313h2.675V.414A32.619,32.619,0,0,0,15.008,0C10.163,0,7,2.937,7,8.254v4.673H1.609v6.132H7V33.882h6.629V19.059Z" transform="translate(105.979 720.059)" fill="#3965b8"/>
+  </g>
+</svg>

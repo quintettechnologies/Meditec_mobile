@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="76" height="76" viewBox="0 0 76 76">
+  <defs>
+    <filter id="Path_14" x="0" y="0" width="76" height="76" filterUnits="userSpaceOnUse">
+      <feOffset dx="3" dy="4" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feFlood flood-opacity="0.11"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="google" transform="translate(-170 -703)">
+    <g transform="matrix(1, 0, 0, 1, 170, 703)" filter="url(#Path_14)">
+      <path id="Path_14-2" data-name="Path 14" d="M32,0A32,32,0,1,1,0,32,32,32,0,0,1,32,0Z" transform="translate(3 2)" fill="#e2e9f8"/>
+    </g>
+    <g id="google-hangouts" transform="translate(186.987 718.987)">
+      <path id="Path_9" data-name="Path 9" d="M8.025,150.372l-1.26,4.705-4.607.1a18.137,18.137,0,0,1-.133-16.907h0l4.1.752,1.8,4.077a10.805,10.805,0,0,0,.1,7.275Z" transform="translate(0 -128.489)" fill="#fbbb00"/>
+      <path id="Path_10" data-name="Path 10" d="M279.019,208.176a18.1,18.1,0,0,1-6.454,17.5h0l-5.166-.264-.731-4.564a10.791,10.791,0,0,0,4.643-5.51h-9.681v-7.163h17.391Z" transform="translate(-243.124 -193.453)" fill="#518ef8"/>
+      <path id="Path_11" data-name="Path 11" d="M57.791,319.75h0a18.111,18.111,0,0,1-27.283-5.539l5.867-4.8a10.768,10.768,0,0,0,15.517,5.513Z" transform="translate(-28.351 -287.526)" fill="#28b446"/>
+      <path id="Path_12" data-name="Path 12" d="M56.262,4.168,50.4,8.97a10.767,10.767,0,0,0-15.873,5.638l-5.9-4.829h0A18.109,18.109,0,0,1,56.262,4.168Z" transform="translate(-26.6)" fill="#f14336"/>
+    </g>
+  </g>
+</svg>
