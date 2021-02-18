@@ -99,6 +99,28 @@ class UserProvider extends ChangeNotifier {
     }
     return loginStatus;
   }
+
+  Future logout() async {
+    print("$number $password");
+    var uri = Uri.http('192.168.0.100:8080', '/logoutUser');
+    var response = await http.post(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.contentTypeHeader: 'application/json',
+    });
+    print(response.body);
+    if (response.body != null && response.statusCode == 200) {
+      this.loginStatus = false;
+      this._user = null;
+      this.number = null;
+      this.password = null;
+      this.authToken = null;
+      this.image1 = null;
+      this.selectedImage = null;
+      notifyListeners();
+    }
+    return false;
+  }
 }
 
 final userProvider =
