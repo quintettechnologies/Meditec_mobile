@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Login',
-                          style: kButtonTextStyle,
+                          style: kButtonTextStyle.copyWith(color: Colors.white),
                         ),
                       ),
                     ),
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Sign Up',
-                          style: kButtonTextStyle,
+                          style: kButtonTextStyle.copyWith(color: Colors.white),
                         ),
                       ),
                     ),

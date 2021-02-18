@@ -60,12 +60,16 @@ class MyCustomDrawer extends HookWidget {
                                       Text(
                                         '${user.currentUser().name.toString()}',
                                         // 'Alex Horls',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         "${user.currentUser().roles['name'].toString().toUpperCase()}",
                                         // "Patient",
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
                                       ),
                                     ],
                                   ),
@@ -140,8 +144,12 @@ class MyCustomDrawer extends HookWidget {
                             onPressed: () async {
                               bool logout = await user.logout();
                               if (!logout) {
-                                Navigator.popAndPushNamed(
-                                    context, HomeScreen.id);
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeScreen()),
+                                    (Route<dynamic> route) => false);
+                                // Navigator.popAndPushNamed(
+                                //     context, HomeScreen.id);
                               }
                             },
                             child: Padding(
