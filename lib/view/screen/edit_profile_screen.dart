@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/model/addressBooks.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -14,17 +16,19 @@ import 'package:meditec/view/widget/customFAB.dart';
 
 class EditProfileScreen extends HookWidget {
   static const String id = 'edit_profile';
-
   @override
   Widget build(BuildContext context) {
-    //final userRepo = useProvider(userProvider);
-    final name = useTextEditingController();
-    final email = useTextEditingController();
-    final mobileNumber = useTextEditingController();
+    final userRepo = useProvider(userProvider);
+    final nameController = useTextEditingController();
+    final emailController = useTextEditingController();
+    final mobileNumberController = useTextEditingController();
+    final street1Controller = useTextEditingController();
+    final street2Controller = useTextEditingController();
+    final street3Controller = useTextEditingController();
+    final cityController = useTextEditingController();
+    final countryController = useTextEditingController();
+    final zipController = useTextEditingController();
     final double space = MediaQuery.of(context).size.width;
-    // name.text = '${userRepo.currentUser().name}';
-    // email.text = '${userRepo.currentUser().email}';
-    // mobileNumber.text = '${userRepo.currentUser().mobileNumber}';
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MyCustomAppBar(),
@@ -41,97 +45,132 @@ class EditProfileScreen extends HookWidget {
                 ),
               ),
               Space(space: space),
-              Consumer(builder: (context, watch, child) {
-                //User user = context.read(userProvider).currentUser();
-                return SizedBox(
-                  height: space * 0.25,
-                  width: space * 0.25,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    overflow: Overflow.visible,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        // child: Image(
-                        //   image: user.name == null
-                        //       ? AssetImage('assets/images/profiles/user.png')
-                        //       : Image.memory(
-                        //               base64.decode(user.userAvatar['image']))
-                        //           .image,
-                        //   fit: BoxFit.fill,
-                        //   height: space * 0.25,
-                        //   width: space * 0.25,
-                        // ),
-                        child: Image(
-                          height: space * 0.25,
-                          width: space * 0.25,
-                          fit: BoxFit.fill,
-                          image: AssetImage('assets/images/profiles/user.png'),
-                        ),
-                      ),
-                      Positioned(
-                        right: -10,
-                        bottom: -10,
-                        child: SizedBox(
-                          height: space * 0.1,
-                          width: space * 0.1,
-                          child: FlatButton(
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: Colors.white),
+              SizedBox(
+                height: space * 0.25,
+                width: space * 0.25,
+                child: Stack(
+                  fit: StackFit.expand,
+                  overflow: Overflow.visible,
+                  children: [
+                    (userRepo.currentUser().userAvatar != null)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: Image(
+                              image: Image.memory(base64.decode(
+                                      userRepo.currentUser().userAvatar.image))
+                                  .image,
+                              fit: BoxFit.fitHeight,
+                              height: 60,
                             ),
-                            color: Color(0xFFF5F6F9),
-                            onPressed: () {
-                              Navigator.popAndPushNamed(
-                                  context, UploadProfileImageScreen.id);
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (BuildContext context) => MyImagePicker()));
-                            },
-                            child: Icon(
-                              Icons.camera_alt,
-                              color: Colors.blueGrey,
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: Image(
+                              image:
+                                  AssetImage('assets/images/profiles/user.png'),
                             ),
                           ),
+                    Positioned(
+                      right: -10,
+                      bottom: -10,
+                      child: SizedBox(
+                        height: space * 0.1,
+                        width: space * 0.1,
+                        child: FlatButton(
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: Colors.white),
+                          ),
+                          color: Color(0xFFF5F6F9),
+                          onPressed: () {
+                            Navigator.popAndPushNamed(
+                                context, UploadProfileImageScreen.id);
+                          },
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.blueGrey,
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-              Space(space: space),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               Space(space: space),
               TextEditingField(
-                text: 'First Name',
+                text: 'Name',
+                controller: nameController,
                 space: space,
-                controller: name,
               ),
               Space(space: space),
               TextEditingField(
                 text: 'Email',
+                controller: emailController,
                 space: space,
-                controller: email,
               ),
               Space(space: space),
               TextEditingField(
-                text: 'Phone Number',
-                space: space,
-                controller: mobileNumber,
-              ),
+                  text: "Phone",
+                  controller: mobileNumberController,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Street 1",
+                  controller: street1Controller,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Street 2",
+                  controller: street2Controller,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Street 3",
+                  controller: street3Controller,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "City", controller: cityController, space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Country", controller: countryController, space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Zip", controller: zipController, space: space),
               Space(space: space),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Consumer(builder: (context, watch, build) {
                     return InkWell(
-                      onTap: () {
-                        // User user = User();
-                        // user.name = name.text;
-                        // user.email = email.text;
-                        // user.mobileNumber = mobileNumber.text;
-                        // context.read(userProvider).editUser(user);
+                      onTap: () async {
+                        User user = User();
+                        AddressBooks addressBook = AddressBooks();
+                        user.name = nameController.text.trim();
+                        user.email = emailController.text.trim();
+                        user.mobileNumber = mobileNumberController.text.trim();
+                        addressBook.street1 = street1Controller.text;
+                        addressBook.street2 = street2Controller.text;
+                        addressBook.street3 = street3Controller.text;
+                        addressBook.city = cityController.text;
+                        addressBook.country = countryController.text;
+                        addressBook.zip = zipController.text;
+
+                        user.addressBooks = addressBook;
+
+                        print("*************************************");
+                        print(user.toJson());
+                        print("*************************************");
+                        print(user.addressBooks.toJson());
+                        print("*************************************");
+                        bool status =
+                            await context.read(userProvider).editUser(user);
+
+                        if (status == true) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, Dashboard.id, (route) => false);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -178,13 +217,13 @@ class Space extends StatelessWidget {
 class TextEditingField extends StatelessWidget {
   TextEditingField({
     @required this.text,
-    @required this.space,
     @required this.controller,
+    @required this.space,
   });
 
   final double space;
-  final String text;
   final TextEditingController controller;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +237,7 @@ class TextEditingField extends StatelessWidget {
         SizedBox(
           height: space * 0.1,
           width: space * 0.5,
-          child: TextField(
+          child: TextFormField(
             controller: controller,
             decoration: InputDecoration(
               hintStyle: TextStyle(fontSize: 16),

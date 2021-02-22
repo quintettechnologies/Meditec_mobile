@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
@@ -22,11 +23,37 @@ class UploadProfileImageScreen extends StatefulWidget {
 
 class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
   File _image;
-  Future _getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
+  bool _inProcess = false;
+
+  _getImage(ImageSource source) async {
+    this.setState(() {
+      _inProcess = true;
     });
+    File image = await ImagePicker.pickImage(source: source);
+    if (image != null) {
+      File cropped = await ImageCropper.cropImage(
+          sourcePath: image.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 100,
+          maxWidth: 700,
+          maxHeight: 700,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarColor: Color(0xFF00BABA),
+            toolbarTitle: "Meditec",
+            statusBarColor: Color(0xFF00BABA),
+            backgroundColor: Colors.white,
+          ));
+
+      this.setState(() {
+        _image = cropped;
+        _inProcess = false;
+      });
+    } else {
+      this.setState(() {
+        _inProcess = false;
+      });
+    }
   }
 
   @override
@@ -38,94 +65,136 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
       drawer: MyCustomDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image(
-                    image: _image != null
-                        ? FileImage(_image)
-                        : AssetImage('assets/images/profiles/user.png'),
-                    fit: BoxFit.fill,
-                    height: space * 0.5,
-                    width: space * 0.5,
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  (context.read(userProvider).currentUser().userAvatar != null)
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image(
+                            image: _image != null
+                                ? FileImage(_image)
+                                : Image.memory(base64.decode(context
+                                        .read(userProvider)
+                                        .currentUser()
+                                        .userAvatar
+                                        .image))
+                                    .image,
+                            fit: BoxFit.fill,
+                            height: space * 0.5,
+                            width: space * 0.5,
+                          ),
+                        )
+                      : _image != null
+                          ? Image(
+                              image: FileImage(_image),
+                            )
+                          : Container(
+                              height: space * 0.5,
+                              width: space * 0.5,
+                              color: Colors.grey,
+                              child: Icon(
+                                Icons.account_box_rounded,
+                                size: space * 0.5,
+                              ),
+                            ),
+                  SizedBox(
+                    height: space * 0.1,
                   ),
-                ),
-                SizedBox(
-                  height: space * 0.1,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                      onPressed: () {},
-                      child: Container(
-                        width: space * 0.2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              color: Color(0xFF00BABA),
-                            ),
-                            SizedBox(
-                              width: space * 0.02,
-                            ),
-                            Text('Camera')
-                          ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      RaisedButton(
+                        onPressed: () {
+                          _getImage(ImageSource.camera);
+                        },
+                        child: Container(
+                          width: space * 0.2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                color: Color(0xFF00BABA),
+                              ),
+                              SizedBox(
+                                width: space * 0.02,
+                              ),
+                              Text('Camera')
+                            ],
+                          ),
                         ),
                       ),
+                      RaisedButton(
+                        onPressed: () {
+                          _getImage(ImageSource.gallery);
+                        },
+                        child: Container(
+                          width: space * 0.2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(
+                                Icons.image,
+                                color: Color(0xFF00BABA),
+                              ),
+                              SizedBox(
+                                width: space * 0.02,
+                              ),
+                              Text('Gallery')
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: space * 0.1,
+                  ),
+                  RaisedButton(
+                    onPressed: () async {
+                      bool upload =
+                          await context.read(userProvider).uploadImage(_image);
+                      if (upload) {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(
+                      width: space * 0.2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            Icons.save,
+                            color: Color(0xFF00BABA),
+                          ),
+                          SizedBox(
+                            width: space * 0.02,
+                          ),
+                          Text('Save')
+                        ],
+                      ),
                     ),
-                    RaisedButton(
-                      onPressed: _getImage,
-                      child: Container(
-                        width: space * 0.2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              Icons.image,
-                              color: Color(0xFF00BABA),
-                            ),
-                            SizedBox(
-                              width: space * 0.02,
-                            ),
-                            Text('Gallery')
-                          ],
+                  )
+                ],
+              ),
+              (_inProcess)
+                  ? Container(
+                      color: Colors.white,
+                      height: MediaQuery.of(context).size.height * 0.95,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
                         ),
                       ),
                     )
-                  ],
-                ),
-                SizedBox(
-                  height: space * 0.1,
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    context.read(userProvider).uploadImage(_image);
-                    Navigator.popAndPushNamed(context, Dashboard.id);
-                  },
-                  child: Container(
-                    width: space * 0.2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          Icons.save,
-                          color: Color(0xFF00BABA),
-                        ),
-                        SizedBox(
-                          width: space * 0.02,
-                        ),
-                        Text('Save')
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            )),
+                  : Center()
+            ],
+          ),
+        ),
       ),
       floatingActionButton: MyCustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

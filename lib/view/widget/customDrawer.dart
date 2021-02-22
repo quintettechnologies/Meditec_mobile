@@ -33,22 +33,26 @@ class MyCustomDrawer extends HookWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    child: Image(
-                                      image: Image.memory(base64.decode(user
-                                              .currentUser()
-                                              .userAvatar
-                                              .image))
-                                          .image,
-                                      fit: BoxFit.fitHeight,
-                                      height: 60,
-                                    ),
-                                    // child: Image(
-                                    //   image:
-                                    //       AssetImage('assets/images/profiles/user.png'),
-                                    // ),
-                                  ),
+                                  (user.currentUser().userAvatar != null)
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          child: Image(
+                                            image: Image.memory(base64.decode(
+                                                    user
+                                                        .currentUser()
+                                                        .userAvatar
+                                                        .image))
+                                                .image,
+                                            fit: BoxFit.fitHeight,
+                                            height: 60,
+                                          ),
+                                          // child: Image(
+                                          //   image:
+                                          //       AssetImage('assets/images/profiles/user.png'),
+                                          // ),
+                                        )
+                                      : Container(),
                                   SizedBox(
                                     width: 10,
                                   ),
