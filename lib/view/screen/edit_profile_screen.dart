@@ -19,15 +19,35 @@ class EditProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userRepo = useProvider(userProvider);
-    final nameController = useTextEditingController();
-    final emailController = useTextEditingController();
-    final mobileNumberController = useTextEditingController();
-    final street1Controller = useTextEditingController();
-    final street2Controller = useTextEditingController();
-    final street3Controller = useTextEditingController();
-    final cityController = useTextEditingController();
-    final countryController = useTextEditingController();
-    final zipController = useTextEditingController();
+    final AddressBooks addressBooks = userRepo.currentUser().addressBooks;
+    final nameController = useTextEditingController
+        .fromValue(TextEditingValue(text: userRepo.currentUser().name));
+    final nameFocus = useFocusNode();
+    final emailController = useTextEditingController
+        .fromValue(TextEditingValue(text: userRepo.currentUser().email));
+    final emailFocus = useFocusNode();
+    final mobileNumberController = useTextEditingController
+        .fromValue(TextEditingValue(text: userRepo.currentUser().mobileNumber));
+    final mobileNumberFocus = useFocusNode();
+    final street1Controller = useTextEditingController
+        .fromValue(TextEditingValue(text: addressBooks.street1 ?? ""));
+    final street1Focus = useFocusNode();
+    final street2Controller = useTextEditingController
+        .fromValue(TextEditingValue(text: addressBooks.street2 ?? ""));
+    final street2Focus = useFocusNode();
+    final street3Controller = useTextEditingController
+        .fromValue(TextEditingValue(text: addressBooks.street3 ?? ""));
+    final street3Focus = useFocusNode();
+    final cityController = useTextEditingController
+        .fromValue(TextEditingValue(text: addressBooks.city ?? ""));
+    final cityFocus = useFocusNode();
+    final countryController = useTextEditingController
+        .fromValue(TextEditingValue(text: addressBooks.country ?? ""));
+    final countryFocus = useFocusNode();
+    final zipController = useTextEditingController
+        .fromValue(TextEditingValue(text: addressBooks.zip ?? ""));
+    final zipFocus = useFocusNode();
+
     final double space = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -103,43 +123,58 @@ class EditProfileScreen extends HookWidget {
               TextEditingField(
                 text: 'Name',
                 controller: nameController,
+                focusNode: nameFocus,
                 space: space,
               ),
               Space(space: space),
               TextEditingField(
                 text: 'Email',
                 controller: emailController,
+                focusNode: emailFocus,
                 space: space,
               ),
               Space(space: space),
               TextEditingField(
                   text: "Phone",
                   controller: mobileNumberController,
+                  focusNode: mobileNumberFocus,
                   space: space),
               Space(space: space),
               TextEditingField(
                   text: "Street 1",
                   controller: street1Controller,
+                  focusNode: street1Focus,
                   space: space),
               Space(space: space),
               TextEditingField(
                   text: "Street 2",
                   controller: street2Controller,
+                  focusNode: street2Focus,
                   space: space),
               Space(space: space),
               TextEditingField(
                   text: "Street 3",
                   controller: street3Controller,
+                  focusNode: street3Focus,
                   space: space),
               Space(space: space),
               TextEditingField(
-                  text: "City", controller: cityController, space: space),
+                  text: "City",
+                  controller: cityController,
+                  focusNode: cityFocus,
+                  space: space),
               Space(space: space),
               TextEditingField(
-                  text: "Country", controller: countryController, space: space),
+                  text: "Country",
+                  controller: countryController,
+                  focusNode: countryFocus,
+                  space: space),
               Space(space: space),
               TextEditingField(
-                  text: "Zip", controller: zipController, space: space),
+                  text: "Zip",
+                  controller: zipController,
+                  focusNode: zipFocus,
+                  space: space),
               Space(space: space),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -152,23 +187,22 @@ class EditProfileScreen extends HookWidget {
                         user.name = nameController.text.trim();
                         user.email = emailController.text.trim();
                         user.mobileNumber = mobileNumberController.text.trim();
-                        addressBook.street1 = street1Controller.text;
-                        addressBook.street2 = street2Controller.text;
-                        addressBook.street3 = street3Controller.text;
-                        addressBook.city = cityController.text;
-                        addressBook.country = countryController.text;
-                        addressBook.zip = zipController.text;
+                        addressBook.street1 = street1Controller.text.trim();
+                        addressBook.street2 = street2Controller.text.trim();
+                        addressBook.street3 = street3Controller.text.trim();
+                        addressBook.city = cityController.text.trim();
+                        addressBook.country = countryController.text.trim();
+                        addressBook.zip = zipController.text.trim();
 
                         user.addressBooks = addressBook;
 
-                        print("*************************************");
-                        print(user.toJson());
-                        print("*************************************");
-                        print(user.addressBooks.toJson());
-                        print("*************************************");
+                        // print("*************************************");
+                        // print(user.toJson());
+                        // print("*************************************");
+                        // print(user.addressBooks.toJson());
+                        // print("*************************************");
                         bool status =
                             await context.read(userProvider).editUser(user);
-
                         if (status == true) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, Dashboard.id, (route) => false);
@@ -217,15 +251,16 @@ class Space extends StatelessWidget {
 }
 
 class TextEditingField extends StatelessWidget {
-  TextEditingField({
-    @required this.text,
-    @required this.controller,
-    @required this.space,
-  });
+  TextEditingField(
+      {@required this.text,
+      @required this.controller,
+      @required this.space,
+      @required this.focusNode});
 
   final double space;
   final TextEditingController controller;
   final String text;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -241,6 +276,7 @@ class TextEditingField extends StatelessWidget {
           width: space * 0.5,
           child: TextFormField(
             controller: controller,
+            focusNode: focusNode,
             decoration: InputDecoration(
               hintStyle: TextStyle(fontSize: 16),
               border: OutlineInputBorder(

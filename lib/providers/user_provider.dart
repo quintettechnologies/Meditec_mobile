@@ -80,12 +80,12 @@ class UserProvider extends ChangeNotifier {
     //     (user.addressBooks.zip != _user.addressBooks.zip)
     //         ? user.addressBooks.zip
     //         : tempUser.addressBooks.zip;
-    print(
-        "****************************#######################################****************************");
-    print(tempUser.toJson());
-    print(
-        "****************************#######################################****************************");
-    print(tempUser.addressBooks.toJson());
+    // print(
+    //     "****************************#######################################****************************");
+    // print(tempUser.toJson());
+    // print(
+    //     "****************************#######################################****************************");
+    // print(tempUser.addressBooks.toJson());
     var queryParameters = {
       'number': '$number',
     };
