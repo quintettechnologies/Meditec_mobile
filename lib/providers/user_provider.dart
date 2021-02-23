@@ -41,7 +41,7 @@ class UserProvider extends ChangeNotifier {
   Future editUser(User user) async {
     _user.userAvatar = null;
     User tempUser = _user;
-    print(tempUser.toJson());
+    //print(tempUser.toJson());
     tempUser.name =
         (user.name != _user.name) && (user.name != null && user.name != "")
             ? user.name

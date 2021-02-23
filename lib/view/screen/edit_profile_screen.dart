@@ -19,15 +19,16 @@ class EditProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userRepo = useProvider(userProvider);
-    final AddressBooks addressBooks = userRepo.currentUser().addressBooks;
+    final AddressBooks addressBooks =
+        userRepo.currentUser().addressBooks ?? AddressBooks();
     final nameController = useTextEditingController
-        .fromValue(TextEditingValue(text: userRepo.currentUser().name));
+        .fromValue(TextEditingValue(text: userRepo.currentUser().name ?? ""));
     final nameFocus = useFocusNode();
     final emailController = useTextEditingController
-        .fromValue(TextEditingValue(text: userRepo.currentUser().email));
+        .fromValue(TextEditingValue(text: userRepo.currentUser().email ?? ""));
     final emailFocus = useFocusNode();
-    final mobileNumberController = useTextEditingController
-        .fromValue(TextEditingValue(text: userRepo.currentUser().mobileNumber));
+    final mobileNumberController = useTextEditingController.fromValue(
+        TextEditingValue(text: userRepo.currentUser().mobileNumber ?? ""));
     final mobileNumberFocus = useFocusNode();
     final street1Controller = useTextEditingController
         .fromValue(TextEditingValue(text: addressBooks.street1 ?? ""));
