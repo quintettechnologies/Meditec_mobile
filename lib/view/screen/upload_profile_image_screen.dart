@@ -96,9 +96,10 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
                               height: space * 0.5,
                               width: space * 0.5,
                               color: Colors.grey,
-                              child: Icon(
-                                Icons.account_box_rounded,
-                                size: space * 0.5,
+                              child: Image(
+                                image: AssetImage(
+                                    'assets/images/profiles/user.png'),
+                                fit: BoxFit.cover,
                               ),
                             ),
                   SizedBox(

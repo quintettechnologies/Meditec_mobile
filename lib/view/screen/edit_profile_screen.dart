@@ -59,7 +59,7 @@ class EditProfileScreen extends HookWidget {
                               image: Image.memory(base64.decode(
                                       userRepo.currentUser().userAvatar.image))
                                   .image,
-                              fit: BoxFit.fitHeight,
+                              fit: BoxFit.cover,
                               height: 60,
                             ),
                           )
@@ -68,6 +68,8 @@ class EditProfileScreen extends HookWidget {
                             child: Image(
                               image:
                                   AssetImage('assets/images/profiles/user.png'),
+                              fit: BoxFit.cover,
+                              height: 60,
                             ),
                           ),
                     Positioned(

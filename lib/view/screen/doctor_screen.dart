@@ -194,7 +194,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                             ],
                                           ),
                                           SizedBox(
-                                            width: 10,
+                                            width: space * 0.02,
                                           ),
                                           Column(
                                             crossAxisAlignment:
@@ -214,7 +214,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                               ),
                                               Container(
                                                 height: space * 0.05,
-                                                width: space * 0.15,
+                                                //width: space * 0.15,
                                                 child: RatingBar(
                                                   itemSize: 10,
                                                   wrapAlignment:
@@ -228,10 +228,18 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                   allowHalfRating: true,
                                                   itemCount: 5,
                                                   ratingWidget: RatingWidget(
-                                                    full: Icon(Icons.star),
-                                                    half: Icon(Icons.star_half),
-                                                    empty:
-                                                        Icon(Icons.star_border),
+                                                    full: Icon(
+                                                      Icons.star,
+                                                      color: Color(0xFF3C4858),
+                                                    ),
+                                                    half: Icon(
+                                                      Icons.star_half,
+                                                      color: Color(0xFF3C4858),
+                                                    ),
+                                                    empty: Icon(
+                                                      Icons.star_border,
+                                                      color: Color(0xFF3C4858),
+                                                    ),
                                                   ),
                                                   itemPadding:
                                                       EdgeInsets.symmetric(
@@ -324,7 +332,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                             ],
                                           ),
                                           SizedBox(
-                                            width: 10,
+                                            width: space * 0.02,
                                           ),
                                           Column(
                                             crossAxisAlignment:
@@ -344,7 +352,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                               ),
                                               Container(
                                                 height: space * 0.05,
-                                                width: space * 0.15,
+                                                //width: space * 0.15,
                                                 child: RatingBar(
                                                   itemSize: 10,
                                                   wrapAlignment:
@@ -358,10 +366,18 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                   allowHalfRating: true,
                                                   itemCount: 5,
                                                   ratingWidget: RatingWidget(
-                                                    full: Icon(Icons.star),
-                                                    half: Icon(Icons.star_half),
-                                                    empty:
-                                                        Icon(Icons.star_border),
+                                                    full: Icon(
+                                                      Icons.star,
+                                                      color: Color(0xFF3C4858),
+                                                    ),
+                                                    half: Icon(
+                                                      Icons.star_half,
+                                                      color: Color(0xFF3C4858),
+                                                    ),
+                                                    empty: Icon(
+                                                      Icons.star_border,
+                                                      color: Color(0xFF3C4858),
+                                                    ),
                                                   ),
                                                   itemPadding:
                                                       EdgeInsets.symmetric(
