@@ -141,7 +141,10 @@ class UserProvider extends ChangeNotifier {
       'number': '$number',
     };
     var uri = Uri.http('192.168.0.100:8080', '/getUser', queryParameters);
-    var response = await http.get(uri);
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+    });
 
     print(response.body);
     if (response.body != null && response.statusCode == 200) {
