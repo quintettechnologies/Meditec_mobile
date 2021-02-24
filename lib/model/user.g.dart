@@ -35,11 +35,18 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..addressBooks = json['addressBooks'] == null
         ? null
         : AddressBooks.fromJson(json['addressBooks'] as Map<String, dynamic>)
-    ..specialities = json['specialities'] as List
-    ..degrees = json['degrees'] as List
+    ..speciality = json['speciality'] == null
+        ? null
+        : Speciality.fromJson(json['speciality'] as Map<String, dynamic>)
+    ..degree = json['degree'] == null
+        ? null
+        : Degree.fromJson(json['degree'] as Map<String, dynamic>)
     ..appoinments = json['appoinments'] as List
     ..doctorSlots = json['doctorSlots'] as List
-    ..categories = json['categories'] as List;
+    ..categories = (json['categories'] as List)
+        ?.map((e) =>
+            e == null ? null : Category.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -66,8 +73,8 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'roles': instance.roles,
       'userAvatar': instance.userAvatar,
       'addressBooks': instance.addressBooks,
-      'specialities': instance.specialities,
-      'degrees': instance.degrees,
+      'speciality': instance.speciality,
+      'degree': instance.degree,
       'appoinments': instance.appoinments,
       'doctorSlots': instance.doctorSlots,
       'categories': instance.categories

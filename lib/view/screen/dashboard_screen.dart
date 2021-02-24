@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/catagoryButtonDashboard.dart';
@@ -6,6 +7,7 @@ import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
 

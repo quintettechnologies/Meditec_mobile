@@ -1,3 +1,10 @@
 export 'addressBooks.dart' ; 
+export 'auth.dart' ; 
+export 'authorities.dart' ; 
+export 'category.dart' ; 
+export 'degree.dart' ; 
+export 'details.dart' ; 
+export 'principal.dart' ; 
+export 'speciality.dart' ; 
 export 'user.dart' ; 
 export 'userAvatar.dart' ; 

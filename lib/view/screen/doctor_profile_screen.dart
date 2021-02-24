@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/doctor.dart';
+import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
+import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/payment_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -12,9 +16,9 @@ import 'package:meditec/view/widget/customFAB.dart';
 class DoctorProfileScreen extends HookWidget {
   static const String id = 'doctor_profile_screen';
 
-  DoctorProfileScreen({@required this.index});
+  DoctorProfileScreen({@required this.doctor});
 
-  final int index;
+  final User doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,9 @@ class DoctorProfileScreen extends HookWidget {
                               height: space * 0.3,
                               width: space * 0.3,
                               child: Image(
-                                image: NetworkImage(doctors[index].photoUrl),
+                                image: Image.memory(
+                                        base64.decode(doctor.userAvatar.image))
+                                    .image,
                               ),
                             ),
                           ),
@@ -55,12 +61,12 @@ class DoctorProfileScreen extends HookWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                doctors[index].displayName,
+                                doctor.name,
                                 style: TextStyle(
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                doctors[index].category,
+                                doctor.categories[0].name,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -126,7 +132,8 @@ class DoctorProfileScreen extends HookWidget {
                         child: RichText(
                           overflow: TextOverflow.clip,
                           text: TextSpan(
-                            text: doctors[index].bio,
+                            text:
+                                "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
                             style: TextStyle(
                                 fontSize: 13,
                                 height: 1.5,
@@ -273,7 +280,7 @@ class DoctorProfileScreen extends HookWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PaymentScreen(
-                                        index: index,
+                                        doctor: doctor,
                                       )));
                         },
                         child: Container(

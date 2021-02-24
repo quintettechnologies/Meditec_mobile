@@ -1,6 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 import "userAvatar.dart";
 import "addressBooks.dart";
+import "speciality.dart";
+import "degree.dart";
+import "category.dart";
 part 'user.g.dart';
 
 @JsonSerializable()
@@ -30,11 +33,11 @@ class User {
     Map<String,dynamic> roles;
     UserAvatar userAvatar;
     AddressBooks addressBooks;
-    List specialities;
-    List degrees;
+    Speciality speciality;
+    Degree degree;
     List appoinments;
     List doctorSlots;
-    List categories;
+    List<Category> categories;
     
     factory User.fromJson(Map<String,dynamic> json) => _$UserFromJson(json);
     Map<String, dynamic> toJson() => _$UserToJson(this);

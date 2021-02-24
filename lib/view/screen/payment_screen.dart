@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/doctor.dart';
+import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -12,9 +15,9 @@ import 'package:meditec/view/widget/customFAB.dart';
 class PaymentScreen extends HookWidget {
   static const String id = 'doctor_profile_screen';
 
-  PaymentScreen({@required this.index});
+  PaymentScreen({@required this.doctor});
 
-  final int index;
+  final User doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -61,19 +64,19 @@ class PaymentScreen extends HookWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      doctors[index].displayName,
+                                      doctor.name,
                                       style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      doctors[index].category,
+                                      doctor.categories[0].name,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
                                     ),
                                     Text(
-                                      doctors[index].degrees,
+                                      doctor.degree.degreeName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -455,7 +458,9 @@ class PaymentScreen extends HookWidget {
                             height: space * 0.3,
                             width: space * 0.3,
                             child: Image(
-                              image: NetworkImage(doctors[index].photoUrl),
+                              image: Image.memory(
+                                      base64.decode(doctor.userAvatar.image))
+                                  .image,
                             ),
                           ),
                         ),

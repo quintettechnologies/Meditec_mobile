@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:meditec/model/auth.dart';
+import 'package:meditec/model/category.dart';
 import 'package:meditec/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:meditec/model/addressBooks.dart';
@@ -14,6 +16,9 @@ class UserProvider extends ChangeNotifier {
   String authToken;
   var image1;
   File selectedImage;
+  List<Category> categories;
+  List<User> doctors = [];
+  Auth _auth;
 
   User currentUser() {
     return _user;
@@ -56,36 +61,7 @@ class UserProvider extends ChangeNotifier {
         : tempUser.mobileNumber;
     tempUser.addressBooks =
         (user.addressBooks != null) ? user.addressBooks : tempUser.addressBooks;
-    // tempUser.addressBooks.street1 =
-    //     (user.addressBooks.street1 != _user.addressBooks.street1)
-    //         ? user.addressBooks.street1
-    //         : tempUser.addressBooks.street1;
-    // tempUser.addressBooks.street2 =
-    //     (user.addressBooks.street2 != _user.addressBooks.street2)
-    //         ? user.addressBooks.street2
-    //         : tempUser.addressBooks.street2;
-    // tempUser.addressBooks.street3 =
-    //     (user.addressBooks.street3 != _user.addressBooks.street3)
-    //         ? user.addressBooks.street3
-    //         : tempUser.addressBooks.street3;
-    // tempUser.addressBooks.city =
-    //     (user.addressBooks.city != _user.addressBooks.city)
-    //         ? user.addressBooks.city
-    //         : tempUser.addressBooks.city;
-    // tempUser.addressBooks.country =
-    //     (user.addressBooks.country != _user.addressBooks.country)
-    //         ? user.addressBooks.country
-    //         : tempUser.addressBooks.country;
-    // tempUser.addressBooks.zip =
-    //     (user.addressBooks.zip != _user.addressBooks.zip)
-    //         ? user.addressBooks.zip
-    //         : tempUser.addressBooks.zip;
-    // print(
-    //     "****************************#######################################****************************");
-    // print(tempUser.toJson());
-    // print(
-    //     "****************************#######################################****************************");
-    // print(tempUser.addressBooks.toJson());
+
     var queryParameters = {
       'number': '$number',
     };
@@ -136,6 +112,51 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future getCategories() async {
+    var uri = Uri.http('192.168.0.100:8080', '/getCategories');
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+    });
+    List<dynamic> cats = jsonDecode(response.body);
+    //print(cats);
+    categories = (cats)
+        ?.map((e) =>
+            e == null ? null : Category.fromJson(e as Map<String, dynamic>))
+        ?.toList();
+  }
+
+  Future getDoctorList(int id) async {
+    var queryParameters = {
+      'id': '$id',
+    };
+    var uri = Uri.http('192.168.0.100:8080', '/getDoctorList', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> docs = jsonDecode(response.body);
+      doctors.clear();
+      for (dynamic d in docs) {
+        doctors.add(User.fromJson(d));
+      }
+      for (User d in doctors) {
+        print(d.name);
+        print(d.degree.degreeName);
+        print(d.categories[0].name);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future _getUser() async {
     var queryParameters = {
       'number': '$number',
@@ -153,6 +174,7 @@ class UserProvider extends ChangeNotifier {
       print(_user.name);
       image1 = _user.userAvatar.image;
       var image = base64.decode(image1.toString());
+      getCategories();
     }
     notifyListeners();
   }
@@ -168,17 +190,22 @@ class UserProvider extends ChangeNotifier {
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
       HttpHeaders.contentTypeHeader: 'application/json',
     });
-
     print(response.body);
     if (response.body != null && response.statusCode == 200) {
-      //Navigator.pushNamed(context, Dashboard.id);
-      this.number = number;
-      this.password = password;
-      this.authToken =
-          "Basic " + base64.encode(utf8.encode(number + ":" + password));
-      _getUser();
-      this.loginStatus = true;
-      notifyListeners();
+      Map loginMap = jsonDecode(response.body);
+      _auth = Auth.fromJson(loginMap);
+      if (_auth.authorities[0].authority == "patient") {
+        this.number = number;
+        this.password = password;
+        this.authToken = "Basic " +
+            base64.encode(utf8.encode(
+                _auth.principal.username + ":" + _auth.principal.password));
+        await _getUser();
+        this.loginStatus = true;
+        notifyListeners();
+      } else {
+        print("Not Patient");
+      }
     }
     return loginStatus;
   }
