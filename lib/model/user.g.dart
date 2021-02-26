@@ -46,6 +46,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..categories = (json['categories'] as List)
         ?.map((e) =>
             e == null ? null : Category.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..chambers = (json['chambers'] as List)
+        ?.map((e) =>
+            e == null ? null : Chamber.fromJson(e as Map<String, dynamic>))
         ?.toList();
 }
 
@@ -77,5 +81,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'degree': instance.degree,
       'appoinments': instance.appoinments,
       'doctorSlots': instance.doctorSlots,
-      'categories': instance.categories
+      'categories': instance.categories,
+      'chambers': instance.chambers
     };

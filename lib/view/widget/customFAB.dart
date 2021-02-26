@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:meditec/view/screen/dashboard_screen.dart';
 
 class MyCustomFAB extends StatefulWidget {
   @override
@@ -42,7 +43,9 @@ class _MyCustomFABState extends State<MyCustomFAB> {
 </svg>
 '''),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.popAndPushNamed(context, Dashboard.id);
+          },
         ),
       ),
     );

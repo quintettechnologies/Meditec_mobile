@@ -4,6 +4,7 @@ import "addressBooks.dart";
 import "speciality.dart";
 import "degree.dart";
 import "category.dart";
+import "chamber.dart";
 part 'user.g.dart';
 
 @JsonSerializable()
@@ -38,6 +39,7 @@ class User {
     List appoinments;
     List doctorSlots;
     List<Category> categories;
+    List<Chamber> chambers;
     
     factory User.fromJson(Map<String,dynamic> json) => _$UserFromJson(json);
     Map<String, dynamic> toJson() => _$UserToJson(this);

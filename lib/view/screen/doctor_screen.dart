@@ -1,15 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/user.dart';
-import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/doctor_profile_screen.dart';
-import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
@@ -131,21 +127,23 @@ class _DoctorScreenState extends State<DoctorScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    height: space * 0.17,
-                                    width: space * 0.17,
-                                    child: Image(
-                                      image: Image.memory(base64
-                                              .decode(doctor.userAvatar.image))
-                                          .image,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              (doctor.userAvatar != null)
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          height: space * 0.17,
+                                          width: space * 0.17,
+                                          child: Image(
+                                            image: Image.memory(base64.decode(
+                                                    doctor.userAvatar.image))
+                                                .image,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
                               SizedBox(
                                 width: space * 0.02,
                               ),

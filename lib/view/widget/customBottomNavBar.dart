@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
+import 'package:meditec/view/screen/edit_profile_screen.dart';
 
 class MyCustomNavBar extends StatefulWidget {
   @override
@@ -25,9 +26,11 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                     children: <Widget>[
                       NavbarButton(
                         text: 'Home',
+                        route: Dashboard.id,
                       ),
                       NavbarButton(
                         text: 'My app',
+                        route: Dashboard.id,
                       ),
                     ],
                   ),
@@ -39,9 +42,11 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                     children: <Widget>[
                       NavbarButton(
                         text: 'Blog',
+                        route: Dashboard.id,
                       ),
                       NavbarButton(
                         text: 'Profile',
+                        route: EditProfileScreen.id,
                       ),
                     ],
                   )
@@ -57,14 +62,16 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
 
 class NavbarButton extends StatelessWidget {
   final String text;
-  const NavbarButton({this.text});
+  final String route;
+
+  const NavbarButton({this.text, this.route});
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       minWidth: 40,
       onPressed: () {
-        Navigator.popAndPushNamed(context, Dashboard.id);
+        Navigator.popAndPushNamed(context, route);
         // setState(() {
         //   // currentScreen =
         //   //     Dashboard(); // if user taps on this dashboard tab will be active

@@ -6,20 +6,28 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/doctor.dart';
+import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
+import 'package:meditec/providers/user_provider.dart';
+import 'package:meditec/view/screen/dashboard_screen.dart';
 
-class PaymentScreen extends HookWidget {
+class PaymentScreen extends StatefulWidget {
   static const String id = 'doctor_profile_screen';
 
-  PaymentScreen({@required this.doctor});
+  PaymentScreen({@required this.doctor, @required this.doctorSlot});
 
   final User doctor;
+  final DoctorSlot doctorSlot;
+  @override
+  _PaymentScreenScreenState createState() => _PaymentScreenScreenState();
+}
 
+class _PaymentScreenScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
@@ -65,19 +73,19 @@ class PaymentScreen extends HookWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      doctor.name,
+                                      widget.doctor.name,
                                       style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      doctor.categories[0].name,
+                                      widget.doctor.categories[0].name,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
                                     ),
                                     Text(
-                                      doctor.degree.degreeName,
+                                      widget.doctor.degree.degreeName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -244,21 +252,23 @@ class PaymentScreen extends HookWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "12th Jan",
+                                          widget.doctorSlot.startTime
+                                              .toString(),
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
                                           height: space * 0.02,
                                         ),
                                         Text(
-                                          "11:00 AM",
+                                          widget.doctorSlot.startTime
+                                              .toString(),
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
                                           height: space * 0.02,
                                         ),
                                         Text(
-                                          "500.00BDT",
+                                          widget.doctorSlot.fees.toString(),
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ],
@@ -431,13 +441,19 @@ class PaymentScreen extends HookWidget {
                             height: space * 0.05,
                           ),
                           FlatButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => VideoCall(
-                                            doctor: doctor,
-                                          )));
+                            onPressed: () async {
+                              bool status = await context
+                                  .read(userProvider)
+                                  .bookAppointment(widget.doctorSlot);
+                              if (status) {
+                                Navigator.pushNamed(context, Dashboard.id);
+                              }
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => VideoCall(
+                              //               doctor: widget.doctor,
+                              //             )));
                             },
                             padding: EdgeInsets.zero,
                             child: Container(
@@ -464,18 +480,20 @@ class PaymentScreen extends HookWidget {
                         ],
                       ),
                       Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            height: space * 0.3,
-                            width: space * 0.3,
-                            child: Image(
-                              image: Image.memory(
-                                      base64.decode(doctor.userAvatar.image))
-                                  .image,
-                            ),
-                          ),
-                        ),
+                        child: (widget.doctor.userAvatar != null)
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  height: space * 0.3,
+                                  width: space * 0.3,
+                                  child: Image(
+                                    image: Image.memory(base64.decode(
+                                            widget.doctor.userAvatar.image))
+                                        .image,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ),
                     ],
                   ),

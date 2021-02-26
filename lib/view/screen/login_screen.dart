@@ -120,7 +120,7 @@ class LoginScreen extends HookWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'PassWord',
+                                  'Password',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.white),
                                 ),

@@ -33,12 +33,17 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                       )),
                   Text(
-                    "Make an appointment",
-                    style: TextStyle(color: Color(0xFF00CACA)),
+                    "Meditec",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Color(0xFF00CACA)),
                     textAlign: TextAlign.center,
                   ),
                   FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        //Navigator.pushNamed(context, NotificationScreen.id);
+                      },
                       child: Container(
                         height: 40,
                         width: 40,

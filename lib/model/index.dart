@@ -1,9 +1,12 @@
 export 'addressBooks.dart' ; 
+export 'appointment.dart' ; 
 export 'auth.dart' ; 
 export 'authorities.dart' ; 
 export 'category.dart' ; 
+export 'chamber.dart' ; 
 export 'degree.dart' ; 
 export 'details.dart' ; 
+export 'doctorSlot.dart' ; 
 export 'principal.dart' ; 
 export 'speciality.dart' ; 
 export 'user.dart' ; 

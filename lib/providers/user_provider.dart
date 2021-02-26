@@ -4,11 +4,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:meditec/model/auth.dart';
 import 'package:meditec/model/category.dart';
+import 'package:meditec/model/chamber.dart';
+import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
+import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  String url = "192.168.0.100:8080";
+  String url = "182.48.90.214:8080";
   User _user;
   String number;
   String password;
@@ -18,10 +21,70 @@ class UserProvider extends ChangeNotifier {
   File selectedImage;
   List<Category> categories;
   List<User> doctors = [];
+  List<DoctorSlot> doctorSlots = [];
+  DoctorSlot selectedSlot = DoctorSlot();
   Auth _auth;
 
   User currentUser() {
     return _user;
+  }
+
+  Future bookAppointment(DoctorSlot doctorSlot) async {
+    Appointment appointment = new Appointment();
+    _user.userAvatar = null;
+    appointment.user = _user;
+    appointment.doctorSlot = doctorSlot;
+    var uri = Uri.http('$url', '/takeAppoinment');
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode(appointment.toJson()),
+    );
+    print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      _getUser();
+      return true;
+    } else {
+      print(response.body.toString());
+      _getUser();
+      return false;
+    }
+  }
+
+  void selectSlot(DoctorSlot doctorSlot) {
+    selectedSlot = doctorSlot;
+  }
+
+  Future getDoctorSlots(String id) async {
+    var queryParameters = {
+      'id': '$id',
+    };
+    var uri = Uri.http('$url', '/getSlots', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> slots = jsonDecode(response.body);
+      doctorSlots = (slots)
+          ?.map((e) =>
+              e == null ? null : DoctorSlot.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future uploadImage(File _image) async {
@@ -169,7 +232,7 @@ class UserProvider extends ChangeNotifier {
       Map userMap = jsonDecode(response.body);
       _user = User.fromJson(userMap);
       print(_user.name);
-      image1 = _user.userAvatar.image;
+      // image1 = _user.userAvatar.image;
       var image = base64.decode(image1.toString());
       getCategories();
     }

@@ -68,7 +68,8 @@ class SignUpScreen extends HookWidget {
                         TextInputField(
                             text: "Email", controller: emailController),
                         TextInputField(
-                            text: "Phone", controller: mobileNumberController),
+                            text: "Mobile Number",
+                            controller: mobileNumberController),
                         TextInputField(
                             text: "Password", controller: passwordController),
                         SizedBox(

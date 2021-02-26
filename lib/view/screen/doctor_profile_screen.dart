@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/model/chamber.dart';
 import 'package:meditec/model/doctor.dart';
+import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/providers/user_provider.dart';
@@ -13,15 +15,22 @@ import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 
-class DoctorProfileScreen extends HookWidget {
+class DoctorProfileScreen extends StatefulWidget {
   static const String id = 'doctor_profile_screen';
 
   DoctorProfileScreen({@required this.doctor});
 
   final User doctor;
+  @override
+  _DoctorProfileScreenState createState() => _DoctorProfileScreenState();
+}
 
+class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final List<Chamber> chambers = widget.doctor.chambers;
+    List<DoctorSlot> doctorSlots = context.read(userProvider).doctorSlots;
+    DoctorSlot selectedSlot = context.read(userProvider).selectedSlot;
     final double space = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -42,18 +51,20 @@ class DoctorProfileScreen extends HookWidget {
                       ),
                       Row(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              height: space * 0.3,
-                              width: space * 0.3,
-                              child: Image(
-                                image: Image.memory(
-                                        base64.decode(doctor.userAvatar.image))
-                                    .image,
-                              ),
-                            ),
-                          ),
+                          (widget.doctor.userAvatar != null)
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    height: space * 0.3,
+                                    width: space * 0.3,
+                                    child: Image(
+                                      image: Image.memory(base64.decode(
+                                              widget.doctor.userAvatar.image))
+                                          .image,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                           SizedBox(
                             width: space * 0.05,
                           ),
@@ -61,12 +72,12 @@ class DoctorProfileScreen extends HookWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                doctor.name,
+                                widget.doctor.name,
                                 style: TextStyle(
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                doctor.categories[0].name,
+                                widget.doctor.categories[0].name,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -112,13 +123,13 @@ class DoctorProfileScreen extends HookWidget {
                                   ],
                                 ),
                               ),
-                              Text(
-                                "Fee - 500",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              // Text(
+                              //   "Fee - 500",
+                              //   style: TextStyle(
+                              //     fontSize: 14,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
                             ],
                           )
                         ],
@@ -126,153 +137,301 @@ class DoctorProfileScreen extends HookWidget {
                       SizedBox(
                         height: space * 0.08,
                       ),
-                      Container(
-                        height: space * 0.15,
-                        alignment: Alignment.center,
-                        child: RichText(
-                          overflow: TextOverflow.clip,
-                          text: TextSpan(
-                            text:
-                                "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
-                            style: TextStyle(
-                                fontSize: 13,
-                                height: 1.5,
-                                color: Colors.black87),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   height: space * 0.15,
+                      //   alignment: Alignment.center,
+                      //   child: RichText(
+                      //     overflow: TextOverflow.clip,
+                      //     text: TextSpan(
+                      //       text:
+                      //           "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+                      //       style: TextStyle(
+                      //           fontSize: 13,
+                      //           height: 1.5,
+                      //           color: Colors.black87),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: space * 0.05,
                       ),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       'Today 05 Sept 2020',
+                      //       style: TextStyle(
+                      //           fontSize: 16, fontWeight: FontWeight.bold),
+                      //     ),
+                      //     Icon(Icons.keyboard_arrow_down)
+                      //   ],
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(20),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //     children: [
+                      //       myCustomDayButton(
+                      //         space: space,
+                      //         day: 'Sat',
+                      //         date: '05',
+                      //       ),
+                      //       myCustomDayButton(
+                      //         space: space,
+                      //         day: 'Sun',
+                      //         date: '06',
+                      //         selected: true,
+                      //       ),
+                      //       myCustomDayButton(
+                      //         space: space,
+                      //         day: 'Mon',
+                      //         date: '07',
+                      //       ),
+                      //       myCustomDayButton(
+                      //         space: space,
+                      //         day: 'Tue',
+                      //         date: '08',
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Container(
+                      //       alignment: Alignment.center,
+                      //       height: space * 0.1,
+                      //       width: space * 0.25,
+                      //       decoration: BoxDecoration(
+                      //           color: Color(0xFFC5C5C5),
+                      //           borderRadius: BorderRadius.circular(50)),
+                      //       child: Text(
+                      //         "09 - 9.30am",
+                      //         style: TextStyle(
+                      //             fontSize: 14, color: Color(0xFF8D8D8D)),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       alignment: Alignment.center,
+                      //       height: space * 0.1,
+                      //       width: space * 0.25,
+                      //       decoration: BoxDecoration(
+                      //           color: Color(0xFFDDFDE1),
+                      //           borderRadius: BorderRadius.circular(50)),
+                      //       child: Text(
+                      //         "10 - 10.30am",
+                      //         style: TextStyle(
+                      //             fontSize: 14,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Color(0xFF495767)),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       alignment: Alignment.center,
+                      //       height: space * 0.1,
+                      //       width: space * 0.25,
+                      //       decoration: BoxDecoration(
+                      //           color: Color(0xFFC5C5C5),
+                      //           borderRadius: BorderRadius.circular(50)),
+                      //       child: Text(
+                      //         "11 - 11.30am",
+                      //         style: TextStyle(
+                      //             fontSize: 14, color: Color(0xFF8D8D8D)),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: space * 0.05,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //   children: [
+                      //     SizedBox(
+                      //       width: space * 0.05,
+                      //     ),
+                      //     Container(
+                      //       alignment: Alignment.center,
+                      //       height: space * 0.1,
+                      //       width: space * 0.25,
+                      //       decoration: BoxDecoration(
+                      //           color: Color(0xFFDDFDE1),
+                      //           borderRadius: BorderRadius.circular(50)),
+                      //       child: Text(
+                      //         "07 - 7.30pm",
+                      //         style: TextStyle(
+                      //             fontSize: 14,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Color(0xFF495767)),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       alignment: Alignment.center,
+                      //       height: space * 0.1,
+                      //       width: space * 0.25,
+                      //       decoration: BoxDecoration(
+                      //           color: Color(0xFFC5C5C5),
+                      //           borderRadius: BorderRadius.circular(50)),
+                      //       child: Text(
+                      //         "08 - 8.30pm",
+                      //         style: TextStyle(
+                      //             fontSize: 14, color: Color(0xFF8D8D8D)),
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       width: space * 0.05,
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: space * 0.05,
+                      // ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Today 05 Sept 2020',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Icon(Icons.keyboard_arrow_down)
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            myCustomDayButton(
-                              space: space,
-                              day: 'Sat',
-                              date: '05',
-                            ),
-                            myCustomDayButton(
-                              space: space,
-                              day: 'Sun',
-                              date: '06',
-                              selected: true,
-                            ),
-                            myCustomDayButton(
-                              space: space,
-                              day: 'Mon',
-                              date: '07',
-                            ),
-                            myCustomDayButton(
-                              space: space,
-                              day: 'Tue',
-                              date: '08',
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            height: space * 0.1,
-                            width: space * 0.25,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFC5C5C5),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              "09 - 9.30am",
-                              style: TextStyle(
-                                  fontSize: 14, color: Color(0xFF8D8D8D)),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: space * 0.1,
-                            width: space * 0.25,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFDDFDE1),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              "10 - 10.30am",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF495767)),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: space * 0.1,
-                            width: space * 0.25,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFC5C5C5),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              "11 - 11.30am",
-                              style: TextStyle(
-                                  fontSize: 14, color: Color(0xFF8D8D8D)),
-                            ),
+                            "Chambers",
+                            style: TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: space * 0.05,
+                        height: space * 0.02,
+                      ),
+                      Column(
+                        children: [
+                          for (Chamber chamber in chambers)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: space * 0.05),
+                              child: FlatButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () async {
+                                    bool list = await context
+                                        .read(userProvider)
+                                        .getDoctorSlots(chamber.id.toString());
+                                    if (list) {
+                                      setState(() {
+                                        doctorSlots = context
+                                            .read(userProvider)
+                                            .doctorSlots;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    width: space * 0.8,
+                                    height: space * 0.2,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Color(0xFF000000)
+                                                .withOpacity(0.1),
+                                            offset: Offset.fromDirection(1),
+                                            blurRadius: 10,
+                                            spreadRadius: 1)
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              chamber.name,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                            SizedBox(
+                                              height: space * 0.02,
+                                            ),
+                                            Text(
+                                              chamber.adress,
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            //Text(chamber.address),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                        ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: space * 0.05,
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: space * 0.1,
-                            width: space * 0.25,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFDDFDE1),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              "07 - 7.30pm",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF495767)),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: space * 0.1,
-                            width: space * 0.25,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFC5C5C5),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              "08 - 8.30pm",
-                              style: TextStyle(
-                                  fontSize: 14, color: Color(0xFF8D8D8D)),
-                            ),
-                          ),
-                          SizedBox(
-                            width: space * 0.05,
+                          Text(
+                            "Slots",
+                            style: TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: space * 0.05,
+                        height: space * 0.02,
+                      ),
+                      Column(
+                        children: [
+                          for (DoctorSlot doctorSlot in doctorSlots)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: space * 0.05),
+                              child: FlatButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
+                                    context
+                                        .read(userProvider)
+                                        .selectSlot(doctorSlot);
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    width: space * 0.8,
+                                    height: space * 0.2,
+                                    decoration: BoxDecoration(
+                                      color: (selectedSlot.id == doctorSlot.id)
+                                          ? Colors.grey
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Color(0xFF000000)
+                                                .withOpacity(0.1),
+                                            offset: Offset.fromDirection(1),
+                                            blurRadius: 10,
+                                            spreadRadius: 1)
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              doctorSlot.name,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                            SizedBox(
+                                              height: space * 0.02,
+                                            ),
+                                            Text(
+                                              doctorSlot.startTime,
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            Text(
+                                              doctorSlot.fees.toString(),
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            //Text(chamber.address),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                        ],
                       ),
                       FlatButton(
                         onPressed: () {
@@ -280,7 +439,8 @@ class DoctorProfileScreen extends HookWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PaymentScreen(
-                                        doctor: doctor,
+                                        doctor: widget.doctor,
+                                        doctorSlot: selectedSlot,
                                       )));
                         },
                         child: Container(
