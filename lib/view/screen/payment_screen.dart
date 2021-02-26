@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
+import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
@@ -429,20 +430,31 @@ class PaymentScreen extends HookWidget {
                           SizedBox(
                             height: space * 0.05,
                           ),
-                          Container(
-                            height: space * .12,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF00BABA),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Make Payment",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VideoCall(
+                                            doctor: doctor,
+                                          )));
+                            },
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              height: space * .12,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF00BABA),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Make Payment",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ),

@@ -9,6 +9,7 @@ import 'package:meditec/view/screen/login_screen.dart';
 import 'package:meditec/view/screen/signup_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
+import 'package:meditec/view/screen/video_call_screen.dart';
 
 import 'constants.dart';
 
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         EditProfileScreen.id: (context) => EditProfileScreen(),
         UploadProfileImageScreen.id: (context) => UploadProfileImageScreen(),
         AppointmentsScreen.id: (context) => AppointmentsScreen(),
+        VideoCall.id: (context) => VideoCall()
       },
     );
   }

@@ -6,9 +6,9 @@ import 'package:meditec/model/auth.dart';
 import 'package:meditec/model/category.dart';
 import 'package:meditec/model/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:meditec/model/addressBooks.dart';
 
 class UserProvider extends ChangeNotifier {
+  String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -26,9 +26,7 @@ class UserProvider extends ChangeNotifier {
 
   Future uploadImage(File _image) async {
     var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            "http://192.168.0.100:8080/updateAvatar?userId=${_user.userId}"));
+        'POST', Uri.parse("http://$url/updateAvatar?userId=${_user.userId}"));
     request.files.add(http.MultipartFile.fromBytes(
         'profileImage', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
@@ -46,7 +44,6 @@ class UserProvider extends ChangeNotifier {
   Future editUser(User user) async {
     _user.userAvatar = null;
     User tempUser = _user;
-    //print(tempUser.toJson());
     tempUser.name =
         (user.name != _user.name) && (user.name != null && user.name != "")
             ? user.name
@@ -65,7 +62,7 @@ class UserProvider extends ChangeNotifier {
     var queryParameters = {
       'number': '$number',
     };
-    var uri = Uri.http('192.168.0.100:8080', '/updateUser', queryParameters);
+    var uri = Uri.http('$url', '/updateUser', queryParameters);
     var response = await http.post(
       uri,
       headers: {
@@ -96,7 +93,7 @@ class UserProvider extends ChangeNotifier {
       "password": user.password
     };
     var response = await http.post(
-      "http://192.168.0.100:8080/signup",
+      "http://$url/signup",
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
@@ -113,7 +110,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future getCategories() async {
-    var uri = Uri.http('192.168.0.100:8080', '/getCategories');
+    var uri = Uri.http('$url', '/getCategories');
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader:
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
@@ -130,7 +127,7 @@ class UserProvider extends ChangeNotifier {
     var queryParameters = {
       'id': '$id',
     };
-    var uri = Uri.http('192.168.0.100:8080', '/getDoctorList', queryParameters);
+    var uri = Uri.http('$url', '/getDoctorList', queryParameters);
     var response = await http.get(
       uri,
       headers: {
@@ -161,7 +158,7 @@ class UserProvider extends ChangeNotifier {
     var queryParameters = {
       'number': '$number',
     };
-    var uri = Uri.http('192.168.0.100:8080', '/getUser', queryParameters);
+    var uri = Uri.http('$url', '/getUser', queryParameters);
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader:
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
@@ -184,7 +181,7 @@ class UserProvider extends ChangeNotifier {
     var queryParameters = {
       'number': '$number',
     };
-    var uri = Uri.http('192.168.0.100:8080', '/login', queryParameters);
+    var uri = Uri.http('$url', '/login', queryParameters);
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader:
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
@@ -212,7 +209,7 @@ class UserProvider extends ChangeNotifier {
 
   Future logout() async {
     print("$number $password");
-    var uri = Uri.http('192.168.0.100:8080', '/logoutUser');
+    var uri = Uri.http('$url', '/logoutUser');
     var response = await http.post(uri, headers: {
       HttpHeaders.authorizationHeader:
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
