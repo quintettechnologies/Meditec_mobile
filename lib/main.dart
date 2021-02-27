@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/view/screen/PrescriptionPage.dart';
 import 'package:meditec/view/screen/appointents_screen.dart';
 import 'package:meditec/view/screen/doctor_profile_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
@@ -35,10 +36,10 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         DoctorScreen.id: (context) => DoctorScreen(),
         Dashboard.id: (context) => Dashboard(),
+        PrescriptionPage.id: (context) => PrescriptionPage(),
         EditProfileScreen.id: (context) => EditProfileScreen(),
         UploadProfileImageScreen.id: (context) => UploadProfileImageScreen(),
         AppointmentsScreen.id: (context) => AppointmentsScreen(),
-        VideoCall.id: (context) => VideoCall()
       },
     );
   }

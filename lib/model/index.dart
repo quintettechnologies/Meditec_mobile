@@ -7,6 +7,7 @@ export 'chamber.dart' ;
 export 'degree.dart' ; 
 export 'details.dart' ; 
 export 'doctorSlot.dart' ; 
+export 'prescription.dart' ; 
 export 'principal.dart' ; 
 export 'speciality.dart' ; 
 export 'user.dart' ; 

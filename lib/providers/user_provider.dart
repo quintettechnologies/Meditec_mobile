@@ -6,6 +6,7 @@ import 'package:meditec/model/auth.dart';
 import 'package:meditec/model/category.dart';
 import 'package:meditec/model/chamber.dart';
 import 'package:meditec/model/doctorSlot.dart';
+import 'package:meditec/model/index.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,7 @@ class UserProvider extends ChangeNotifier {
   List<User> doctors = [];
   List<DoctorSlot> doctorSlots = [];
   List<Appointment> appointments = [];
+  List<Prescription> prescriptions = [];
   DoctorSlot selectedSlot = DoctorSlot();
   Auth _auth;
 
@@ -85,6 +87,33 @@ class UserProvider extends ChangeNotifier {
       doctorSlots = (slots)
           ?.map((e) =>
               e == null ? null : DoctorSlot.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future getPrescriptions() async {
+    var queryParameters = {
+      'id': '${_user.userId}',
+    };
+    var uri = Uri.http('$url', '/getPrescriptions', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> press = jsonDecode(response.body);
+      prescriptions = (press)
+          ?.map((e) => e == null
+              ? null
+              : Prescription.fromJson(e as Map<String, dynamic>))
           ?.toList();
       return true;
     } else {
@@ -258,6 +287,7 @@ class UserProvider extends ChangeNotifier {
       var image = base64.decode(image1.toString());
       await getCategories();
       await getAppointments();
+      await getPrescriptions();
     }
     notifyListeners();
   }
