@@ -98,16 +98,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             MainAxisAlignment.center,
                                         children: [
                                           FlatButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          VideoCall(
-                                                            doctor:
-                                                                widget.doctor,
-                                                          )));
-                                            },
+                                            onPressed: () {},
                                             child: Container(
                                               height: space * 0.09,
                                               width: space * 0.09,

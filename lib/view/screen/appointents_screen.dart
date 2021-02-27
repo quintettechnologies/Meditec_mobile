@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:meditec/view/screen/appointment_detail_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/catagoryButtonDashboard.dart';
@@ -65,103 +66,121 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   child: Column(
                     children: [
                       for (Appointment appointment in appointments)
-                        Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color(0xFF000000).withOpacity(0.1),
-                                  offset: Offset.fromDirection(1),
-                                  blurRadius: 10,
-                                  spreadRadius: 1)
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              (appointment.doctorSlot.user.userAvatar != null)
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Container(
-                                          height: space * 0.17,
-                                          width: space * 0.17,
-                                          child: Image(
-                                            image: Image.memory(base64.decode(
-                                                    appointment.doctorSlot.user
-                                                        .userAvatar.image))
-                                                .image,
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AppointmentDetailScreen(
+                                          appointment: appointment,
+                                        )));
+                          },
+                          padding: EdgeInsets.zero,
+                          child: Container(
+                            margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color(0xFF000000).withOpacity(0.1),
+                                    offset: Offset.fromDirection(1),
+                                    blurRadius: 10,
+                                    spreadRadius: 1)
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                (appointment.doctorSlot.user.userAvatar != null)
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Container(
+                                            height: space * 0.17,
+                                            width: space * 0.17,
+                                            child: Image(
+                                              image: Image.memory(base64.decode(
+                                                      appointment
+                                                          .doctorSlot
+                                                          .user
+                                                          .userAvatar
+                                                          .image))
+                                                  .image,
+                                            ),
                                           ),
                                         ),
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  width: space * 0.02,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        appointment.doctorSlot.user.name,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    )
-                                  : Container(),
-                              SizedBox(
-                                width: space * 0.02,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      appointment.doctorSlot.user.name,
-                                      style: TextStyle(
+                                      Text(
+                                        appointment
+                                            .doctorSlot.user.categories[0].name,
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      Text(
+                                        appointment.doctorSlot.chamber.name,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      // Text(doctors[index].hospital,
+                                      //     style: TextStyle(
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.w500)),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: space * 0.02,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Date: ${DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
+                                        style: TextStyle(
                                           fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      appointment
-                                          .doctorSlot.user.categories[0].name,
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      appointment.doctorSlot.chamber.name,
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                        ),
                                       ),
-                                    ),
-                                    // Text(doctors[index].hospital,
-                                    //     style: TextStyle(
-                                    //         fontSize: 13,
-                                    //         fontWeight: FontWeight.w500)),
-                                  ],
+                                      Text(
+                                        "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        "End: ${DateFormat.jm().format(appointment.doctorSlot.endTime)}",
+                                        // .substring(11, 16),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: space * 0.02,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Date: ${DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      "End: ${DateFormat.jm().format(appointment.doctorSlot.endTime)}",
-                                      // .substring(11, 16),
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                     ],

@@ -8,14 +8,15 @@ import 'package:jitsi_meet/jitsi_meeting_listener.dart';
 import 'package:jitsi_meet/room_name_constraint.dart';
 import 'package:jitsi_meet/room_name_constraint_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 
 class VideoCall extends StatefulWidget {
-  final User doctor;
+  final Appointment appointment;
 
-  const VideoCall({Key key, @required this.doctor}) : super(key: key);
+  const VideoCall({Key key, @required this.appointment}) : super(key: key);
 
   static const String id = 'video_call';
   @override
@@ -28,9 +29,9 @@ class _VideoCallState extends State<VideoCall> {
   final subjectText = TextEditingController();
   final nameText = TextEditingController(text: "Plugin Test User");
   final emailText = TextEditingController(text: "fake@email.com");
-  var isAudioOnly = true;
-  var isAudioMuted = true;
-  var isVideoMuted = true;
+  var isAudioOnly = false;
+  var isAudioMuted = false;
+  var isVideoMuted = false;
 
   @override
   void initState() {
@@ -54,9 +55,9 @@ class _VideoCallState extends State<VideoCall> {
   Widget build(BuildContext context) {
     final UserProvider userProv = context.read(userProvider);
     roomText.text =
-        'E-consultancy_Room-${widget.doctor.name.replaceAll(" ", "_").replaceAll(".", "")}';
+        'E-consultancy_Room-${widget.appointment.id.toString() + "_" + widget.appointment.user.name.replaceAll(" ", "_").replaceAll(".", "")}';
     subjectText.text =
-        "Meditec_E-consultancy-${widget.doctor.name.replaceAll(" ", "_").replaceAll(".", "")}";
+        "Meditec_E-consultancy-${widget.appointment.id.toString() + "_" + widget.appointment.user.name.replaceAll(" ", "_").replaceAll(".", "")}";
     nameText.text = userProv.currentUser().name;
     emailText.text = userProv.currentUser().email;
     return MaterialApp(
@@ -72,13 +73,13 @@ class _VideoCallState extends State<VideoCall> {
                 SizedBox(
                   height: 24.0,
                 ),
-                TextField(
-                  controller: serverText,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Server URL",
-                      hintText: "Hint: Leave empty for meet.jitsi.si"),
-                ),
+                // TextField(
+                //   controller: serverText,
+                //   decoration: InputDecoration(
+                //       border: OutlineInputBorder(),
+                //       labelText: "Server URL",
+                //       hintText: "Hint: Leave empty for meet.jitsi.si"),
+                // ),
                 SizedBox(
                   height: 16.0,
                 ),
@@ -122,30 +123,30 @@ class _VideoCallState extends State<VideoCall> {
                 SizedBox(
                   height: 16.0,
                 ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                CheckboxListTile(
-                  title: Text("Audio Only"),
-                  value: isAudioOnly,
-                  onChanged: _onAudioOnlyChanged,
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                CheckboxListTile(
-                  title: Text("Audio Muted"),
-                  value: isAudioMuted,
-                  onChanged: _onAudioMutedChanged,
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                CheckboxListTile(
-                  title: Text("Video Muted"),
-                  value: isVideoMuted,
-                  onChanged: _onVideoMutedChanged,
-                ),
+                // SizedBox(
+                //   height: 16.0,
+                // ),
+                // CheckboxListTile(
+                //   title: Text("Audio Only"),
+                //   value: isAudioOnly,
+                //   onChanged: _onAudioOnlyChanged,
+                // ),
+                // SizedBox(
+                //   height: 16.0,
+                // ),
+                // CheckboxListTile(
+                //   title: Text("Audio Muted"),
+                //   value: isAudioMuted,
+                //   onChanged: _onAudioMutedChanged,
+                // ),
+                // SizedBox(
+                //   height: 16.0,
+                // ),
+                // CheckboxListTile(
+                //   title: Text("Video Muted"),
+                //   value: isVideoMuted,
+                //   onChanged: _onVideoMutedChanged,
+                // ),
                 Divider(
                   height: 48.0,
                   thickness: 2.0,
@@ -158,7 +159,7 @@ class _VideoCallState extends State<VideoCall> {
                       _joinMeeting();
                     },
                     child: Text(
-                      "Start Call",
+                      "Join Call",
                       style: TextStyle(color: Colors.white),
                     ),
                     color: Colors.blue,

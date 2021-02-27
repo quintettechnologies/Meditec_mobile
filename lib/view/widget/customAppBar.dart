@@ -25,30 +25,32 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   isDashboard
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5.0),
-                            child: Image(
-                                  image: Image.memory(base64.decode(context
-                                          .read(userProvider)
-                                          .currentUser()
-                                          .userAvatar
-                                          .image))
-                                      .image,
-                                  fit: BoxFit.fitHeight,
-                                  height: 40,
-                                ) ??
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                ),
-                            // child: Image(
-                            //   image:
-                            //       AssetImage('assets/images/profiles/user.png'),
-                            // ),
-                          ),
-                        )
+                      ? (context.read(userProvider).currentUser().userAvatar !=
+                              null)
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  child: Image(
+                                    image: Image.memory(base64.decode(context
+                                            .read(userProvider)
+                                            .currentUser()
+                                            .userAvatar
+                                            .image))
+                                        .image,
+                                    fit: BoxFit.fitHeight,
+                                    height: 40,
+                                  )
+                                  // child: Image(
+                                  //   image:
+                                  //       AssetImage('assets/images/profiles/user.png'),
+                                  // ),
+                                  ),
+                            )
+                          : Container(
+                              height: 40,
+                              width: 40,
+                            )
                       : FlatButton(
                           onPressed: !isDashboard
                               ? () {
