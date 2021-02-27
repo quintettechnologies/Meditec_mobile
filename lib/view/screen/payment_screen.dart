@@ -9,6 +9,7 @@ import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
+import 'package:meditec/view/screen/appointents_screen.dart';
 import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -96,17 +97,30 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Container(
-                                            height: space * 0.09,
-                                            width: space * 0.09,
-                                            decoration: BoxDecoration(
-                                                color: Colors.deepOrange,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Icon(
-                                              Icons.videocam,
-                                              color: Colors.white,
-                                              size: space * 0.06,
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          VideoCall(
+                                                            doctor:
+                                                                widget.doctor,
+                                                          )));
+                                            },
+                                            child: Container(
+                                              height: space * 0.09,
+                                              width: space * 0.09,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.deepOrange,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Icon(
+                                                Icons.videocam,
+                                                color: Colors.white,
+                                                size: space * 0.06,
+                                              ),
                                             ),
                                           ),
                                           SizedBox(
@@ -446,7 +460,8 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   .read(userProvider)
                                   .bookAppointment(widget.doctorSlot);
                               if (status) {
-                                Navigator.pushNamed(context, Dashboard.id);
+                                Navigator.pushNamed(
+                                    context, AppointmentsScreen.id);
                               }
                               // Navigator.push(
                               //     context,

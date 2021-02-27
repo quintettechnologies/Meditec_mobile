@@ -87,19 +87,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: GestureDetector(
-                    onTap: () {
-                      print('Tapped Skip');
-                      Navigator.pushNamed(context, Dashboard.id);
-                    },
-                    child: Text(
-                      'Skip Now',
-                      style: TextStyle(fontSize: 16, color: Color(0xFF6D96EA)),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       print('Tapped Skip');
+                //       Navigator.pushNamed(context, Dashboard.id);
+                //     },
+                //     child: Text(
+                //       'Skip Now',
+                //       style: TextStyle(fontSize: 16, color: Color(0xFF6D96EA)),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   height: 70,
                 )

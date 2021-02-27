@@ -10,8 +10,8 @@ DoctorSlot _$DoctorSlotFromJson(Map<String, dynamic> json) {
   return DoctorSlot()
     ..id = json['id'] as num
     ..name = json['name'] as String
-    ..startTime = json['startTime'] as String
-    ..endTime = json['endTime'] as String
+    ..startTime = DateTime.parse(json['startTime'])
+    ..endTime = DateTime.parse(json['endTime'])
     ..fees = json['fees'] as num
     ..maximumNumberOfAppoinment = json['maximumNumberOfAppoinment'] as num
     ..user = json['user'] == null
@@ -26,8 +26,8 @@ Map<String, dynamic> _$DoctorSlotToJson(DoctorSlot instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'startTime': instance.startTime,
-      'endTime': instance.endTime,
+      'startTime': instance.startTime.toIso8601String(),
+      'endTime': instance.endTime.toIso8601String(),
       'fees': instance.fees,
       'maximumNumberOfAppoinment': instance.maximumNumberOfAppoinment,
       'user': instance.user,

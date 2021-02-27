@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/constants.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool isDashboard;
+
+  const MyCustomAppBar({Key key, this.isDashboard = false}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -17,21 +24,48 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEDF0F0),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Color(0xFF00CACA),
-                        ),
-                      )),
+                  isDashboard
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: Image(
+                                  image: Image.memory(base64.decode(context
+                                          .read(userProvider)
+                                          .currentUser()
+                                          .userAvatar
+                                          .image))
+                                      .image,
+                                  fit: BoxFit.fitHeight,
+                                  height: 40,
+                                ) ??
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                ),
+                            // child: Image(
+                            //   image:
+                            //       AssetImage('assets/images/profiles/user.png'),
+                            // ),
+                          ),
+                        )
+                      : FlatButton(
+                          onPressed: !isDashboard
+                              ? () {
+                                  Navigator.pop(context);
+                                }
+                              : null,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                color: Color(0xFFEDF0F0),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Color(0xFF00CACA),
+                            ),
+                          )),
                   Text(
                     "Meditec",
                     style: TextStyle(

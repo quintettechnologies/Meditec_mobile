@@ -21,160 +21,167 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyCustomAppBar(),
-      drawer: MyCustomDrawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: space * 0.01, horizontal: space * 0.05),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Category',
-                  style: TextStyle(
-                      fontSize: space * 0.05, color: kPrimaryTextColor),
+    return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: MyCustomAppBar(
+            isDashboard: true,
+          ),
+          drawer: MyCustomDrawer(),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: space * 0.01, horizontal: space * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category',
+                      style: TextStyle(
+                          fontSize: space * 0.05, color: kPrimaryTextColor),
+                    ),
+                    SizedBox(height: space * 0.05),
+                    FittedBox(
+                      child: Row(
+                        children: [
+                          CatagoryButtonDashBoard(
+                            onTap: () {
+                              Navigator.pushNamed(context, DoctorScreen.id);
+                            },
+                            category: 'Doctor',
+                            color: Color(0xFFE2F2F8),
+                          ),
+                          // SizedBox(width: space * 0.05),
+                          // CatagoryButtonDashBoard(
+                          //   onTap: () {},
+                          //   category: 'Hospital',
+                          //   color: Color(0xFFE2F1EF),
+                          // ),
+                          // SizedBox(width: space * 0.05),
+                          // CatagoryButtonDashBoard(
+                          //   onTap: () {},
+                          //   category: 'Ambulance',
+                          //   color: Color(0xFFE7F1E4),
+                          // ),
+                          // SizedBox(width: space * 0.05),
+                          // CatagoryButtonDashBoard(
+                          //   onTap: () {},
+                          //   category: 'Diagnostic',
+                          //   color: Color(0xFFD6E7F2),
+                          // ),
+                        ],
+                      ),
+                    ),
+                    // SizedBox(height: space * 0.05),
+                    // FittedBox(
+                    //   child: Row(
+                    //     children: [
+                    //       CatagoryButtonDashBoard(
+                    //         onTap: () {},
+                    //         category: 'Blood',
+                    //         color: Color(0xFFF7E0E0),
+                    //       ),
+                    //       SizedBox(width: space * 0.05),
+                    //       CatagoryButtonDashBoard(
+                    //         onTap: () {},
+                    //         category: 'Int. Doctor',
+                    //         color: Color(0xFFF8EBE1),
+                    //       ),
+                    //       SizedBox(width: space * 0.05),
+                    //       CatagoryButtonDashBoard(
+                    //         onTap: () {},
+                    //         category: 'Report',
+                    //         color: Color(0xFFF7E3E9),
+                    //       ),
+                    //       SizedBox(width: space * 0.05),
+                    //       CatagoryButtonDashBoard(
+                    //         onTap: () {},
+                    //         category: 'Blog',
+                    //         color: Color(0xFFF1E5EF),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    SizedBox(height: space * 0.05),
+                    Text(
+                      "What's New",
+                      style: TextStyle(
+                          fontSize: space * 0.05, color: kPrimaryTextColor),
+                    ),
+                    SizedBox(height: space * 0.05),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: kSelectedButtonDecoration,
+                            child: Text(
+                              "Corona Update",
+                              style: kSelectedButtonTextStyle,
+                            ),
+                          ),
+                          SizedBox(width: space * 0.03),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: kButtonDecoration,
+                            child: Text(
+                              "Health",
+                              style: kButtonTextStyle,
+                            ),
+                          ),
+                          SizedBox(width: space * 0.03),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: kButtonDecoration,
+                            child: Text(
+                              "Doctors",
+                              style: kButtonTextStyle,
+                            ),
+                          ),
+                          SizedBox(width: space * 0.03),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: kButtonDecoration,
+                            child: Text(
+                              "Hospital",
+                              style: kButtonTextStyle,
+                            ),
+                          ),
+                          SizedBox(width: space * 0.03),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: kButtonDecoration,
+                            child: Text(
+                              "Medicine",
+                              style: kButtonTextStyle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(height: space * 0.05),
-                FittedBox(
-                  child: Row(
-                    children: [
-                      CatagoryButtonDashBoard(
-                        onTap: () {
-                          Navigator.pushNamed(context, DoctorScreen.id);
-                        },
-                        category: 'Doctor',
-                        color: Color(0xFFE2F2F8),
-                      ),
-                      // SizedBox(width: space * 0.05),
-                      // CatagoryButtonDashBoard(
-                      //   onTap: () {},
-                      //   category: 'Hospital',
-                      //   color: Color(0xFFE2F1EF),
-                      // ),
-                      // SizedBox(width: space * 0.05),
-                      // CatagoryButtonDashBoard(
-                      //   onTap: () {},
-                      //   category: 'Ambulance',
-                      //   color: Color(0xFFE7F1E4),
-                      // ),
-                      // SizedBox(width: space * 0.05),
-                      // CatagoryButtonDashBoard(
-                      //   onTap: () {},
-                      //   category: 'Diagnostic',
-                      //   color: Color(0xFFD6E7F2),
-                      // ),
-                    ],
-                  ),
-                ),
-                // SizedBox(height: space * 0.05),
-                // FittedBox(
-                //   child: Row(
-                //     children: [
-                //       CatagoryButtonDashBoard(
-                //         onTap: () {},
-                //         category: 'Blood',
-                //         color: Color(0xFFF7E0E0),
-                //       ),
-                //       SizedBox(width: space * 0.05),
-                //       CatagoryButtonDashBoard(
-                //         onTap: () {},
-                //         category: 'Int. Doctor',
-                //         color: Color(0xFFF8EBE1),
-                //       ),
-                //       SizedBox(width: space * 0.05),
-                //       CatagoryButtonDashBoard(
-                //         onTap: () {},
-                //         category: 'Report',
-                //         color: Color(0xFFF7E3E9),
-                //       ),
-                //       SizedBox(width: space * 0.05),
-                //       CatagoryButtonDashBoard(
-                //         onTap: () {},
-                //         category: 'Blog',
-                //         color: Color(0xFFF1E5EF),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                SizedBox(height: space * 0.05),
-                Text(
-                  "What's New",
-                  style: TextStyle(
-                      fontSize: space * 0.05, color: kPrimaryTextColor),
-                ),
-                SizedBox(height: space * 0.05),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: kSelectedButtonDecoration,
-                        child: Text(
-                          "Corona Update",
-                          style: kSelectedButtonTextStyle,
-                        ),
-                      ),
-                      SizedBox(width: space * 0.03),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: kButtonDecoration,
-                        child: Text(
-                          "Health",
-                          style: kButtonTextStyle,
-                        ),
-                      ),
-                      SizedBox(width: space * 0.03),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: kButtonDecoration,
-                        child: Text(
-                          "Doctors",
-                          style: kButtonTextStyle,
-                        ),
-                      ),
-                      SizedBox(width: space * 0.03),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: kButtonDecoration,
-                        child: Text(
-                          "Hospital",
-                          style: kButtonTextStyle,
-                        ),
-                      ),
-                      SizedBox(width: space * 0.03),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: kButtonDecoration,
-                        child: Text(
-                          "Medicine",
-                          style: kButtonTextStyle,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      // body: Center(
-      //   child: Container(
-      //     child: FlatButton(
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, DoctorScreen.id);
-      //         },
-      //         child: Text("Doctors")),
-      //   ),
-      // ),
-      floatingActionButton: MyCustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: MyCustomNavBar(),
-    );
+          // body: Center(
+          //   child: Container(
+          //     child: FlatButton(
+          //         onPressed: () {
+          //           Navigator.pushNamed(context, DoctorScreen.id);
+          //         },
+          //         child: Text("Doctors")),
+          //   ),
+          // ),
+          floatingActionButton: MyCustomFAB(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: MyCustomNavBar(),
+        ));
   }
 }

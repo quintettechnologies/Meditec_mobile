@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:meditec/model/chamber.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
@@ -386,7 +387,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                   },
                                   child: Container(
                                     width: space * 0.8,
-                                    height: space * 0.2,
+                                    height: space * 0.25,
                                     decoration: BoxDecoration(
                                       color: (selectedSlot.id == doctorSlot.id)
                                           ? Colors.grey
@@ -417,11 +418,15 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                               height: space * 0.02,
                                             ),
                                             Text(
-                                              doctorSlot.startTime,
+                                              "Date: ${DateFormat.yMd().format(doctorSlot.startTime)} ",
                                               style: TextStyle(fontSize: 16),
                                             ),
                                             Text(
-                                              doctorSlot.fees.toString(),
+                                              "Start: ${DateFormat.jm().format(doctorSlot.startTime)} ",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            Text(
+                                              "Fee: ${doctorSlot.fees.toString()}",
                                               style: TextStyle(fontSize: 16),
                                             ),
                                             //Text(chamber.address),

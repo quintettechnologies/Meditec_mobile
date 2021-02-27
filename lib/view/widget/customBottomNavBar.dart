@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:meditec/view/screen/appointents_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 
@@ -29,8 +30,8 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                         route: Dashboard.id,
                       ),
                       NavbarButton(
-                        text: 'My app',
-                        route: Dashboard.id,
+                        text: 'Appointments',
+                        route: AppointmentsScreen.id,
                       ),
                     ],
                   ),
@@ -70,8 +71,9 @@ class NavbarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       minWidth: 40,
+      padding: EdgeInsets.zero,
       onPressed: () {
-        Navigator.popAndPushNamed(context, route);
+        Navigator.pushNamed(context, route);
         // setState(() {
         //   // currentScreen =
         //   //     Dashboard(); // if user taps on this dashboard tab will be active
@@ -82,12 +84,17 @@ class NavbarButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SvgPicture.asset('assets/icons/navbar/$text.svg'),
-          Text(
-            text,
-            style: TextStyle(
-              color: Colors.white,
+          SizedBox(
+            width: 90,
+            height: 20,
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
-          ),
+          )
         ],
       ),
     );

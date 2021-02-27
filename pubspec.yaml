@@ -32,7 +32,6 @@ dependencies:
   flutter_hooks:
   hooks_riverpod:
   shared_preferences:
-  freezed_annotation:
   http: ^0.12.2
   basic_utils: ^1.4.0
   flutter_svg: any
@@ -42,7 +41,7 @@ dependencies:
   image_picker:
   image_cropper: ^1.3.1
   jitsi_meet: ^2.0.0
-  dio: ^3.0.10
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

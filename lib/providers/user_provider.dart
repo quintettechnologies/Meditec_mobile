@@ -11,7 +11,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  String url = "182.48.90.214:8080";
+  //String url = "182.48.90.214:8080";
+  String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -22,6 +23,7 @@ class UserProvider extends ChangeNotifier {
   List<Category> categories;
   List<User> doctors = [];
   List<DoctorSlot> doctorSlots = [];
+  List<Appointment> appointments = [];
   DoctorSlot selectedSlot = DoctorSlot();
   Auth _auth;
 
@@ -31,8 +33,10 @@ class UserProvider extends ChangeNotifier {
 
   Future bookAppointment(DoctorSlot doctorSlot) async {
     Appointment appointment = new Appointment();
+    print(doctorSlot);
     _user.userAvatar = null;
     appointment.user = _user;
+    appointment.time = doctorSlot.startTime.toIso8601String();
     appointment.doctorSlot = doctorSlot;
     var uri = Uri.http('$url', '/takeAppoinment');
     var response = await http.post(
@@ -48,11 +52,12 @@ class UserProvider extends ChangeNotifier {
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
-      _getUser();
+      selectedSlot = DoctorSlot();
+      await _getUser();
       return true;
     } else {
       print(response.body.toString());
-      _getUser();
+      await _getUser();
       return false;
     }
   }
@@ -96,7 +101,7 @@ class UserProvider extends ChangeNotifier {
     var res = await request.send();
     print(res.statusCode);
     if (res != null && res.statusCode == 200) {
-      _getUser();
+      await _getUser();
       notifyListeners();
       return true;
     } else {
@@ -140,10 +145,10 @@ class UserProvider extends ChangeNotifier {
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
-      _getUser();
+      await _getUser();
       return loginStatus;
     } else {
-      _getUser();
+      await _getUser();
       return false;
     }
   }
@@ -170,6 +175,23 @@ class UserProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  Future getAppointments() async {
+    var queryParameters = {
+      'mobileNumber': '$number',
+    };
+    var uri = Uri.http('$url', '/myAppoinments', queryParameters);
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+    });
+    List<dynamic> updatedAppointments = jsonDecode(response.body);
+    //print(cats);
+    appointments = (updatedAppointments)
+        ?.map((e) =>
+            e == null ? null : Appointment.fromJson(e as Map<String, dynamic>))
+        ?.toList();
   }
 
   Future getCategories() async {
@@ -234,7 +256,8 @@ class UserProvider extends ChangeNotifier {
       print(_user.name);
       // image1 = _user.userAvatar.image;
       var image = base64.decode(image1.toString());
-      getCategories();
+      await getCategories();
+      await getAppointments();
     }
     notifyListeners();
   }
