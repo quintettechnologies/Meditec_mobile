@@ -2,20 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/view/screen/appointents_screen.dart';
-import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
-import 'package:meditec/view/screen/dashboard_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
   static const String id = 'doctor_profile_screen';
@@ -131,14 +129,18 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                               child: Center(
                                                 child: RichText(
                                                   text: TextSpan(
-                                                      text: 'Sun',
+                                                      text: DateFormat.E()
+                                                          .format(widget
+                                                              .doctorSlot
+                                                              .startTime),
                                                       style: TextStyle(
                                                           fontSize: 16,
                                                           height: 1.5,
                                                           color: Colors.white),
                                                       children: [
                                                         TextSpan(
-                                                            text: ' 06',
+                                                            text:
+                                                                ' ${DateFormat.d().format(widget.doctorSlot.startTime)}',
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -164,7 +166,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                   horizontal: 10),
                                               child: Center(
                                                   child: Text(
-                                                "10-10.30am",
+                                                "${DateFormat.jm().format(widget.doctorSlot.startTime)}-${DateFormat.jm().format(widget.doctorSlot.startTime)}",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
@@ -211,13 +213,13 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text(
-                                      "Edit",
-                                      style: TextStyle(
-                                          color: Color(0xFF00BABA),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    // Text(
+                                    //   "Edit",
+                                    //   style: TextStyle(
+                                    //       color: Color(0xFF00BABA),
+                                    //       fontSize: 16,
+                                    //       fontWeight: FontWeight.bold),
+                                    // ),
                                   ],
                                 ),
                                 SizedBox(
@@ -257,16 +259,14 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          widget.doctorSlot.startTime
-                                              .toString(),
+                                          "${DateFormat.yMd().format(widget.doctorSlot.startTime)}",
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
                                           height: space * 0.02,
                                         ),
                                         Text(
-                                          widget.doctorSlot.startTime
-                                              .toString(),
+                                          "${DateFormat.jm().format(widget.doctorSlot.startTime)} ",
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
@@ -277,7 +277,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ],
-                                    ),
+                                    )
                                   ],
                                 )
                               ],

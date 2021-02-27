@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/doctor_profile_screen.dart';
+import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
@@ -86,10 +88,38 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         },
                         child: Container(
                           padding: EdgeInsets.all(10),
-                          decoration: kSelectedButtonDecoration,
-                          child: Text(
-                            category.name,
-                            style: kSelectedButtonTextStyle,
+                          decoration: kButtonDecoration,
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Material(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.1,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.1,
+                                          child: SvgPicture.asset(
+                                            "assets/icons/doctor_page/${category.name}.svg",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ) ??
+                                  Container(),
+                              Text(
+                                category.name,
+                                style: kButtonTextStyle,
+                              ),
+                            ],
                           ),
                         ),
                       ),
