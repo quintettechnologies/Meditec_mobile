@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Category',
+                      'Services',
                       style: TextStyle(
                           fontSize: space * 0.05, color: kPrimaryTextColor),
                     ),
