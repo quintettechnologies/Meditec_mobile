@@ -12,8 +12,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  String url = "182.48.90.214:8080";
-  // String url = "192.168.0.100:8080";
+  //String url = "182.48.90.214:8080";
+  String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -23,6 +23,7 @@ class UserProvider extends ChangeNotifier {
   File selectedImage;
   List<Category> categories;
   List<User> doctors = [];
+  List<User> categoryDoctors = [];
   List<DoctorSlot> doctorSlots = [];
   List<Appointment> appointments = [];
   List<Prescription> prescriptions = [];
@@ -237,11 +238,8 @@ class UserProvider extends ChangeNotifier {
         ?.toList();
   }
 
-  Future getDoctorList(int id) async {
-    var queryParameters = {
-      'id': '$id',
-    };
-    var uri = Uri.http('$url', '/getDoctorList', queryParameters);
+  Future getDoctorList() async {
+    var uri = Uri.http('$url', '/getAppDoctors');
     var response = await http.get(
       uri,
       headers: {
@@ -258,6 +256,35 @@ class UserProvider extends ChangeNotifier {
         doctors.add(User.fromJson(d));
       }
       for (User d in doctors) {
+        print(d.name);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future getCategoryDoctorList(int id) async {
+    var queryParameters = {
+      'id': '$id',
+    };
+    var uri = Uri.http('$url', '/getDoctorList', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> docs = jsonDecode(response.body);
+      categoryDoctors.clear();
+      for (dynamic d in docs) {
+        categoryDoctors.add(User.fromJson(d));
+      }
+      for (User d in categoryDoctors) {
         print(d.name);
         print(d.degree.degreeName);
         print(d.categories[0].name);
@@ -288,6 +315,7 @@ class UserProvider extends ChangeNotifier {
       await getCategories();
       await getAppointments();
       await getPrescriptions();
+      await getDoctorList();
     }
     notifyListeners();
   }

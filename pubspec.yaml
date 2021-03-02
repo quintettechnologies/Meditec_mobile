@@ -71,6 +71,7 @@ flutter:
     - assets/images/
     - assets/images/profiles/
     - assets/images/payments/
+    - assets/images/ads/
     - assets/icons/
     - assets/icons/navbar/
     - assets/icons/dashboard/
