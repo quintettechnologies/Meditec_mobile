@@ -29,7 +29,9 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyCustomAppBar(),
+      appBar: MyCustomAppBar(
+        enableSearch: true,
+      ),
       drawer: MyCustomDrawer(),
       body: SafeArea(
         child: Padding(

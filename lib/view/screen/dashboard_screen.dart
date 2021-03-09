@@ -35,6 +35,7 @@ class _DashboardState extends State<Dashboard> {
           resizeToAvoidBottomInset: false,
           appBar: MyCustomAppBar(
             isDashboard: true,
+            enableSearch: true,
           ),
           drawer: MyCustomDrawer(),
           body: SafeArea(

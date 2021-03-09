@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:meditec/providers/user_provider.dart';
-import 'package:meditec/view/constants.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDashboard;
+  final bool enableSearch;
 
-  const MyCustomAppBar({Key key, this.isDashboard = false}) : super(key: key);
+  const MyCustomAppBar(
+      {Key key, this.isDashboard = false, this.enableSearch = false})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -94,63 +96,65 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.width * 0.15,
-              child: Row(
-                children: [
-                  FlatButton(
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                      padding: EdgeInsets.zero,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEDF0F0),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Icon(
-                          Icons.menu,
-                          color: Color(0xFF00CACA),
-                        ),
-                      )),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextField(
-                        style:
-                            TextStyle(fontSize: 16, color: Color(0xFF777A95)),
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search_outlined),
-                          suffixIcon: Icon(Icons.menu),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Doctor,Hospitals and more...',
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF777A95),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Color(0xFFA8A8A8),
+            enableSearch
+                ? Container(
+                    height: MediaQuery.of(context).size.width * 0.15,
+                    child: Row(
+                      children: [
+                        FlatButton(
+                            onPressed: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFEDF0F0),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Icon(
+                                Icons.menu,
+                                color: Color(0xFF00CACA),
+                              ),
+                            )),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: TextField(
+                              style: TextStyle(
+                                  fontSize: 16, color: Color(0xFF777A95)),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.search_outlined),
+                                suffixIcon: Icon(Icons.menu),
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Doctor,Hospitals and more...',
+                                hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFF777A95),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFA8A8A8),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Container(
+                          height: 40,
+                          width: 40,
+                        ),
+                        Container(
+                          height: 40,
+                          width: 40,
+                        )
+                      ],
                     ),
-                  ),
-                  Container(
-                    height: 40,
-                    width: 40,
-                  ),
-                  Container(
-                    height: 40,
-                    width: 40,
                   )
-                ],
-              ),
-            ),
+                : Container(),
           ],
         ),
       ),
@@ -158,5 +162,5 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(150);
+  Size get preferredSize => Size.fromHeight(enableSearch ? 145 : 70);
 }

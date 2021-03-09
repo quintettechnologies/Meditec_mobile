@@ -164,14 +164,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                         ),
                                       ),
                                       Text(
-                                        "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Text(
-                                        "End: ${DateFormat.jm().format(appointment.doctorSlot.endTime)}",
-                                        // .substring(11, 16),
+                                        "Start: ${DateFormat.jm().format(appointment.time)} ",
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),

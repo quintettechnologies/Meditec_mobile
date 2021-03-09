@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
   String url = "182.48.90.214:8080";
-  //String url = "192.168.0.100:8080";
+  // String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -39,7 +39,6 @@ class UserProvider extends ChangeNotifier {
     print(doctorSlot);
     _user.userAvatar = null;
     appointment.user = _user;
-    appointment.time = doctorSlot.startTime.toIso8601String();
     appointment.doctorSlot = doctorSlot;
     var uri = Uri.http('$url', '/takeAppoinment');
     var response = await http.post(
@@ -52,7 +51,9 @@ class UserProvider extends ChangeNotifier {
       body: jsonEncode(appointment.toJson()),
     );
     print(response.body);
-    if (response.body != null && response.statusCode == 200) {
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
       selectedSlot = DoctorSlot();
       await _getUser();
       return true;
@@ -128,6 +129,24 @@ class UserProvider extends ChangeNotifier {
         filename: _image.path.split("/").last));
     var res = await request.send();
     print(res.statusCode);
+    if (res != null && res.statusCode == 200) {
+      await _getUser();
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future uploadReports(File _image, int id) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse("http://$url/uploadReports?appoinmentId=$id"));
+    request.files.add(http.MultipartFile.fromBytes(
+        'reports', File(_image.path).readAsBytesSync(),
+        filename: _image.path.split("/").last));
+    var res = await request.send();
+    print(res.statusCode);
+    print(res);
     if (res != null && res.statusCode == 200) {
       await _getUser();
       notifyListeners();
@@ -214,8 +233,8 @@ class UserProvider extends ChangeNotifier {
       HttpHeaders.authorizationHeader:
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
     });
+    print(response.body);
     List<dynamic> updatedAppointments = jsonDecode(response.body);
-    //print(cats);
     appointments = (updatedAppointments)
         ?.map((e) =>
             e == null ? null : Appointment.fromJson(e as Map<String, dynamic>))

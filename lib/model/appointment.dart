@@ -8,7 +8,8 @@ class Appointment {
     Appointment();
 
     num id;
-    String time;
+    DateTime time;
+    num serialNumber;
     String status;
     User user;
     DoctorSlot doctorSlot;

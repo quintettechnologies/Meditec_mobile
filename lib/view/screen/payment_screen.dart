@@ -166,7 +166,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                   horizontal: 10),
                                               child: Center(
                                                   child: Text(
-                                                "${DateFormat.jm().format(widget.doctorSlot.startTime)}-${DateFormat.jm().format(widget.doctorSlot.startTime)}",
+                                                "${DateFormat.jm().format(widget.doctorSlot.startTime)}-${DateFormat.jm().format(widget.doctorSlot.endTime)}",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
@@ -213,13 +213,18 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    // Text(
-                                    //   "Edit",
-                                    //   style: TextStyle(
-                                    //       color: Color(0xFF00BABA),
-                                    //       fontSize: 16,
-                                    //       fontWeight: FontWeight.bold),
-                                    // ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        "Edit",
+                                        style: TextStyle(
+                                            color: Color(0xFF00BABA),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(
