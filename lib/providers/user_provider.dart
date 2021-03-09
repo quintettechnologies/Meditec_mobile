@@ -12,8 +12,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  //String url = "182.48.90.214:8080";
-  String url = "192.168.0.100:8080";
+  String url = "182.48.90.214:8080";
+  //String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -52,9 +52,7 @@ class UserProvider extends ChangeNotifier {
       body: jsonEncode(appointment.toJson()),
     );
     print(response.body);
-    if (response.body != null &&
-        response.statusCode == 200 &&
-        response.body == "success") {
+    if (response.body != null && response.statusCode == 200) {
       selectedSlot = DoctorSlot();
       await _getUser();
       return true;
