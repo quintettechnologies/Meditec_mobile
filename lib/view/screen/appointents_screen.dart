@@ -7,6 +7,7 @@ import 'package:meditec/model/appointment.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointment_detail_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
+import 'package:meditec/view/screen/prescription_page.dart';
 import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/catagoryButtonDashboard.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
@@ -145,6 +146,37 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                       //         fontSize: 13,
                                       //         fontWeight: FontWeight.w500)),
                                     ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    bool get = await context
+                                        .read(userProvider)
+                                        .getFullPrescription(appointment.id);
+                                    if (get) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PrescriptionPage(
+                                                    prescription: context
+                                                        .read(userProvider)
+                                                        .prescriptionTemp,
+                                                  )));
+                                    }
+                                  },
+                                  child: Container(
+                                    height: space * 0.09,
+                                    width: space * 0.09,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Icon(
+                                      Icons.file_present,
+                                      color: Colors.white,
+                                      size: space * 0.06,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(

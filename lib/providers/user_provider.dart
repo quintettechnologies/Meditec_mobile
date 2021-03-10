@@ -12,8 +12,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  String url = "182.48.90.214:8080";
-  // String url = "192.168.0.100:8080";
+  // String url = "182.48.90.214:8080";
+  String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -29,9 +29,35 @@ class UserProvider extends ChangeNotifier {
   List<Prescription> prescriptions = [];
   DoctorSlot selectedSlot = DoctorSlot();
   Auth _auth;
+  Prescription prescriptionTemp;
 
   User currentUser() {
     return _user;
+  }
+
+  Future getFullPrescription(int appointmentId) async {
+    var queryParameters = {
+      'appoinmentId': '$appointmentId',
+    };
+    var uri = Uri.http('$url', '/getFullPrescription', queryParameters);
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+    });
+    print(response.body);
+    if (response.body != null && response.statusCode == 200) {
+      try {
+        Map prescriptionMap = jsonDecode(response.body);
+        Prescription prescriptionFromServer =
+            Prescription.fromJson(prescriptionMap);
+        this.prescriptionTemp = prescriptionFromServer;
+        notifyListeners();
+        return true;
+      } catch (e) {
+        print(e);
+        return false;
+      }
+    }
   }
 
   Future bookAppointment(DoctorSlot doctorSlot) async {

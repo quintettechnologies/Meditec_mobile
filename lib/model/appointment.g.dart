@@ -17,7 +17,12 @@ Appointment _$AppointmentFromJson(Map<String, dynamic> json) {
         : User.fromJson(json['user'] as Map<String, dynamic>)
     ..doctorSlot = json['doctorSlot'] == null
         ? null
-        : DoctorSlot.fromJson(json['doctorSlot'] as Map<String, dynamic>);
+        : DoctorSlot.fromJson(json['doctorSlot'] as Map<String, dynamic>)
+    ..reports = (json['reports'] as List)
+        ?.map((e) => e == null
+            ? null
+            : PrescriptionReport.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
@@ -27,5 +32,6 @@ Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
       'serialNumber': instance.serialNumber,
       'status': instance.status,
       'user': instance.user,
-      'doctorSlot': instance.doctorSlot
+      'doctorSlot': instance.doctorSlot,
+      'reports': instance.reports
     };

@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/providers/user_provider.dart';
-import 'package:meditec/view/screen/PrescriptionPage.dart';
 import 'package:meditec/view/screen/appointents_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
@@ -134,12 +133,12 @@ class MyCustomDrawer extends HookWidget {
                             },
                             child: MenuItem(text: 'My appointments')),
                         // MenuItem(text: 'Report'),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, PrescriptionPage.id);
-                            },
-                            child: MenuItem(text: 'Prescriptions')),
+                        // GestureDetector(
+                        //     onTap: () {
+                        //       Navigator.pop(context);
+                        //       Navigator.pushNamed(context, PrescriptionPage.id);
+                        //     },
+                        //     child: MenuItem(text: 'Prescriptions')),
                         // MenuItem(text: 'Feedback'),
                         // MenuItem(text: 'Following'),
                       ],
