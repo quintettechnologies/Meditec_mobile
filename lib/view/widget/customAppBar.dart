@@ -145,11 +145,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                         Container(
                           height: 40,
-                          width: 40,
-                        ),
-                        Container(
-                          height: 40,
-                          width: 40,
+                          width: 25,
                         )
                       ],
                     ),

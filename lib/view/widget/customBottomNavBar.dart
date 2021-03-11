@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meditec/view/screen/appointents_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
+import 'package:meditec/view/screen/profile_screen.dart';
 
 class MyCustomNavBar extends StatefulWidget {
   @override
@@ -47,7 +48,7 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                       ),
                       NavbarButton(
                         text: 'Profile',
-                        route: EditProfileScreen.id,
+                        route: ProfileScreen.id,
                       ),
                     ],
                   )

@@ -8,6 +8,7 @@ import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointents_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
+import 'package:meditec/view/screen/profile_screen.dart';
 
 class MyCustomDrawer extends HookWidget {
   @override
@@ -120,8 +121,7 @@ class MyCustomDrawer extends HookWidget {
                         GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
-                              Navigator.pushNamed(
-                                  context, EditProfileScreen.id);
+                              Navigator.pushNamed(context, ProfileScreen.id);
                             },
                             child: MenuItem(text: 'Edit Profile')),
                         // MenuItem(text: 'Change password'),
