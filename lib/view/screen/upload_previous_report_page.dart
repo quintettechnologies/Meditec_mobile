@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,8 +33,40 @@ class UploadPreviousReportScreen extends StatefulWidget {
 
 class _UploadPreviousReportScreenState
     extends State<UploadPreviousReportScreen> {
-  File _image;
+  File _report;
   bool _inProcess = false;
+
+  bool _isImage() {
+    if (_report != null) {
+      if (_report.path.endsWith(".pdf")) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  _getPDF() async {
+    this.setState(() {
+      _inProcess = true;
+    });
+    FilePickerResult result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ["pdf"]);
+    if (result != null) {
+      File file = File(result.files.single.path);
+
+      this.setState(() {
+        _report = file;
+        _inProcess = false;
+      });
+    } else {
+      this.setState(() {
+        _inProcess = false;
+      });
+    }
+  }
 
   _getImage(ImageSource source) async {
     this.setState(() {
@@ -56,7 +89,7 @@ class _UploadPreviousReportScreenState
           ));
 
       this.setState(() {
-        _image = cropped;
+        _report = cropped;
         _inProcess = false;
       });
     } else {
@@ -89,10 +122,21 @@ class _UploadPreviousReportScreenState
                   SizedBox(
                     height: 10,
                   ),
-                  _image != null
-                      ? Image(
-                          image: FileImage(_image),
-                        )
+                  _report != null
+                      ? _isImage()
+                          ? Image(
+                              image: FileImage(_report),
+                            )
+                          : Container(
+                              height: space * 0.5,
+                              width: space * 0.5,
+                              color: Colors.green,
+                              child: Icon(
+                                Icons.picture_as_pdf,
+                                size: space * 0.5,
+                                color: Colors.white,
+                              ),
+                            )
                       : Container(
                           height: space * 0.5,
                           width: space * 0.5,
@@ -111,6 +155,7 @@ class _UploadPreviousReportScreenState
                       RaisedButton(
                         onPressed: () {
                           // _getImage(ImageSource.camera);
+                          _getPDF();
                         },
                         child: Container(
                           width: space * 0.15,
@@ -169,10 +214,16 @@ class _UploadPreviousReportScreenState
                   ),
                   RaisedButton(
                     onPressed: () async {
+                      setState(() {
+                        _inProcess = true;
+                      });
                       bool upload = await context
                           .read(userProvider)
-                          .uploadReports(_image, widget.appointment.id);
+                          .uploadReports(_report, widget.appointment.id);
                       if (upload) {
+                        setState(() {
+                          _inProcess = false;
+                        });
                         Navigator.pop(context);
                       }
                     },
@@ -216,136 +267,3 @@ class _UploadPreviousReportScreenState
     );
   }
 }
-
-// class UploadProfileImageScreen extends HookWidget {
-//   static const String id = 'upload_profile_image';
-//   File _image;
-//   Future _getImage() async {
-//     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-//     _image = image;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final double space = MediaQuery.of(context).size.width;
-//     return Scaffold(
-//       resizeToAvoidBottomInset: false,
-//       appBar: MyCustomAppBar(),
-//       drawer: MyCustomDrawer(),
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Consumer(
-//                   builder: (context, watch, child) {
-//                     // User user = context.read(userProvider).currentUser();
-//                     // return ClipRRect(
-//                     //   borderRadius: BorderRadius.circular(10.0),
-//                     //   child: Image(
-//                     //     image: _image != null
-//                     //         ? FileImage(_image)
-//                     //         : Image.memory(
-//                     //                 base64.decode(user.userAvatar['image']))
-//                     //             .image,
-//                     //     fit: BoxFit.fill,
-//                     //     height: space * 0.5,
-//                     //     width: space * 0.5,
-//                     //   ),
-//                     // );
-//                     return ClipRRect(
-//                       borderRadius: BorderRadius.circular(10.0),
-//                       child: Image(
-//                         image: _image != null
-//                             ? FileImage(_image)
-//                             : AssetImage('assets/images/profiles/user.png'),
-//                         fit: BoxFit.fill,
-//                         height: space * 0.5,
-//                         width: space * 0.5,
-//                       ),
-//                     );
-//                   },
-//                 ),
-//                 SizedBox(
-//                   height: space * 0.1,
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                   children: [
-//                     RaisedButton(
-//                       onPressed: () {},
-//                       child: Container(
-//                         width: space * 0.2,
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                           children: [
-//                             Icon(
-//                               Icons.camera_alt,
-//                               color: Color(0xFF00BABA),
-//                             ),
-//                             SizedBox(
-//                               width: space * 0.02,
-//                             ),
-//                             Text('Camera')
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                     RaisedButton(
-//                       onPressed: _getImage,
-//                       child: Container(
-//                         width: space * 0.2,
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                           children: [
-//                             Icon(
-//                               Icons.image,
-//                               color: Color(0xFF00BABA),
-//                             ),
-//                             SizedBox(
-//                               width: space * 0.02,
-//                             ),
-//                             Text('Gallery')
-//                           ],
-//                         ),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//                 SizedBox(
-//                   height: space * 0.1,
-//                 ),
-//                 Consumer(builder: (context, watch, child) {
-//                   return RaisedButton(
-//                     onPressed: () {
-//                       context.read(userProvider).uploadImage(_image);
-//                       Navigator.popAndPushNamed(context, Dashboard.id);
-//                     },
-//                     child: Container(
-//                       width: space * 0.2,
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                         children: [
-//                           Icon(
-//                             Icons.save,
-//                             color: Color(0xFF00BABA),
-//                           ),
-//                           SizedBox(
-//                             width: space * 0.02,
-//                           ),
-//                           Text('Save')
-//                         ],
-//                       ),
-//                     ),
-//                   );
-//                 })
-//               ],
-//             )),
-//       ),
-//       floatingActionButton: MyCustomFAB(),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//       bottomNavigationBar: MyCustomNavBar(),
-//     );
-//   }
-// }
