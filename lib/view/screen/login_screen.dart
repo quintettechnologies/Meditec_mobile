@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/signup_screen.dart';
@@ -9,13 +10,28 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginScreen extends HookWidget {
+class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController numberController;
+  TextEditingController passwordController;
+  bool _inProcess = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    numberController = TextEditingController();
+    passwordController = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    final numberController = useTextEditingController();
-    final passwordController = useTextEditingController();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -171,13 +187,31 @@ class LoginScreen extends HookWidget {
                           builder: (context, watch, child) {
                             return GestureDetector(
                               onTap: () async {
+                                setState(() {
+                                  _inProcess = true;
+                                });
                                 print('Tapped Login');
                                 bool loginStatus = await context
                                     .read(userProvider)
                                     .login(numberController.text,
                                         passwordController.text);
                                 if (loginStatus) {
+                                  setState(() {
+                                    _inProcess = false;
+                                  });
                                   Navigator.pushNamed(context, Dashboard.id);
+                                } else {
+                                  setState(() {
+                                    _inProcess = false;
+                                  });
+                                  Fluttertoast.showToast(
+                                      msg: "Login Failed",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 }
                               },
                               child: Container(
@@ -271,8 +305,27 @@ class LoginScreen extends HookWidget {
               ),
             ),
           ),
+          (_inProcess)
+              ? Container(
+                  color: Colors.blue,
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                )
+              : Center()
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    numberController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
