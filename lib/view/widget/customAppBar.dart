@@ -7,9 +7,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDashboard;
   final bool enableSearch;
+  final TextEditingController searchController;
+  final FocusNode searchFocus;
+  final Function onChangedCallback;
 
   const MyCustomAppBar(
-      {Key key, this.isDashboard = false, this.enableSearch = false})
+      {Key key,
+      this.isDashboard = false,
+      this.enableSearch = false,
+      this.searchController,
+      this.onChangedCallback,
+      this.searchFocus})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -26,50 +34,50 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  isDashboard
-                      ? (context.read(userProvider).currentUser().userAvatar !=
-                              null)
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  child: Image(
-                                    image: Image.memory(base64.decode(context
-                                            .read(userProvider)
-                                            .currentUser()
-                                            .userAvatar
-                                            .image))
-                                        .image,
-                                    fit: BoxFit.fitHeight,
-                                    height: 40,
-                                  )
-                                  // child: Image(
-                                  //   image:
-                                  //       AssetImage('assets/images/profiles/user.png'),
-                                  // ),
-                                  ),
-                            )
-                          : Container(
-                              height: 40,
-                              width: 40,
-                            )
-                      : FlatButton(
-                          onPressed: !isDashboard
-                              ? () {
-                                  Navigator.pop(context);
-                                }
-                              : null,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFEDF0F0),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Color(0xFF00CACA),
-                            ),
-                          )),
+                  // isDashboard
+                  //     ? (context.read(userProvider).currentUser().userAvatar !=
+                  //             null)
+                  //         ? Padding(
+                  //             padding: EdgeInsets.symmetric(horizontal: 20),
+                  //             child: ClipRRect(
+                  //                 borderRadius: BorderRadius.circular(5.0),
+                  //                 child: Image(
+                  //                   image: Image.memory(base64.decode(context
+                  //                           .read(userProvider)
+                  //                           .currentUser()
+                  //                           .userAvatar
+                  //                           .image))
+                  //                       .image,
+                  //                   fit: BoxFit.fitHeight,
+                  //                   height: 40,
+                  //                 )
+                  //                 // child: Image(
+                  //                 //   image:
+                  //                 //       AssetImage('assets/images/profiles/user.png'),
+                  //                 // ),
+                  //                 ),
+                  //           )
+                  //         : Container(
+                  //             height: 40,
+                  //             width: 40,
+                  //           )
+                  FlatButton(
+                      onPressed: !isDashboard
+                          ? () {
+                              Navigator.pop(context);
+                            }
+                          : null,
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFEDF0F0),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Color(0xFF00CACA),
+                        ),
+                      )),
                   Text(
                     "Meditec",
                     style: TextStyle(
@@ -121,6 +129,9 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: TextField(
+                              controller: searchController,
+                              onChanged: onChangedCallback,
+                              focusNode: searchFocus,
                               style: TextStyle(
                                   fontSize: 16, color: Color(0xFF777A95)),
                               decoration: InputDecoration(

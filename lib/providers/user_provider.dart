@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:meditec/model/auth.dart';
 import 'package:meditec/model/category.dart';
-import 'package:meditec/model/chamber.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/index.dart';
 import 'package:meditec/model/user.dart';
@@ -12,8 +11,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  // String url = "182.48.90.214:8080";
-  String url = "192.168.0.100:8080";
+  String url = "182.48.90.214:8080";
+  // String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -33,6 +32,35 @@ class UserProvider extends ChangeNotifier {
 
   User currentUser() {
     return _user;
+  }
+
+  Future<List<User>> globalSearch(String query) async {
+    List<User> searchResult = [];
+    var queryParameters = {
+      'keyWords': '$query',
+    };
+    var uri = Uri.http('$url', '/searchDoctors', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> docs = jsonDecode(response.body);
+      for (dynamic d in docs) {
+        searchResult.add(User.fromJson(d));
+      }
+      for (User d in searchResult) {
+        print(d.name);
+      }
+      return searchResult;
+    } else {
+      return searchResult;
+    }
   }
 
   Future getFullPrescription(int appointmentId) async {
@@ -364,6 +392,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future login(String number, String password) async {
+    bool timedOut = false;
     print("$number $password");
     var queryParameters = {
       'number': '$number',
@@ -384,8 +413,17 @@ class UserProvider extends ChangeNotifier {
         this.authToken = "Basic " +
             base64.encode(utf8.encode(
                 _auth.principal.username + ":" + _auth.principal.password));
-        await _getUser();
-        this.loginStatus = true;
+        await _getUser().timeout(Duration(seconds: 60), onTimeout: () {
+          // time has run out, do what you wanted to do
+          timedOut = true;
+          return null;
+        });
+        if (timedOut) {
+          await logout();
+          this.loginStatus = false;
+        } else {
+          this.loginStatus = true;
+        }
         notifyListeners();
       } else {
         print("Not Patient");
