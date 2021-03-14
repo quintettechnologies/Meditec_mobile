@@ -64,6 +64,8 @@ class NavbarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    // print(height);
+    // print(width);
     return MaterialButton(
       minWidth: 40,
       padding: EdgeInsets.zero,
@@ -90,6 +92,7 @@ class NavbarButton extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontSize: height * 0.022,
                 color: Colors.white,
               ),
             ),
