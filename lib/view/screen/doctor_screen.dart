@@ -94,8 +94,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
                             },
                             child: Container(
                               // padding: EdgeInsets.all(10),
-                              height: MediaQuery.of(context).size.width * 0.25,
-                              width: MediaQuery.of(context).size.width * 0.25,
+                              height: space * 0.25,
+                              width: space * 0.25,
                               decoration: kButtonDecoration,
                               child: Column(
                                 children: [
@@ -108,14 +108,13 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.1,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.1,
+                                              height: space * 0.1,
+                                              width: space * 0.1,
+                                              // child: Icon(
+                                              //   Icons.account_circle,
+                                              //   size: space * 0.1,
+                                              //   color: Color(0xFF00BABA),
+                                              // )
                                               child: SvgPicture.asset(
                                                 "assets/icons/doctor_page/${category.name}.svg",
                                               ),
@@ -126,7 +125,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                       Container(),
                                   Text(
                                     category.name,
-                                    style: kButtonTextStyle,
+                                    style:
+                                        kButtonTextStyle.copyWith(fontSize: 16),
                                   ),
                                 ],
                               ),
@@ -260,22 +260,26 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     ),
+                                                    Text(
+                                                      doctor.degree
+                                                              .degreeName ??
+                                                          "",
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                    Text(
+                                                      doctor.categories[0].name,
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
                                                     // Text(
-                                                    //   doctor.degree
-                                                    //           .degreeName ??
-                                                    //       "",
-                                                    //   style: TextStyle(
-                                                    //       fontSize: 12),
-                                                    // ),
-                                                    // Text(
-                                                    //   doctor.categories[0].name,
-                                                    //   style: TextStyle(
-                                                    //       fontSize: 12),
-                                                    // ),
-                                                    // Text(doctors[index].hospital,
+                                                    //     doctor
+                                                    //         .chambers[0].adress,
                                                     //     style: TextStyle(
                                                     //         fontSize: 13,
-                                                    //         fontWeight: FontWeight.w500)),
+                                                    //         fontWeight:
+                                                    //             FontWeight
+                                                    //                 .w500)),
                                                   ],
                                                 ),
                                               ),
@@ -424,18 +428,19 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                                 FontWeight
                                                                     .bold),
                                                       ),
-                                                      // Text(
-                                                      //   doctor.degree
-                                                      //           .degreeName ??
-                                                      //       "",
-                                                      //   style: TextStyle(
-                                                      //       fontSize: 12),
-                                                      // ),
-                                                      // Text(
-                                                      //   doctor.categories[0].name,
-                                                      //   style: TextStyle(
-                                                      //       fontSize: 12),
-                                                      // ),
+                                                      Text(
+                                                        doctor.degree
+                                                                .degreeName ??
+                                                            "",
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                      Text(
+                                                        doctor
+                                                            .categories[0].name,
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
                                                       // Text(doctors[index].hospital,
                                                       //     style: TextStyle(
                                                       //         fontSize: 13,

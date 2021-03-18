@@ -9,7 +9,7 @@ import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/doctors_provider.dart';
-import 'package:meditec/view/screen/appointents_screen.dart';
+import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
@@ -78,13 +78,13 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      widget.doctor.categories[0].name,
+                                      widget.doctor.degree.degreeName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
                                     ),
                                     Text(
-                                      widget.doctor.degree.degreeName,
+                                      widget.doctor.categories[0].name,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -95,21 +95,17 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          FlatButton(
-                                            onPressed: () {},
-                                            child: Container(
-                                              height: space * 0.09,
-                                              width: space * 0.09,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.deepOrange,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Icon(
-                                                Icons.videocam,
-                                                color: Colors.white,
-                                                size: space * 0.06,
-                                              ),
+                                          Container(
+                                            height: space * 0.09,
+                                            width: space * 0.09,
+                                            decoration: BoxDecoration(
+                                                color: Colors.deepOrange,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Icon(
+                                              Icons.videocam,
+                                              color: Colors.white,
+                                              size: space * 0.06,
                                             ),
                                           ),
                                           SizedBox(
@@ -450,40 +446,75 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                           SizedBox(
                             height: space * 0.05,
                           ),
-                          FlatButton(
-                            onPressed: () async {
-                              bool status = await context
-                                  .read(userProvider)
-                                  .bookAppointment(widget.doctorSlot);
-                              if (status) {
-                                Navigator.pushNamed(
-                                    context, AppointmentsScreen.id);
-                              }
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => VideoCall(
-                              //               doctor: widget.doctor,
-                              //             )));
-                            },
-                            padding: EdgeInsets.zero,
-                            child: Container(
-                              height: space * .12,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Color(0xFF00BABA),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Make Payment",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(
+                                onPressed: () async {
+                                  bool status = await context
+                                      .read(userProvider)
+                                      .bookAppointmentPayLater(
+                                          widget.doctorSlot);
+                                  if (status) {
+                                    Navigator.pushNamed(
+                                        context, AppointmentsScreen.id);
+                                  }
+                                },
+                                child: Container(
+                                  height: space * .12,
+                                  width: space * 0.36,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF00BABA),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Pay Later",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              TextButton(
+                                onPressed: () async {
+                                  bool status = await context
+                                      .read(userProvider)
+                                      .bookAppointment(widget.doctorSlot);
+                                  if (status) {
+                                    Navigator.pushNamed(
+                                        context, AppointmentsScreen.id);
+                                  }
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => VideoCall(
+                                  //               doctor: widget.doctor,
+                                  //             )));
+                                },
+                                child: Container(
+                                  height: space * .12,
+                                  width: space * 0.36,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF00BABA),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Make Payment",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: space * 0.1,

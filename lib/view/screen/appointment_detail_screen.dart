@@ -7,6 +7,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:meditec/view/screen/upload_previous_report_page.dart';
 import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
+import 'package:meditec/view/widget/customBottomNavBar.dart';
+import 'package:meditec/view/widget/customFAB.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
   static const String id = 'appointment_detail';
@@ -25,6 +27,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     final double space = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: MyCustomAppBar(),
+      bottomNavigationBar: MyCustomNavBar(),
+      floatingActionButton: MyCustomFAB(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -60,23 +65,231 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  widget.appointment.doctorSlot.user.name,
+                                  widget
+                                      .appointment.doctorSlot.chamber.user.name,
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  widget.appointment.doctorSlot.user
+                                  widget.appointment.doctorSlot.chamber.user
                                       .categories[0].name,
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
                                 ),
                                 Text(
-                                  widget.appointment.doctorSlot.user.degree
-                                      .degreeName,
+                                  widget.appointment.doctorSlot.chamber.user
+                                      .degree.degreeName,
                                   style: TextStyle(
                                     fontSize: 16,
+                                  ),
+                                ),
+                                Container(
+                                  height: space * 0.12,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        VideoCall(
+                                                          appointment: widget
+                                                              .appointment,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            height: space * 0.09,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: space * 0.01),
+                                            decoration: BoxDecoration(
+                                                color: Colors.deepOrange,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.videocam,
+                                                  color: Colors.white,
+                                                  size: space * 0.06,
+                                                ),
+                                                SizedBox(
+                                                  width: space * 0.01,
+                                                ),
+                                                Text(
+                                                  "Join Video Call",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: space * 0.05,
+                                        ),
+                                        GestureDetector(
+                                          // onTap: () {
+                                          //   Navigator.push(
+                                          //       context,
+                                          //       MaterialPageRoute(
+                                          //           builder: (context) =>
+                                          //               VideoCall(
+                                          //                 appointment:
+                                          //                     widget.appointment,
+                                          //               )));
+                                          // },
+                                          child: Container(
+                                            height: space * 0.09,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: space * 0.01),
+                                            decoration: BoxDecoration(
+                                                color: Colors.blueAccent,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.messenger,
+                                                  color: Colors.white,
+                                                  size: space * 0.06,
+                                                ),
+                                                SizedBox(
+                                                  width: space * 0.01,
+                                                ),
+                                                Text(
+                                                  "Send Text Message",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: space * 0.12,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UploadPreviousReportScreen(
+                                                  appointment:
+                                                      widget.appointment,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            height: space * 0.09,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: space * 0.01),
+                                            decoration: BoxDecoration(
+                                                color: Colors.brown,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.upload_file,
+                                                  color: Colors.white,
+                                                  size: space * 0.06,
+                                                ),
+                                                SizedBox(
+                                                  width: space * 0.01,
+                                                ),
+                                                Text(
+                                                  "Upload Previous Documents",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: space * 0.12,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          // onTap: () {
+                                          //   Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //       builder: (context) =>
+                                          //           UploadPreviousReportScreen(
+                                          //         appointment:
+                                          //             widget.appointment,
+                                          //       ),
+                                          //     ),
+                                          //   );
+                                          // },
+                                          child: Container(
+                                            height: space * 0.09,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: space * 0.01),
+                                            decoration: BoxDecoration(
+                                                color: Colors.teal,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.image_rounded,
+                                                  color: Colors.white,
+                                                  size: space * 0.06,
+                                                ),
+                                                SizedBox(
+                                                  width: space * 0.01,
+                                                ),
+                                                Text(
+                                                  "Upload Sample Images",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -84,63 +297,6 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      VideoCall(
-                                                        appointment:
-                                                            widget.appointment,
-                                                      )));
-                                        },
-                                        child: Container(
-                                          height: space * 0.09,
-                                          width: space * 0.09,
-                                          decoration: BoxDecoration(
-                                              color: Colors.deepOrange,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Icon(
-                                            Icons.videocam,
-                                            color: Colors.white,
-                                            size: space * 0.06,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: space * 0.05,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UploadPreviousReportScreen(
-                                                appointment: widget.appointment,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          height: space * 0.09,
-                                          width: space * 0.09,
-                                          decoration: BoxDecoration(
-                                              color: Colors.brown,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Icon(
-                                            Icons.upload_file,
-                                            color: Colors.white,
-                                            size: space * 0.06,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: space * 0.05,
-                                      ),
                                       Container(
                                         height: space * 0.09,
                                         decoration: BoxDecoration(
@@ -314,25 +470,27 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     ],
                   ),
                   Center(
-                    child:
-                        (widget.appointment.doctorSlot.user.userAvatar != null)
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height: space * 0.3,
-                                  width: space * 0.3,
-                                  child: Image(
-                                    image: Image.memory(base64.decode(widget
-                                            .appointment
-                                            .doctorSlot
-                                            .user
-                                            .userAvatar
-                                            .image))
-                                        .image,
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                    child: (widget.appointment.doctorSlot.chamber.user
+                                .userAvatar !=
+                            null)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              height: space * 0.3,
+                              width: space * 0.3,
+                              child: Image(
+                                image: Image.memory(base64.decode(widget
+                                        .appointment
+                                        .doctorSlot
+                                        .chamber
+                                        .user
+                                        .userAvatar
+                                        .image))
+                                    .image,
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ),
                 ],
               ),

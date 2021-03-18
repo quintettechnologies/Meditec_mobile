@@ -169,5 +169,5 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(enableSearch ? 145 : 70);
+  Size get preferredSize => Size.fromHeight(enableSearch ? 120 : 70);
 }

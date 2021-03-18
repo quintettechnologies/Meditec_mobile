@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/model/index.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointment_detail_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
@@ -18,13 +19,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
 
-class AppointmentsScreen extends StatefulWidget {
-  static const String id = 'AppointmentsScreen';
+class PrescriptionListScreen extends StatefulWidget {
+  static const String id = 'PrescriptionListScreen';
   @override
-  _AppointmentsScreenState createState() => _AppointmentsScreenState();
+  _PrescriptionListScreenState createState() => _PrescriptionListScreenState();
 }
 
-class _AppointmentsScreenState extends State<AppointmentsScreen> {
+class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +33,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     context.read(userProvider).getAppointments();
     super.didChangeDependencies();
@@ -56,7 +57,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Appointments',
+                  'Prescriptions',
                   style: TextStyle(
                       fontSize: space * 0.05, color: kPrimaryTextColor),
                 ),
@@ -67,17 +68,22 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   child: Column(
                     children: [
                       for (Appointment appointment in appointments)
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AppointmentDetailScreen(
-                                          appointment: appointment,
-                                        )));
+                        GestureDetector(
+                          onTap: () async {
+                            bool get = await context
+                                .read(userProvider)
+                                .getFullPrescription(appointment.id);
+                            if (get) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PrescriptionPage(
+                                            prescription: context
+                                                .read(userProvider)
+                                                .prescriptionTemp,
+                                          )));
+                            }
                           },
-                          padding: EdgeInsets.zero,
                           child: Container(
                             margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
@@ -94,7 +100,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                (appointment.doctorSlot.user.userAvatar != null)
+                                (appointment.doctorSlot.chamber.user
+                                            .userAvatar !=
+                                        null)
                                     ? Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: ClipRRect(
@@ -107,6 +115,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                               image: Image.memory(base64.decode(
                                                       appointment
                                                           .doctorSlot
+                                                          .chamber
                                                           .user
                                                           .userAvatar
                                                           .image))
@@ -125,14 +134,15 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        appointment.doctorSlot.user.name,
+                                        appointment
+                                            .doctorSlot.chamber.user.name,
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        appointment
-                                            .doctorSlot.user.categories[0].name,
+                                        appointment.doctorSlot.chamber.user
+                                            .categories[0].name,
                                         style: TextStyle(fontSize: 12),
                                       ),
                                       Text(
@@ -146,37 +156,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                       //         fontSize: 13,
                                       //         fontWeight: FontWeight.w500)),
                                     ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    bool get = await context
-                                        .read(userProvider)
-                                        .getFullPrescription(appointment.id);
-                                    if (get) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PrescriptionPage(
-                                                    prescription: context
-                                                        .read(userProvider)
-                                                        .prescriptionTemp,
-                                                  )));
-                                    }
-                                  },
-                                  child: Container(
-                                    height: space * 0.09,
-                                    width: space * 0.09,
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Icon(
-                                      Icons.file_present,
-                                      color: Colors.white,
-                                      size: space * 0.06,
-                                    ),
                                   ),
                                 ),
                                 SizedBox(

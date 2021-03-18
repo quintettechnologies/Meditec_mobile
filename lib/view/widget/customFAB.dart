@@ -11,9 +11,11 @@ class MyCustomFAB extends StatefulWidget {
 class _MyCustomFABState extends State<MyCustomFAB> {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double size = width * 0.15;
     return Container(
-      height: 70.0,
-      width: 70.0,
+      height: size,
+      width: size,
       child: FittedBox(
         child: FloatingActionButton(
           shape: RoundedRectangleBorder(

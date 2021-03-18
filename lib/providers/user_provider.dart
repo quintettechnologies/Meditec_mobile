@@ -118,6 +118,36 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future bookAppointmentPayLater(DoctorSlot doctorSlot) async {
+    Appointment appointment = new Appointment();
+    print(doctorSlot);
+    _user.userAvatar = null;
+    appointment.user = _user;
+    appointment.doctorSlot = doctorSlot;
+    var uri = Uri.http('$url', '/takeAppoinmentPayLater');
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode(appointment.toJson()),
+    );
+    print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      selectedSlot = DoctorSlot();
+      await _getUser();
+      return true;
+    } else {
+      print(response.body.toString());
+      await _getUser();
+      return false;
+    }
+  }
+
   void selectSlot(DoctorSlot doctorSlot) {
     selectedSlot = doctorSlot;
   }
@@ -142,6 +172,50 @@ class UserProvider extends ChangeNotifier {
           ?.map((e) =>
               e == null ? null : DoctorSlot.fromJson(e as Map<String, dynamic>))
           ?.toList();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future getDoctorSlotsByDate(DateTime date, int chamberId) async {
+    String year = date.year.toString();
+    String month = date.month.toString();
+    String day = date.day.toString();
+    if (date.month < 10) {
+      month = "0$month";
+    }
+    if (date.day < 10) {
+      day = "0$day";
+    }
+    String formatDate = "$year-$month-$day";
+    print(formatDate);
+    var queryParameters = {
+      'date': '$formatDate',
+      'chamberId': '$chamberId',
+    };
+    var uri = Uri.http('$url', '/slotsByDate', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    print(response.body);
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> slots = jsonDecode(response.body);
+      doctorSlots = (slots)
+          ?.map((e) =>
+              e == null ? null : DoctorSlot.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      for (DoctorSlot slot in doctorSlots) {
+        print(slot.name);
+        print(slot.startTime.toIso8601String());
+      }
       return true;
     } else {
       return false;

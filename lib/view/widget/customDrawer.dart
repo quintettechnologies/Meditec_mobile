@@ -5,9 +5,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/providers/user_provider.dart';
-import 'package:meditec/view/screen/appointents_screen.dart';
+import 'package:meditec/view/screen/appointents_list_screen.dart';
+import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
+import 'package:meditec/view/screen/prescriptions_list_screen.dart';
 import 'package:meditec/view/screen/profile_screen.dart';
 
 class MyCustomDrawer extends HookWidget {
@@ -132,13 +134,21 @@ class MyCustomDrawer extends HookWidget {
                                   context, AppointmentsScreen.id);
                             },
                             child: MenuItem(text: 'My appointments')),
-                        // MenuItem(text: 'Report'),
-                        // GestureDetector(
-                        //     onTap: () {
-                        //       Navigator.pop(context);
-                        //       Navigator.pushNamed(context, PrescriptionPage.id);
-                        //     },
-                        //     child: MenuItem(text: 'Prescriptions')),
+
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(
+                                  context, PrescriptionListScreen.id);
+                            },
+                            child: MenuItem(text: 'Prescriptions')),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(
+                                  context, AppointmentReportListScreen.id);
+                            },
+                            child: MenuItem(text: 'Previous Reports')),
                         // MenuItem(text: 'Feedback'),
                         // MenuItem(text: 'Following'),
                       ],

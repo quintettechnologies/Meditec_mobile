@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,9 +28,17 @@ class DoctorProfileScreen extends StatefulWidget {
 }
 
 class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
+  DatePickerController _controller = DatePickerController();
+  DateTime _selectedValue = DateTime.now();
+  getSlotsByDate() async {
+    context.read(userProvider).selectedSlot = DoctorSlot();
+    await context
+        .read(userProvider)
+        .getDoctorSlotsByDate(_selectedValue, widget.doctor.chambers[0].id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<Chamber> chambers = widget.doctor.chambers;
     List<DoctorSlot> doctorSlots = context.read(userProvider).doctorSlots;
     DoctorSlot selectedSlot = context.read(userProvider).selectedSlot;
     final double space = MediaQuery.of(context).size.width;
@@ -78,11 +87,24 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               Text(
+                                widget.doctor.degree.degreeName,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
                                 widget.doctor.categories[0].name,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
+
+                              // Text(
+                              //   widget.doctor.chambers[0].adress,
+                              //   style: TextStyle(
+                              //     fontSize: 16,
+                              //   ),
+                              // ),
                               Container(
                                 height: space * 0.12,
                                 width: space * 0.43,
@@ -159,207 +181,45 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                       // Row(
                       //   children: [
                       //     Text(
-                      //       'Today 05 Sept 2020',
+                      //       'Today ${DateFormat.yMMMMd(_selectedValue).toString()}',
                       //       style: TextStyle(
                       //           fontSize: 16, fontWeight: FontWeight.bold),
                       //     ),
                       //     Icon(Icons.keyboard_arrow_down)
                       //   ],
                       // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(20),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //     children: [
-                      //       myCustomDayButton(
-                      //         space: space,
-                      //         day: 'Sat',
-                      //         date: '05',
-                      //       ),
-                      //       myCustomDayButton(
-                      //         space: space,
-                      //         day: 'Sun',
-                      //         date: '06',
-                      //         selected: true,
-                      //       ),
-                      //       myCustomDayButton(
-                      //         space: space,
-                      //         day: 'Mon',
-                      //         date: '07',
-                      //       ),
-                      //       myCustomDayButton(
-                      //         space: space,
-                      //         day: 'Tue',
-                      //         date: '08',
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Container(
-                      //       alignment: Alignment.center,
-                      //       height: space * 0.1,
-                      //       width: space * 0.25,
-                      //       decoration: BoxDecoration(
-                      //           color: Color(0xFFC5C5C5),
-                      //           borderRadius: BorderRadius.circular(50)),
-                      //       child: Text(
-                      //         "09 - 9.30am",
-                      //         style: TextStyle(
-                      //             fontSize: 14, color: Color(0xFF8D8D8D)),
-                      //       ),
-                      //     ),
-                      //     Container(
-                      //       alignment: Alignment.center,
-                      //       height: space * 0.1,
-                      //       width: space * 0.25,
-                      //       decoration: BoxDecoration(
-                      //           color: Color(0xFFDDFDE1),
-                      //           borderRadius: BorderRadius.circular(50)),
-                      //       child: Text(
-                      //         "10 - 10.30am",
-                      //         style: TextStyle(
-                      //             fontSize: 14,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Color(0xFF495767)),
-                      //       ),
-                      //     ),
-                      //     Container(
-                      //       alignment: Alignment.center,
-                      //       height: space * 0.1,
-                      //       width: space * 0.25,
-                      //       decoration: BoxDecoration(
-                      //           color: Color(0xFFC5C5C5),
-                      //           borderRadius: BorderRadius.circular(50)),
-                      //       child: Text(
-                      //         "11 - 11.30am",
-                      //         style: TextStyle(
-                      //             fontSize: 14, color: Color(0xFF8D8D8D)),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: space * 0.05,
-                      // ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //   children: [
-                      //     SizedBox(
-                      //       width: space * 0.05,
-                      //     ),
-                      //     Container(
-                      //       alignment: Alignment.center,
-                      //       height: space * 0.1,
-                      //       width: space * 0.25,
-                      //       decoration: BoxDecoration(
-                      //           color: Color(0xFFDDFDE1),
-                      //           borderRadius: BorderRadius.circular(50)),
-                      //       child: Text(
-                      //         "07 - 7.30pm",
-                      //         style: TextStyle(
-                      //             fontSize: 14,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Color(0xFF495767)),
-                      //       ),
-                      //     ),
-                      //     Container(
-                      //       alignment: Alignment.center,
-                      //       height: space * 0.1,
-                      //       width: space * 0.25,
-                      //       decoration: BoxDecoration(
-                      //           color: Color(0xFFC5C5C5),
-                      //           borderRadius: BorderRadius.circular(50)),
-                      //       child: Text(
-                      //         "08 - 8.30pm",
-                      //         style: TextStyle(
-                      //             fontSize: 14, color: Color(0xFF8D8D8D)),
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       width: space * 0.05,
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: space * 0.05,
-                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Chambers",
+                            "Select Date",
                             style: TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: space * 0.02,
+                      Container(
+                        child: DatePicker(
+                          DateTime.now(),
+                          width: 60,
+                          height: 80,
+                          controller: _controller,
+                          initialSelectedDate: DateTime.now(),
+                          selectionColor: Colors.black,
+                          selectedTextColor: Colors.white,
+                          inactiveDates: [
+                            // DateTime.now().add(Duration(days: )),
+                            // DateTime.now().add(Duration(days: 4)),
+                            // DateTime.now().add(Duration(days: 7))
+                          ],
+                          onDateChange: (date) async {
+                            _selectedValue = date;
+                            print(_selectedValue.toIso8601String());
+                            await getSlotsByDate();
+                            setState(() {});
+                          },
+                        ),
                       ),
-                      Column(
-                        children: [
-                          for (Chamber chamber in chambers)
-                            Padding(
-                              padding: EdgeInsets.only(bottom: space * 0.05),
-                              child: FlatButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () async {
-                                    bool list = await context
-                                        .read(userProvider)
-                                        .getDoctorSlots(chamber.id.toString());
-                                    if (list) {
-                                      setState(() {
-                                        doctorSlots = context
-                                            .read(userProvider)
-                                            .doctorSlots;
-                                      });
-                                    }
-                                  },
-                                  child: Container(
-                                    width: space * 0.8,
-                                    height: space * 0.2,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              chamber.name,
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                            SizedBox(
-                                              height: space * 0.02,
-                                            ),
-                                            Text(
-                                              chamber.adress,
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            //Text(chamber.address),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                        ],
-                      ),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -386,86 +246,62 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                     setState(() {});
                                   },
                                   child: Container(
-                                    width: space * 0.8,
-                                    height: space * 0.25,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(space * 0.01),
+                                    height: space * 0.1,
+                                    width: space * 0.36,
                                     decoration: BoxDecoration(
-                                      color: (selectedSlot.id == doctorSlot.id)
-                                          ? Colors.grey
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              doctorSlot.name,
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                            SizedBox(
-                                              height: space * 0.02,
-                                            ),
-                                            Text(
-                                              "Date: ${DateFormat.yMd().format(doctorSlot.startTime)} ",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            Text(
-                                              "Start: ${DateFormat.jm().format(doctorSlot.startTime)} ",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            Text(
-                                              "Fee: ${doctorSlot.fees.toString()}",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            //Text(chamber.address),
-                                          ],
-                                        ),
-                                      ],
+                                        color:
+                                            (selectedSlot.id == doctorSlot.id)
+                                                ? Color(0xFF00BABA)
+                                                : Color(0xFFDDFDE1),
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: Text(
+                                      "${DateFormat.jm().format(doctorSlot.startTime)} - ${DateFormat.jm().format(doctorSlot.endTime)}",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            (selectedSlot.id == doctorSlot.id)
+                                                ? Colors.white
+                                                : Colors.black,
+                                      ),
                                     ),
                                   )),
                             ),
                         ],
                       ),
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PaymentScreen(
-                                        doctor: widget.doctor,
-                                        doctorSlot: selectedSlot,
-                                      )));
-                        },
-                        child: Container(
-                          height: space * .12,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF00BABA),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Book an Appointment",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
+                      (doctorSlots.isNotEmpty)
+                          ? TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PaymentScreen(
+                                              doctor: widget.doctor,
+                                              doctorSlot: selectedSlot,
+                                            )));
+                              },
+                              child: Container(
+                                height: space * .12,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF00BABA),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Book an Appointment",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
                       SizedBox(
                         height: space * 0.1,
                       ),

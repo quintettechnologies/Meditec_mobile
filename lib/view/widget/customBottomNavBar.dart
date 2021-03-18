@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:meditec/view/screen/appointents_screen.dart';
+import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/profile_screen.dart';
 
@@ -17,7 +17,7 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
       child: BottomAppBar(
         child: Container(
           color: Color(0xFF00BABA),
-          height: height * 0.1,
+          height: height * 0.07,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: height * 0.01),
             //padding: EdgeInsets.zero,
@@ -62,7 +62,6 @@ class NavbarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     // print(height);
     // print(width);
@@ -87,12 +86,11 @@ class NavbarButton extends StatelessWidget {
               : Container(),
           SizedBox(
             width: width * 0.15,
-            height: height * 0.05,
             child: Text(
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: height * 0.022,
+                fontSize: width * 0.024,
                 color: Colors.white,
               ),
             ),
