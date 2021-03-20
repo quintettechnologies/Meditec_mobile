@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import "role.dart";
 import "userAvatar.dart";
 import "addressBooks.dart";
 import "speciality.dart";
@@ -27,17 +28,21 @@ class User {
     String lastLoginDate;
     String lastLoginIp;
     String lastFailedLoginDate;
+    String adminNumber;
+    String gender;
+    num weight;
+    num age;
+    String bloodGroup;
+    String hospitalName;
     num failedLoginAttempts;
     bool aggreedToTermOfUse;
     bool emailVerified;
     List account;
-    Map<String,dynamic> roles;
+    Role roles;
     UserAvatar userAvatar;
     AddressBooks addressBooks;
     Speciality speciality;
     Degree degree;
-    List appoinments;
-    List doctorSlots;
     List<Category> categories;
     List<Chamber> chambers;
     

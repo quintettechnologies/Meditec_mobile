@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/view/screen/upload_previous_report_page.dart';
+import 'package:meditec/view/screen/upload_sample_screen.dart';
 import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -246,18 +247,18 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         GestureDetector(
-                                          // onTap: () {
-                                          //   Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           UploadPreviousReportScreen(
-                                          //         appointment:
-                                          //             widget.appointment,
-                                          //       ),
-                                          //     ),
-                                          //   );
-                                          // },
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UploadSampleScreen(
+                                                  appointment:
+                                                      widget.appointment,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                           child: Container(
                                             height: space * 0.09,
                                             padding: EdgeInsets.symmetric(

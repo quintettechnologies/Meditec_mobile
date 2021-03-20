@@ -7,6 +7,7 @@ class MedicineSchedule {
     MedicineSchedule();
 
     num id;
+    bool afterMeal;
     num morning;
     num day;
     num night;

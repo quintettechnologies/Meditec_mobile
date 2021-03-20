@@ -19,16 +19,17 @@ class EditProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userRepo = useProvider(userProvider);
+    final user = useProvider(userProvider).currentUser();
     final AddressBooks addressBooks =
         userRepo.currentUser().addressBooks ?? AddressBooks();
     final nameController = useTextEditingController
-        .fromValue(TextEditingValue(text: userRepo.currentUser().name ?? ""));
+        .fromValue(TextEditingValue(text: user.name ?? ""));
     final nameFocus = useFocusNode();
     final emailController = useTextEditingController
-        .fromValue(TextEditingValue(text: userRepo.currentUser().email ?? ""));
+        .fromValue(TextEditingValue(text: user.email ?? ""));
     final emailFocus = useFocusNode();
-    final mobileNumberController = useTextEditingController.fromValue(
-        TextEditingValue(text: userRepo.currentUser().mobileNumber ?? ""));
+    final mobileNumberController = useTextEditingController
+        .fromValue(TextEditingValue(text: user.mobileNumber ?? ""));
     final mobileNumberFocus = useFocusNode();
     final street1Controller = useTextEditingController
         .fromValue(TextEditingValue(text: addressBooks.street1 ?? ""));
@@ -48,6 +49,18 @@ class EditProfileScreen extends HookWidget {
     final zipController = useTextEditingController
         .fromValue(TextEditingValue(text: addressBooks.zip ?? ""));
     final zipFocus = useFocusNode();
+    final ageController = useTextEditingController
+        .fromValue(TextEditingValue(text: user.age.toString() ?? ""));
+    final ageFocus = useFocusNode();
+    final bloodGroupController = useTextEditingController
+        .fromValue(TextEditingValue(text: user.bloodGroup ?? ""));
+    final bloodGroupFocus = useFocusNode();
+    final genderController = useTextEditingController
+        .fromValue(TextEditingValue(text: user.gender ?? ""));
+    final genderFocus = useFocusNode();
+    final weightController = useTextEditingController
+        .fromValue(TextEditingValue(text: user.weight.toString() ?? ""));
+    final weightFocus = useFocusNode();
 
     final double space = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -63,61 +76,6 @@ class EditProfileScreen extends HookWidget {
                 "Edit Profile",
                 style: TextStyle(
                   fontSize: 18,
-                ),
-              ),
-              Space(space: space),
-              SizedBox(
-                height: space * 0.25,
-                width: space * 0.25,
-                child: Stack(
-                  fit: StackFit.expand,
-                  overflow: Overflow.visible,
-                  children: [
-                    (userRepo.currentUser().userAvatar != null)
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(5.0),
-                            child: Image(
-                              image: Image.memory(base64.decode(
-                                      userRepo.currentUser().userAvatar.image))
-                                  .image,
-                              fit: BoxFit.cover,
-                              height: 60,
-                            ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(5.0),
-                            child: Image(
-                              image:
-                                  AssetImage('assets/images/profiles/user.png'),
-                              fit: BoxFit.cover,
-                              height: 60,
-                            ),
-                          ),
-                    Positioned(
-                      right: -10,
-                      bottom: -10,
-                      child: SizedBox(
-                        height: space * 0.1,
-                        width: space * 0.1,
-                        child: FlatButton(
-                          padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: Colors.white),
-                          ),
-                          color: Color(0xFFF5F6F9),
-                          onPressed: () {
-                            Navigator.popAndPushNamed(
-                                context, UploadProfileImageScreen.id);
-                          },
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
                 ),
               ),
               Space(space: space),
@@ -139,6 +97,30 @@ class EditProfileScreen extends HookWidget {
                   text: "Phone",
                   controller: mobileNumberController,
                   focusNode: mobileNumberFocus,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Blood Group",
+                  controller: bloodGroupController,
+                  focusNode: bloodGroupFocus,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Weight (Kg)",
+                  controller: weightController,
+                  focusNode: weightFocus,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Gender",
+                  controller: genderController,
+                  focusNode: genderFocus,
+                  space: space),
+              Space(space: space),
+              TextEditingField(
+                  text: "Age (Years)",
+                  controller: ageController,
+                  focusNode: ageFocus,
                   space: space),
               Space(space: space),
               TextEditingField(
@@ -183,19 +165,26 @@ class EditProfileScreen extends HookWidget {
                   Consumer(builder: (context, watch, build) {
                     return InkWell(
                       onTap: () async {
-                        User user = User();
+                        User tempuser = User();
                         AddressBooks addressBook = AddressBooks();
-                        user.name = nameController.text.trim();
-                        user.email = emailController.text.trim();
-                        user.mobileNumber = mobileNumberController.text.trim();
+                        tempuser.name = nameController.text.trim();
+                        tempuser.email = emailController.text.trim();
+                        tempuser.mobileNumber =
+                            mobileNumberController.text.trim();
+                        tempuser.bloodGroup = bloodGroupController.text.trim();
+                        tempuser.weight =
+                            double.parse(weightController.text.trim());
+                        tempuser.gender = genderController.text.trim();
+                        tempuser.age = int.parse(ageController.text.trim());
+                        tempuser.bloodGroup = bloodGroupController.text.trim();
+                        tempuser.bloodGroup = bloodGroupController.text.trim();
                         addressBook.street1 = street1Controller.text.trim();
                         addressBook.street2 = street2Controller.text.trim();
                         addressBook.street3 = street3Controller.text.trim();
                         addressBook.city = cityController.text.trim();
                         addressBook.country = countryController.text.trim();
                         addressBook.zip = zipController.text.trim();
-
-                        user.addressBooks = addressBook;
+                        tempuser.addressBooks = addressBook;
 
                         // print("*************************************");
                         // print(user.toJson());
@@ -203,7 +192,7 @@ class EditProfileScreen extends HookWidget {
                         // print(user.addressBooks.toJson());
                         // print("*************************************");
                         bool status =
-                            await context.read(userProvider).editUser(user);
+                            await context.read(userProvider).editUser(tempuser);
                         if (status == true) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, Dashboard.id, (route) => false);

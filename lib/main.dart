@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/category.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
+import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
 import 'package:meditec/view/screen/category_doctor_screen.dart';
 import 'package:meditec/view/screen/doctor_profile_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
@@ -48,6 +49,8 @@ class MyApp extends StatelessWidget {
         PrescriptionListScreen.id: (context) => PrescriptionListScreen(),
         AppointmentReportListScreen.id: (context) =>
             AppointmentReportListScreen(),
+        AppointmentSampleListScreen.id: (context) =>
+            AppointmentSampleListScreen()
       },
     );
   }

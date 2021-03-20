@@ -17,6 +17,7 @@ import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
+import 'confirm_payment_screen.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   static const String id = 'AppointmentsScreen';
@@ -68,15 +69,25 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                     children: [
                       for (Appointment appointment in appointments)
                         FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AppointmentDetailScreen(
-                                          appointment: appointment,
-                                        )));
-                          },
+                          onPressed: (appointment.status != "Payment Pending")
+                              ? () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AppointmentDetailScreen(
+                                                appointment: appointment,
+                                              )));
+                                }
+                              : () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConfirmPaymentScreen(
+                                                appointment: appointment,
+                                              )));
+                                },
                           padding: EdgeInsets.zero,
                           child: Container(
                             margin: EdgeInsets.all(5),

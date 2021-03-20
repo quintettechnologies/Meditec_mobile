@@ -45,7 +45,10 @@ dependencies:
   intl: ^0.16.1
   file_picker:
   fluttertoast: ^7.1.6
-  url_launcher: ^6.0.2
+  url_launcher:
+  path_provider:
+  permission_handler:
+  custom_switch: ^0.0.1
 
 dev_dependencies:
   flutter_test:

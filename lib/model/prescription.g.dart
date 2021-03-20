@@ -13,7 +13,6 @@ Prescription _$PrescriptionFromJson(Map<String, dynamic> json) {
     ..test = json['test'] as String
     ..doctorName = json['doctorName'] as String
     ..referredTo = json['referredTo'] as String
-    ..appoinmentId = json['appoinmentId'] as num
     ..advice = json['advice'] as String
     ..patient = json['patient'] == null
         ? null
@@ -36,7 +35,10 @@ Prescription _$PrescriptionFromJson(Map<String, dynamic> json) {
         ?.toList()
     ..referredDoctor = json['referredDoctor'] == null
         ? null
-        : User.fromJson(json['referredDoctor'] as Map<String, dynamic>);
+        : User.fromJson(json['referredDoctor'] as Map<String, dynamic>)
+    ..appoinment = json['appoinment'] == null
+        ? null
+        : Appointment.fromJson(json['appoinment'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$PrescriptionToJson(Prescription instance) =>
@@ -46,12 +48,12 @@ Map<String, dynamic> _$PrescriptionToJson(Prescription instance) =>
       'test': instance.test,
       'doctorName': instance.doctorName,
       'referredTo': instance.referredTo,
-      'appoinmentId': instance.appoinmentId,
       'advice': instance.advice,
       'patient': instance.patient,
       'doctor': instance.doctor,
       'medicines': instance.medicines,
       'tests': instance.tests,
       'scedules': instance.scedules,
-      'referredDoctor': instance.referredDoctor
+      'referredDoctor': instance.referredDoctor,
+      'appoinment': instance.appoinment
     };

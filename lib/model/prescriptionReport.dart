@@ -9,6 +9,7 @@ class PrescriptionReport {
     num id;
     String image;
     Appointment appoinment;
+    String fileTye;
     
     factory PrescriptionReport.fromJson(Map<String,dynamic> json) => _$PrescriptionReportFromJson(json);
     Map<String, dynamic> toJson() => _$PrescriptionReportToJson(this);

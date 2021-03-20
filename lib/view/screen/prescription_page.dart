@@ -36,12 +36,53 @@ class PrescriptionPage extends HookWidget {
             children: [
               Row(
                 children: [
+                  (prescription.doctor.userAvatar != null)
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            height: space * 0.2,
+                            width: space * 0.2,
+                            child: Image(
+                              image: Image.memory(base64.decode(
+                                      prescription.doctor.userAvatar.image))
+                                  .image,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Doctor's name: ${prescription.doctor.name}",
+                        style: TextStyle(fontSize: space * 0.038),
+                      ),
+                      Text(
+                        "Doctor Category: ${prescription.doctor.categories[0].name}",
+                        style: TextStyle(fontSize: space * 0.038),
+                      ),
+                      Text(
+                        "Mobile Number: ${prescription.doctor.mobileNumber}",
+                        style: TextStyle(fontSize: space * 0.038),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
                   (prescription.patient.userAvatar != null)
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
-                            height: space * 0.3,
-                            width: space * 0.3,
+                            height: space * 0.2,
+                            width: space * 0.2,
                             child: Image(
                               image: Image.memory(base64.decode(
                                       prescription.patient.userAvatar.image))
@@ -56,25 +97,11 @@ class PrescriptionPage extends HookWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text("Patients name: ${prescription.patient.name}",
+                          style: TextStyle(fontSize: space * 0.038)),
                       Text(
-                        "Patients name: ${prescription.patient.name}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                          "Patients type: ${prescription.doctor.categories[0].name}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(
-                        "Serial Number: ${prescription.appoinmentId}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        "Mobile Number: ${prescription.patient.mobileNumber}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
+                          "Mobile Number: ${prescription.patient.mobileNumber}",
+                          style: TextStyle(fontSize: space * 0.038)),
                     ],
                   )
                 ],
@@ -113,44 +140,41 @@ class PrescriptionPage extends HookWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Container(
+                                              height: space * 0.15,
+                                              width: space * 0.15,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              RichText(
+                                                  text: TextSpan(
+                                                      text: schedule.medicine
+                                                          .medicineName,
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: [])),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
                                           Row(
                                             children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Container(
-                                                  height: space * 0.15,
-                                                  width: space * 0.15,
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  RichText(
-                                                      text: TextSpan(
-                                                          text: schedule
-                                                              .medicine
-                                                              .medicineName,
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                          children: [])),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
                                               Container(
                                                 padding: EdgeInsets.all(5),
                                                 decoration: BoxDecoration(
@@ -338,6 +362,9 @@ class PrescriptionPage extends HookWidget {
                     color: Color(0xFF00BABA),
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Text(
                 (prescription.advice != null) ? prescription.advice : "",

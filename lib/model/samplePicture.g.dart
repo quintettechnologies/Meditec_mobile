@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'prescriptionReport.dart';
+part of 'samplePicture.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PrescriptionReport _$PrescriptionReportFromJson(Map<String, dynamic> json) {
-  return PrescriptionReport()
+SamplePicture _$SamplePictureFromJson(Map<String, dynamic> json) {
+  return SamplePicture()
     ..id = json['id'] as num
     ..image = json['image'] as String
     ..appoinment = json['appoinment'] == null
         ? null
         : Appointment.fromJson(json['appoinment'] as Map<String, dynamic>)
-    ..fileTye = json['fileTye'] as String;
+    ..fileType = json['fileType'] as String;
 }
 
-Map<String, dynamic> _$PrescriptionReportToJson(PrescriptionReport instance) =>
+Map<String, dynamic> _$SamplePictureToJson(SamplePicture instance) =>
     <String, dynamic>{
       'id': instance.id,
       'image': instance.image,
       'appoinment': instance.appoinment,
-      'fileTye': instance.fileTye
+      'fileType': instance.fileType
     };

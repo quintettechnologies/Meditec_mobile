@@ -125,8 +125,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                       Container(),
                                   Text(
                                     category.name,
-                                    style:
-                                        kButtonTextStyle.copyWith(fontSize: 16),
+                                    style: kButtonTextStyle.copyWith(
+                                        fontSize: space * 0.036),
                                   ),
                                 ],
                               ),

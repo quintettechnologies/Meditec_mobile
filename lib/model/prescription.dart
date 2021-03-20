@@ -3,6 +3,7 @@ import "user.dart";
 import "medicine.dart";
 import "test.dart";
 import "medicineSchedule.dart";
+import "appointment.dart";
 part 'prescription.g.dart';
 
 @JsonSerializable()
@@ -14,7 +15,6 @@ class Prescription {
     String test;
     String doctorName;
     String referredTo;
-    num appoinmentId;
     String advice;
     User patient;
     User doctor;
@@ -22,6 +22,7 @@ class Prescription {
     List<Test> tests;
     List<MedicineSchedule> scedules;
     User referredDoctor;
+    Appointment appoinment;
     
     factory Prescription.fromJson(Map<String,dynamic> json) => _$PrescriptionFromJson(json);
     Map<String, dynamic> toJson() => _$PrescriptionToJson(this);

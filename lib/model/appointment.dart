@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import "user.dart";
 import "doctorSlot.dart";
-import "prescriptionReport.dart";
+import "prescription.dart";
 part 'appointment.g.dart';
 
 @JsonSerializable()
@@ -12,9 +12,14 @@ class Appointment {
   DateTime time;
   num serialNumber;
   String status;
+  String friendlyUserName;
+  num friendlyUserAge;
+  num friendlyUserWeight;
+  String friendlyUserBloodGroup;
+  bool originalUser;
   User user;
   DoctorSlot doctorSlot;
-  List<PrescriptionReport> reports;
+  Prescription prescription;
 
   factory Appointment.fromJson(Map<String, dynamic> json) =>
       _$AppointmentFromJson(json);

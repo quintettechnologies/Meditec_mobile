@@ -192,6 +192,55 @@ class ProfileScreen extends HookWidget {
                 padding: EdgeInsets.all(10),
                 child: Column(
                   children: [
+                    Text(
+                      "Health Information",
+                      style: TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    DetailsWidget(
+                      title: "Blood Group",
+                      text: user.bloodGroup ?? "",
+                      space: space,
+                    ),
+                    Space(space: space),
+                    DetailsWidget(
+                      title: "Weight",
+                      text: "${user.weight.toString() ?? ""} KG" ?? "",
+                      space: space,
+                    ),
+                    Space(space: space),
+                    DetailsWidget(
+                      title: "Gender",
+                      text: user.gender ?? "",
+                      space: space,
+                    ),
+                    Space(space: space),
+                    DetailsWidget(
+                      title: "Age",
+                      text: user.age.toString() ?? "",
+                      space: space,
+                    ),
+                  ],
+                ),
+              ),
+              Space(space: space),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color(0xFF000000).withOpacity(0.1),
+                        offset: Offset.fromDirection(1),
+                        blurRadius: 10,
+                        spreadRadius: 1)
+                  ],
+                ),
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
                     DetailsWidget(
                       title: "Address",
                       text: "",

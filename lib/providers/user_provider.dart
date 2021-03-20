@@ -11,8 +11,8 @@ import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  String url = "182.48.90.214:8080";
-  // String url = "192.168.0.100:8080";
+  // String url = "182.48.90.214:8080";
+  String url = "192.168.0.100:8080";
   User _user;
   String number;
   String password;
@@ -25,7 +25,6 @@ class UserProvider extends ChangeNotifier {
   List<User> categoryDoctors = [];
   List<DoctorSlot> doctorSlots = [];
   List<Appointment> appointments = [];
-  List<Prescription> prescriptions = [];
   DoctorSlot selectedSlot = DoctorSlot();
   Auth _auth;
   Prescription prescriptionTemp;
@@ -88,12 +87,8 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future bookAppointment(DoctorSlot doctorSlot) async {
-    Appointment appointment = new Appointment();
-    print(doctorSlot);
-    _user.userAvatar = null;
-    appointment.user = _user;
-    appointment.doctorSlot = doctorSlot;
+  Future<String> bookAppointment(Appointment appointment) async {
+    appointment.user.userAvatar = null;
     var uri = Uri.http('$url', '/takeAppoinment');
     var response = await http.post(
       uri,
@@ -109,21 +104,50 @@ class UserProvider extends ChangeNotifier {
         response.statusCode == 200 &&
         response.body == "success") {
       selectedSlot = DoctorSlot();
-      await _getUser();
+      await getAppointments();
+      return "success";
+    } else if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "taken") {
+      print(response.body.toString());
+      return "taken";
+    } else if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "overloaded") {
+      print(response.body.toString());
+      return "overloaded";
+    } else {
+      return "failed";
+    }
+  }
+
+  Future confirmPayment(String appointmentID) async {
+    var queryParameters = {
+      'id': '$appointmentID',
+    };
+    var uri = Uri.http('$url', '/makePaymentDone', queryParameters);
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+    print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      await getAppointments();
       return true;
     } else {
       print(response.body.toString());
-      await _getUser();
       return false;
     }
   }
 
-  Future bookAppointmentPayLater(DoctorSlot doctorSlot) async {
-    Appointment appointment = new Appointment();
-    print(doctorSlot);
-    _user.userAvatar = null;
-    appointment.user = _user;
-    appointment.doctorSlot = doctorSlot;
+  Future<String> bookAppointmentPayLater(Appointment appointment) async {
+    appointment.user.userAvatar = null;
     var uri = Uri.http('$url', '/takeAppoinmentPayLater');
     var response = await http.post(
       uri,
@@ -139,12 +163,20 @@ class UserProvider extends ChangeNotifier {
         response.statusCode == 200 &&
         response.body == "success") {
       selectedSlot = DoctorSlot();
-      await _getUser();
-      return true;
-    } else {
+      await getAppointments();
+      return "success";
+    } else if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "taken") {
       print(response.body.toString());
-      await _getUser();
-      return false;
+      return "taken";
+    } else if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "overloaded") {
+      print(response.body.toString());
+      return "overloaded";
+    } else {
+      return "failed";
     }
   }
 
@@ -222,46 +254,90 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future getPrescriptions() async {
-    var queryParameters = {
-      'id': '${_user.userId}',
-    };
-    var uri = Uri.http('$url', '/getPrescriptions', queryParameters);
-    var response = await http.get(
-      uri,
-      headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
-        HttpHeaders.contentTypeHeader: 'application/json',
-      },
-    );
+  // Future getPrescriptions() async {
+  //   var queryParameters = {
+  //     'id': '${_user.userId}',
+  //   };
+  //   var uri = Uri.http('$url', '/getPrescriptions', queryParameters);
+  //   var response = await http.get(
+  //     uri,
+  //     headers: {
+  //       HttpHeaders.authorizationHeader:
+  //           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+  //       HttpHeaders.contentTypeHeader: 'application/json',
+  //     },
+  //   );
+  //
+  //   if (response.body != null && response.statusCode == 200) {
+  //     List<dynamic> press = jsonDecode(response.body);
+  //     prescriptions = (press)
+  //         ?.map((e) => e == null
+  //             ? null
+  //             : Prescription.fromJson(e as Map<String, dynamic>))
+  //         ?.toList();
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-    if (response.body != null && response.statusCode == 200) {
-      List<dynamic> press = jsonDecode(response.body);
-      prescriptions = (press)
-          ?.map((e) => e == null
-              ? null
-              : Prescription.fromJson(e as Map<String, dynamic>))
-          ?.toList();
+  Future uploadSample(File _image, int id) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse("http://$url/uploadSample?appoinmentId=$id"));
+    request.files.add(http.MultipartFile.fromBytes(
+        'samples', File(_image.path).readAsBytesSync(),
+        filename: _image.path.split("/").last));
+    var res = await request.send();
+    print(res.statusCode);
+    print(res);
+    if (res != null && res.statusCode == 200) {
       return true;
     } else {
       return false;
     }
   }
 
-  Future uploadImage(File _image) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse("http://$url/updateAvatar?userId=${_user.userId}"));
-    request.files.add(http.MultipartFile.fromBytes(
-        'profileImage', File(_image.path).readAsBytesSync(),
-        filename: _image.path.split("/").last));
-    var res = await request.send();
-    print(res.statusCode);
-    if (res != null && res.statusCode == 200) {
-      await _getUser();
-      notifyListeners();
+  Future<List<SamplePicture>> getPreviousSamples(int appointmentId) async {
+    var queryParameters = {
+      'appoinmentId': '$appointmentId',
+    };
+    var uri = Uri.http('$url', '/getSamples', queryParameters);
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+    });
+    print(response.body);
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> samples = jsonDecode(response.body);
+      List<SamplePicture> h = (samples)
+          ?.map((e) => e == null
+              ? null
+              : SamplePicture.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return h;
+    }
+  }
+
+  Future deletePreviousSample(SamplePicture samplePicture) async {
+    samplePicture.appoinment = null;
+    var uri = Uri.http('$url', '/deleteSample');
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode(samplePicture.toJson()),
+    );
+    print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
       return true;
     } else {
+      print(response.body.toString());
       return false;
     }
   }
@@ -275,6 +351,68 @@ class UserProvider extends ChangeNotifier {
     var res = await request.send();
     print(res.statusCode);
     print(res);
+    if (res != null && res.statusCode == 200) {
+      await _getUser();
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<PrescriptionReport>> getPreviousReports(int appointmentId) async {
+    var queryParameters = {
+      'appoinmentId': '$appointmentId',
+    };
+    var uri = Uri.http('$url', '/getPreviousReports', queryParameters);
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader:
+          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+    });
+    print(response.body);
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> slots = jsonDecode(response.body);
+      List<PrescriptionReport> h = (slots)
+          ?.map((e) => e == null
+              ? null
+              : PrescriptionReport.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return h;
+    }
+  }
+
+  Future deletePreviousReport(PrescriptionReport report) async {
+    report.appoinment = null;
+    var uri = Uri.http('$url', '/deletePrescriptionReport');
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode(report.toJson()),
+    );
+    print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      return true;
+    } else {
+      print(response.body.toString());
+      return false;
+    }
+  }
+
+  Future uploadImage(File _image) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse("http://$url/updateAvatar?userId=${_user.userId}"));
+    request.files.add(http.MultipartFile.fromBytes(
+        'profileImage', File(_image.path).readAsBytesSync(),
+        filename: _image.path.split("/").last));
+    var res = await request.send();
+    print(res.statusCode);
     if (res != null && res.statusCode == 200) {
       await _getUser();
       notifyListeners();
@@ -299,6 +437,19 @@ class UserProvider extends ChangeNotifier {
             (user.mobileNumber != null && user.mobileNumber != "")
         ? user.mobileNumber
         : tempUser.mobileNumber;
+    tempUser.bloodGroup = (user.bloodGroup != _user.bloodGroup) &&
+            (user.bloodGroup != null && user.bloodGroup != "")
+        ? user.bloodGroup
+        : tempUser.bloodGroup;
+    tempUser.weight = (user.weight != _user.weight) && (user.weight != null)
+        ? user.weight
+        : tempUser.weight;
+    tempUser.gender = (user.gender != _user.gender) &&
+            (user.gender != null && user.gender != "")
+        ? user.gender
+        : tempUser.gender;
+    tempUser.age =
+        (user.age != _user.age) && (user.age != null) ? user.age : tempUser.age;
     tempUser.addressBooks =
         (user.addressBooks != null) ? user.addressBooks : tempUser.addressBooks;
 
@@ -459,7 +610,6 @@ class UserProvider extends ChangeNotifier {
       var image = base64.decode(image1.toString());
       await getCategories();
       await getAppointments();
-      await getPrescriptions();
       await getDoctorList();
     }
     notifyListeners();

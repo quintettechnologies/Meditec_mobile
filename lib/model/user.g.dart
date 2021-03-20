@@ -24,11 +24,19 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..lastLoginDate = json['lastLoginDate'] as String
     ..lastLoginIp = json['lastLoginIp'] as String
     ..lastFailedLoginDate = json['lastFailedLoginDate'] as String
+    ..adminNumber = json['adminNumber'] as String
+    ..gender = json['gender'] as String
+    ..weight = json['weight'] as num
+    ..age = json['age'] as num
+    ..bloodGroup = json['bloodGroup'] as String
+    ..hospitalName = json['hospitalName'] as String
     ..failedLoginAttempts = json['failedLoginAttempts'] as num
     ..aggreedToTermOfUse = json['aggreedToTermOfUse'] as bool
     ..emailVerified = json['emailVerified'] as bool
     ..account = json['account'] as List
-    ..roles = json['roles'] as Map<String, dynamic>
+    ..roles = json['roles'] == null
+        ? null
+        : Role.fromJson(json['roles'] as Map<String, dynamic>)
     ..userAvatar = json['userAvatar'] == null
         ? null
         : UserAvatar.fromJson(json['userAvatar'] as Map<String, dynamic>)
@@ -41,8 +49,6 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..degree = json['degree'] == null
         ? null
         : Degree.fromJson(json['degree'] as Map<String, dynamic>)
-    ..appoinments = json['appoinments'] as List
-    ..doctorSlots = json['doctorSlots'] as List
     ..categories = (json['categories'] as List)
         ?.map((e) =>
             e == null ? null : Category.fromJson(e as Map<String, dynamic>))
@@ -70,6 +76,12 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'lastLoginDate': instance.lastLoginDate,
       'lastLoginIp': instance.lastLoginIp,
       'lastFailedLoginDate': instance.lastFailedLoginDate,
+      'adminNumber': instance.adminNumber,
+      'gender': instance.gender,
+      'weight': instance.weight,
+      'age': instance.age,
+      'bloodGroup': instance.bloodGroup,
+      'hospitalName': instance.hospitalName,
       'failedLoginAttempts': instance.failedLoginAttempts,
       'aggreedToTermOfUse': instance.aggreedToTermOfUse,
       'emailVerified': instance.emailVerified,
@@ -79,8 +91,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'addressBooks': instance.addressBooks,
       'speciality': instance.speciality,
       'degree': instance.degree,
-      'appoinments': instance.appoinments,
-      'doctorSlots': instance.doctorSlots,
       'categories': instance.categories,
       'chambers': instance.chambers
     };

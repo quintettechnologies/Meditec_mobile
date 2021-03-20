@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,134 +17,21 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
 
-class PaymentScreen extends StatefulWidget {
-  static const String id = 'doctor_profile_screen';
+class ConfirmPaymentScreen extends StatefulWidget {
+  static const String id = 'confirmPayment';
 
-  PaymentScreen({@required this.doctor, @required this.doctorSlot});
+  final Appointment appointment;
 
-  final User doctor;
-  final DoctorSlot doctorSlot;
+  const ConfirmPaymentScreen({Key key, @required this.appointment})
+      : super(key: key);
   @override
   _PaymentScreenScreenState createState() => _PaymentScreenScreenState();
 }
 
-class _PaymentScreenScreenState extends State<PaymentScreen> {
-  Appointment appointment = Appointment();
-  bool forFNF = false;
-  TextEditingController nameController;
-  TextEditingController ageController;
-  TextEditingController weightController;
-  TextEditingController bloodGroupController;
-  FocusNode nameFocus;
-  FocusNode ageFocus;
-  FocusNode weightFocus;
-  FocusNode bloodGroupFocus;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    nameController = TextEditingController();
-    ageController = TextEditingController();
-    weightController = TextEditingController();
-    bloodGroupController = TextEditingController();
-    nameFocus = FocusNode();
-    ageFocus = FocusNode();
-    weightFocus = FocusNode();
-    bloodGroupFocus = FocusNode();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    nameController.dispose();
-    ageController.dispose();
-    weightController.dispose();
-    bloodGroupController.dispose();
-    nameFocus.dispose();
-    ageFocus.dispose();
-    weightFocus.dispose();
-    bloodGroupFocus.dispose();
-    super.dispose();
-  }
-
-  setAppointment(User user) {
-    appointment.user = user;
-    appointment.doctorSlot = widget.doctorSlot;
-    if (forFNF) {
-      appointment.originalUser = false;
-      appointment.friendlyUserName = nameController.text.trim();
-      appointment.friendlyUserAge = int.tryParse(ageController.text.trim());
-      appointment.friendlyUserWeight =
-          double.tryParse(weightController.text.trim());
-      appointment.friendlyUserBloodGroup = bloodGroupController.text.trim();
-    } else {
-      appointment.originalUser = true;
-      appointment.friendlyUserName = null;
-      appointment.friendlyUserAge = null;
-      appointment.friendlyUserWeight = null;
-      appointment.friendlyUserBloodGroup = null;
-    }
-  }
-
-  bool validate() {
-    if (forFNF) {
-      if (appointment.friendlyUserName == null ||
-          appointment.friendlyUserName == "") {
-        Fluttertoast.showToast(
-            msg: "Patient Name Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return false;
-      } else if (appointment.friendlyUserAge == null ||
-          appointment.friendlyUserAge == 0) {
-        Fluttertoast.showToast(
-            msg: "Patient Age Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return false;
-      } else if (appointment.friendlyUserWeight == null ||
-          appointment.friendlyUserWeight == 0) {
-        Fluttertoast.showToast(
-            msg: "Patient Weight Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return false;
-      } else if (appointment.friendlyUserBloodGroup == null ||
-          appointment.friendlyUserBloodGroup == "") {
-        Fluttertoast.showToast(
-            msg: "Patient Blood Group Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-  }
-
+class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    final User user = context.read(userProvider).currentUser();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MyCustomAppBar(),
@@ -156,7 +42,6 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                 vertical: space * 0.01, horizontal: space * 0.05),
             child: Consumer(
               builder: (context, watch, child) {
-                List<Doctor> doctors = watch(doctorsProvider);
                 return Container(
                   child: Stack(
                     children: [
@@ -188,19 +73,22 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      widget.doctor.name,
+                                      widget.appointment.doctorSlot.chamber.user
+                                          .name,
                                       style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      widget.doctor.degree.degreeName,
+                                      widget.appointment.doctorSlot.chamber.user
+                                          .categories[0].name,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
                                     ),
                                     Text(
-                                      widget.doctor.categories[0].name,
+                                      widget.appointment.doctorSlot.chamber.user
+                                          .degree.degreeName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -243,6 +131,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                   text: TextSpan(
                                                       text: DateFormat.E()
                                                           .format(widget
+                                                              .appointment
                                                               .doctorSlot
                                                               .startTime),
                                                       style: TextStyle(
@@ -252,7 +141,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                       children: [
                                                         TextSpan(
                                                             text:
-                                                                ' ${DateFormat.d().format(widget.doctorSlot.startTime)}',
+                                                                ' ${DateFormat.d().format(widget.appointment.doctorSlot.startTime)}',
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -278,7 +167,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                   horizontal: 10),
                                               child: Center(
                                                   child: Text(
-                                                "${DateFormat.jm().format(widget.doctorSlot.startTime)}-${DateFormat.jm().format(widget.doctorSlot.endTime)}",
+                                                "${DateFormat.jm().format(widget.appointment.doctorSlot.startTime)}-${DateFormat.jm().format(widget.appointment.doctorSlot.endTime)}",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
@@ -325,18 +214,6 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "Edit",
-                                        style: TextStyle(
-                                            color: Color(0xFF00BABA),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
                                   ],
                                 ),
                                 SizedBox(
@@ -376,21 +253,22 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${DateFormat.yMd().format(widget.doctorSlot.startTime)}",
+                                          "${DateFormat.yMd().format(widget.appointment.doctorSlot.startTime)}",
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
                                           height: space * 0.02,
                                         ),
                                         Text(
-                                          "${DateFormat.jm().format(widget.doctorSlot.startTime)} ",
+                                          "${DateFormat.jm().format(widget.appointment.time)} ",
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
                                           height: space * 0.02,
                                         ),
                                         Text(
-                                          widget.doctorSlot.fees.toString(),
+                                          widget.appointment.doctorSlot.fees
+                                              .toString(),
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ],
@@ -403,106 +281,6 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                           SizedBox(
                             height: space * 0.05,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "For Someone Else",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              CustomSwitch(
-                                activeColor: Colors.green,
-                                value: forFNF,
-                                onChanged: (value) {
-                                  print("VALUE : $value");
-                                  setState(() {
-                                    forFNF = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: space * 0.05,
-                          ),
-                          forFNF
-                              ? Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0xFF000000)
-                                                  .withOpacity(0.1),
-                                              offset: Offset.fromDirection(1),
-                                              blurRadius: 10,
-                                              spreadRadius: 1)
-                                        ],
-                                      ),
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "Patient Details",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: space * 0.02,
-                                          ),
-                                          TextEditingField(
-                                            text: "Name",
-                                            space: space,
-                                            controller: nameController,
-                                            focusNode: nameFocus,
-                                          ),
-                                          SizedBox(
-                                            height: space * 0.02,
-                                          ),
-                                          TextEditingField(
-                                            text: "Age",
-                                            space: space,
-                                            controller: ageController,
-                                            focusNode: ageFocus,
-                                          ),
-                                          SizedBox(
-                                            height: space * 0.02,
-                                          ),
-                                          TextEditingField(
-                                            text: "Weight",
-                                            space: space,
-                                            controller: weightController,
-                                            focusNode: weightFocus,
-                                          ),
-                                          SizedBox(
-                                            height: space * 0.02,
-                                          ),
-                                          TextEditingField(
-                                            text: "Blood Group",
-                                            space: space,
-                                            controller: bloodGroupController,
-                                            focusNode: bloodGroupFocus,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: space * 0.05,
-                                    ),
-                                  ],
-                                )
-                              : Container(),
                           Container(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -667,55 +445,31 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                             children: [
                               TextButton(
                                 onPressed: () async {
-                                  setAppointment(user);
-                                  bool valid = validate();
-                                  if (valid) {
-                                    String status = await context
-                                        .read(userProvider)
-                                        .bookAppointmentPayLater(appointment);
-                                    if (status == "success") {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Appointment booked successfully!",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.green,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      Navigator.pushNamed(
-                                          context, AppointmentsScreen.id);
-                                    } else if (status == "taken") {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "You have already booked an appointment at this time slot.",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    } else if (status == "overloaded") {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Sorry this time slot is already full.",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Sorry, failed to book an appointment",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    }
+                                  bool status = await context
+                                      .read(userProvider)
+                                      .confirmPayment(
+                                          widget.appointment.id.toString());
+                                  if (status) {
+                                    Fluttertoast.showToast(
+                                        msg: "Payment Successul",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.green,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(
+                                        context, AppointmentsScreen.id);
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Payment Failed",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
                                   }
                                 },
                                 child: Container(
@@ -728,79 +482,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "Pay Later",
-                                      style: TextStyle(
-                                          fontSize: space * 0.04,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  setAppointment(user);
-                                  bool valid = validate();
-                                  if (valid) {
-                                    String status = await context
-                                        .read(userProvider)
-                                        .bookAppointment(appointment);
-                                    if (status == "success") {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Appointment booked successfully!",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.green,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      Navigator.pushNamed(
-                                          context, AppointmentsScreen.id);
-                                    } else if (status == "taken") {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "You have already booked an appointment at this time slot.",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    } else if (status == "overloaded") {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Sorry this time slot is already full.",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Sorry, failed to book an appointment",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                  height: space * .12,
-                                  width: space * 0.36,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF00BABA),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Make Payment",
+                                      "Pay Now",
                                       style: TextStyle(
                                           fontSize: space * 0.04,
                                           fontWeight: FontWeight.bold,
@@ -817,15 +499,22 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                         ],
                       ),
                       Center(
-                        child: (widget.doctor.userAvatar != null)
+                        child: (widget.appointment.doctorSlot.chamber.user
+                                    .userAvatar !=
+                                null)
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Container(
                                   height: space * 0.3,
                                   width: space * 0.3,
                                   child: Image(
-                                    image: Image.memory(base64.decode(
-                                            widget.doctor.userAvatar.image))
+                                    image: Image.memory(base64.decode(widget
+                                            .appointment
+                                            .doctorSlot
+                                            .chamber
+                                            .user
+                                            .userAvatar
+                                            .image))
                                         .image,
                                   ),
                                 ),
@@ -847,60 +536,46 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
   }
 }
 
-class Space extends StatelessWidget {
-  const Space({
+class myCustomDayButton extends StatelessWidget {
+  const myCustomDayButton({
     Key key,
     @required this.space,
+    @required this.day,
+    @required this.date,
+    this.selected = false,
   }) : super(key: key);
 
   final double space;
+  final String day;
+  final String date;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: space * 0.05,
-    );
-  }
-}
-
-class TextEditingField extends StatelessWidget {
-  TextEditingField(
-      {@required this.text,
-      @required this.controller,
-      @required this.space,
-      @required this.focusNode});
-
-  final double space;
-  final TextEditingController controller;
-  final String text;
-  final FocusNode focusNode;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          text,
-          style: TextStyle(fontSize: 16),
-        ),
-        SizedBox(
-          height: space * 0.1,
-          width: space * 0.5,
-          child: TextFormField(
-            controller: controller,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-              hintStyle: TextStyle(fontSize: 16),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
-                ),
-              ),
-            ),
+    return Container(
+      width: space * 0.12,
+      height: space * 0.15,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: selected ? Color(0xFF3C4858) : Colors.white,
+          borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            day,
+            style: TextStyle(
+                fontSize: 16, color: selected ? Colors.white : Colors.black87),
           ),
-        ),
-      ],
+          Text(
+            date,
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: selected ? Colors.white : Colors.black87),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -9,6 +9,7 @@ part of 'medicineSchedule.dart';
 MedicineSchedule _$MedicineScheduleFromJson(Map<String, dynamic> json) {
   return MedicineSchedule()
     ..id = json['id'] as num
+    ..afterMeal = json['afterMeal'] as bool
     ..morning = json['morning'] as num
     ..day = json['day'] as num
     ..night = json['night'] as num
@@ -21,6 +22,7 @@ MedicineSchedule _$MedicineScheduleFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$MedicineScheduleToJson(MedicineSchedule instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'afterMeal': instance.afterMeal,
       'morning': instance.morning,
       'day': instance.day,
       'night': instance.night,

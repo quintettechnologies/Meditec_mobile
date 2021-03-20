@@ -15,6 +15,8 @@ class DoctorSlot {
   num maximumNumberOfAppoinment;
   User user;
   Chamber chamber;
+  String dayName;
+  num weekToRepeat;
 
   factory DoctorSlot.fromJson(Map<String, dynamic> json) =>
       _$DoctorSlotFromJson(json);

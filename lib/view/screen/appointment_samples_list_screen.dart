@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/index.dart';
@@ -10,6 +9,8 @@ import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointment_detail_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/screen/prescription_page.dart';
+import 'package:meditec/view/screen/reports_list_screen.dart';
+import 'package:meditec/view/screen/samples_list_screen.dart';
 import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/catagoryButtonDashboard.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
@@ -20,13 +21,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
 
-class PrescriptionListScreen extends StatefulWidget {
-  static const String id = 'PrescriptionListScreen';
+class AppointmentSampleListScreen extends StatefulWidget {
+  static const String id = 'AppointmentSampleListScreen';
   @override
-  _PrescriptionListScreenState createState() => _PrescriptionListScreenState();
+  _AppointmentSampleListScreenState createState() =>
+      _AppointmentSampleListScreenState();
 }
 
-class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
+class _AppointmentSampleListScreenState
+    extends State<AppointmentSampleListScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -58,7 +61,7 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Prescriptions',
+                  'Samples',
                   style: TextStyle(
                       fontSize: space * 0.05, color: kPrimaryTextColor),
                 ),
@@ -71,28 +74,12 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
                       for (Appointment appointment in appointments)
                         GestureDetector(
                           onTap: () async {
-                            bool get = await context
-                                .read(userProvider)
-                                .getFullPrescription(appointment.id);
-                            if (get) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PrescriptionPage(
-                                            prescription: context
-                                                .read(userProvider)
-                                                .prescriptionTemp,
-                                          )));
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: "Sorry, not prescribed yet.",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SampleListScreen(
+                                          appointment: appointment,
+                                        )));
                           },
                           child: Container(
                             margin: EdgeInsets.all(5),

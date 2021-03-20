@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
+import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
 import 'package:meditec/view/screen/prescriptions_list_screen.dart';
@@ -74,7 +75,7 @@ class MyCustomDrawer extends HookWidget {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "${user.currentUser().roles['name'].toString().toUpperCase()}",
+                                        "${user.currentUser().roles.name.toString().toUpperCase()}",
                                         // "Patient",
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 14),
@@ -149,6 +150,13 @@ class MyCustomDrawer extends HookWidget {
                                   context, AppointmentReportListScreen.id);
                             },
                             child: MenuItem(text: 'Previous Reports')),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(
+                                  context, AppointmentSampleListScreen.id);
+                            },
+                            child: MenuItem(text: 'Previous Samples')),
                         // MenuItem(text: 'Feedback'),
                         // MenuItem(text: 'Following'),
                       ],
