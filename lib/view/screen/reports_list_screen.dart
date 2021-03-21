@@ -9,6 +9,7 @@ import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/prescriptionReport.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/report_detail_screen.dart';
+import 'package:meditec/view/screen/upload_previous_report_page.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
@@ -30,7 +31,6 @@ class ReportsListScreen extends StatefulWidget {
 class _ReportsListScreenState extends State<ReportsListScreen> {
   List<PrescriptionReport> reports = [];
   bool loading = false;
-  double progress = 0;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
@@ -113,7 +113,7 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
         0, // notification id
         isSuccess ? 'Success' : 'Failure',
         isSuccess
-            ? 'File has been downloaded successfully!'
+            ? 'File has been downloaded successfully! Tap to open the file.'
             : 'There was an error while downloading the file.',
         platform,
         payload: json);
@@ -208,7 +208,7 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                           fontSize: space * 0.05, color: kPrimaryTextColor),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: space * 0.1,
                     ),
                     Column(
                       children: [
@@ -358,6 +358,42 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                     ),
                   ],
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  RaisedButton(
+                    onPressed: () async {
+                      bool upload = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UploadPreviousReportScreen(
+                            appointment: widget.appointment,
+                          ),
+                        ),
+                      );
+                      if (upload) {
+                        await getReports();
+                      }
+                    },
+                    child: Container(
+                      width: space * 0.2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            Icons.upload_file,
+                            color: Color(0xFF00BABA),
+                          ),
+                          SizedBox(
+                            width: space * 0.02,
+                          ),
+                          Text('Upload')
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
               loading ? Center(child: CircularProgressIndicator()) : Container()
             ],

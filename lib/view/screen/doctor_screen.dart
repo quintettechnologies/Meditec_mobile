@@ -277,6 +277,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                       style: TextStyle(
                                                           fontSize: 12),
                                                     ),
+                                                    Text(
+                                                      doctor.hospitalName ?? "",
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
                                                     // Text(
                                                     //     doctor
                                                     //         .chambers[0].adress,

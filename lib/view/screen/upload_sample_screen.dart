@@ -181,10 +181,18 @@ class _UploadSampleScreenState extends State<UploadSampleScreen> {
                           .read(userProvider)
                           .uploadSample(_sample, widget.appointment.id);
                       if (upload) {
+                        Fluttertoast.showToast(
+                            msg: "Upload successful!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.green,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
                         setState(() {
                           _inProcess = false;
                         });
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       } else {
                         Fluttertoast.showToast(
                             msg: "Something went wrong! please try again.",

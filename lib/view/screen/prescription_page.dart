@@ -270,6 +270,7 @@ class PrescriptionPage extends HookWidget {
               ),
               (prescription.tests.isNotEmpty)
                   ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Tests",
@@ -379,6 +380,7 @@ class PrescriptionPage extends HookWidget {
                   : Container(),
               (prescription.advice != null)
                   ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Advice",
@@ -402,6 +404,7 @@ class PrescriptionPage extends HookWidget {
               ),
               (prescription.referredDoctor != null)
                   ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Referred to",

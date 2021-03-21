@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -221,10 +222,30 @@ class _UploadPreviousReportScreenState
                           .read(userProvider)
                           .uploadReports(_report, widget.appointment.id);
                       if (upload) {
+                        Fluttertoast.showToast(
+                            msg: "Upload successful!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.green,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
                         setState(() {
                           _inProcess = false;
                         });
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Something went wrong! please try again.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        setState(() {
+                          _inProcess = false;
+                        });
                       }
                     },
                     child: Container(

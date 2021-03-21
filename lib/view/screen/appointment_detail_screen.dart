@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/view/screen/reports_list_screen.dart';
+import 'package:meditec/view/screen/samples_list_screen.dart';
 import 'package:meditec/view/screen/upload_previous_report_page.dart';
 import 'package:meditec/view/screen/upload_sample_screen.dart';
 import 'package:meditec/view/screen/video_call_screen.dart';
@@ -197,7 +199,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    UploadPreviousReportScreen(
+                                                    ReportsListScreen(
                                                   appointment:
                                                       widget.appointment,
                                                 ),
@@ -252,7 +254,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    UploadSampleScreen(
+                                                    SampleListScreen(
                                                   appointment:
                                                       widget.appointment,
                                                 ),

@@ -30,7 +30,7 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                   route: Dashboard.id,
                 ),
                 NavbarButton(
-                  text: 'Appointments',
+                  text: 'Appointment',
                   route: AppointmentsScreen.id,
                 ),
                 NavbarButton(
