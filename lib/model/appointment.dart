@@ -16,6 +16,7 @@ class Appointment {
   num friendlyUserAge;
   num friendlyUserWeight;
   String friendlyUserBloodGroup;
+  String friendlyUserGender;
   bool originalUser;
   User user;
   DoctorSlot doctorSlot;

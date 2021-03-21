@@ -7,6 +7,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
+import 'package:meditec/view/screen/edit_profile_screen.dart';
+import 'package:meditec/view/screen/profile_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
@@ -95,13 +97,12 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
                           : Container(
                               height: space * 0.5,
                               width: space * 0.5,
-                              color: Colors.grey,
-                              child: Image(
-                                image: AssetImage(
-                                    'assets/images/profiles/user.png'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                              color: Colors.transparent,
+                              child: Icon(
+                                Icons.account_circle,
+                                color: Color(0xFF00BABA),
+                                size: space * 0.5,
+                              )),
                   SizedBox(
                     height: space * 0.1,
                   ),
@@ -161,6 +162,7 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
                           await context.read(userProvider).uploadImage(_image);
                       if (upload) {
                         Navigator.pop(context);
+                        Navigator.pushNamed(context, ProfileScreen.id);
                       }
                     },
                     child: Container(

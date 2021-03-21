@@ -73,13 +73,11 @@ class ProfileScreen extends HookWidget {
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: Image(
-                                    image: AssetImage(
-                                        'assets/images/profiles/user.png'),
-                                    fit: BoxFit.cover,
-                                    height: 70,
-                                  ),
-                                ),
+                                  child: Icon(
+                                    Icons.account_circle,
+                                    color: Color(0xFF00BABA),
+                                    size: space * 0.3,
+                                  )),
                           Positioned(
                             right: -10,
                             bottom: -10,

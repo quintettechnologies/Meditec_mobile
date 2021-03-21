@@ -16,6 +16,7 @@ Appointment _$AppointmentFromJson(Map<String, dynamic> json) {
     ..friendlyUserAge = json['friendlyUserAge'] as num
     ..friendlyUserWeight = json['friendlyUserWeight'] as num
     ..friendlyUserBloodGroup = json['friendlyUserBloodGroup'] as String
+    ..friendlyUserGender = json['friendlyUserGender'] as String
     ..originalUser = json['originalUser'] as bool
     ..user = json['user'] == null
         ? null
@@ -38,6 +39,7 @@ Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
       'friendlyUserAge': instance.friendlyUserAge,
       'friendlyUserWeight': instance.friendlyUserWeight,
       'friendlyUserBloodGroup': instance.friendlyUserBloodGroup,
+      'friendlyUserGender': instance.friendlyUserGender,
       'originalUser': instance.originalUser,
       'user': instance.user,
       'doctorSlot': instance.doctorSlot,

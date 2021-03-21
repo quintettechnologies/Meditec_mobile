@@ -1,24 +1,66 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:meditec/model/index.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/login_screen.dart';
+import 'package:meditec/view/screen/profile_screen.dart';
 import 'package:meditec/view/widget/textAndField.dart';
 
 import 'dashboard_screen.dart';
 
-class SignUpScreen extends HookWidget {
+class SignUpScreen extends StatefulWidget {
   static const String id = 'signup_screen';
+
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController nameController;
+  FocusNode nameFocus;
+  TextEditingController emailController;
+  FocusNode emailFocus;
+  TextEditingController mobileNumberController;
+  FocusNode mobileNumberFocus;
+  TextEditingController passwordController;
+  FocusNode passwordFocus;
+  bool _inProcess = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    mobileNumberController = TextEditingController();
+    passwordController = TextEditingController();
+    nameFocus = FocusNode();
+    emailFocus = FocusNode();
+    mobileNumberFocus = FocusNode();
+    passwordFocus = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    nameController.dispose();
+    emailController.dispose();
+    mobileNumberController.dispose();
+    passwordController.dispose();
+    nameFocus.dispose();
+    emailFocus.dispose();
+    mobileNumberFocus.dispose();
+    passwordFocus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    final nameController = useTextEditingController();
-    final emailController = useTextEditingController();
-    final mobileNumberController = useTextEditingController();
-    final passwordController = useTextEditingController();
-    final confirmPasswordController = useTextEditingController();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -53,7 +95,7 @@ class SignUpScreen extends HookWidget {
                                 'Create Account',
                                 style: TextStyle(
                                     fontFamily: 'Source Sans Pro',
-                                    fontSize: 24,
+                                    fontSize: space * 0.06,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
@@ -64,19 +106,33 @@ class SignUpScreen extends HookWidget {
                         //   height: space * 0.0,
                         // ),
                         TextInputField(
-                            text: "Name", controller: nameController),
+                          text: "Name",
+                          controller: nameController,
+                          focus: nameFocus,
+                        ),
                         TextInputField(
-                            text: "Email", controller: emailController),
+                          text: "Email",
+                          controller: emailController,
+                          focus: emailFocus,
+                        ),
                         TextInputField(
-                            text: "Mobile Number",
-                            controller: mobileNumberController),
+                          text: "Mobile Number",
+                          controller: mobileNumberController,
+                          focus: mobileNumberFocus,
+                        ),
                         TextInputField(
-                            text: "Password", controller: passwordController),
+                          text: "Password",
+                          controller: passwordController,
+                          focus: passwordFocus,
+                        ),
                         SizedBox(
                           height: 20,
                         ),
                         GestureDetector(
                           onTap: () async {
+                            setState(() {
+                              _inProcess = true;
+                            });
                             User user = new User();
                             user.name = nameController.text;
                             user.email = emailController.text;
@@ -84,9 +140,34 @@ class SignUpScreen extends HookWidget {
                             user.password = passwordController.text;
                             bool signUp =
                                 await context.read(userProvider).signUp(user);
-
                             if (signUp) {
+                              setState(() {
+                                _inProcess = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: "Successfully Signed Up",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                               Navigator.pushNamed(context, Dashboard.id);
+                              Navigator.pushNamed(context, ProfileScreen.id);
+                              Navigator.pushNamed(
+                                  context, EditProfileScreen.id);
+                            } else {
+                              setState(() {
+                                _inProcess = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: "Signup Failed",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                             }
                           },
                           child: Container(
@@ -139,6 +220,17 @@ class SignUpScreen extends HookWidget {
                 ),
               ),
             ),
+            (_inProcess)
+                ? Container(
+                    color: Colors.blue,
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                  )
+                : Center()
           ],
         ),
       ),
@@ -151,13 +243,16 @@ class TextInputField extends StatelessWidget {
     Key key,
     @required this.text,
     @required this.controller,
+    @required this.focus,
   }) : super(key: key);
 
   final TextEditingController controller;
+  final FocusNode focus;
   final String text;
 
   @override
   Widget build(BuildContext context) {
+    final double space = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(
@@ -167,13 +262,15 @@ class TextInputField extends StatelessWidget {
             children: [
               Text(
                 text,
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: TextStyle(fontSize: space * 0.043, color: Colors.white),
               ),
             ],
           ),
         ),
-        Container(
+        ConstrainedBox(
+          constraints: BoxConstraints.tight(Size(space * 0.7, space * 0.14)),
           child: TextFormField(
+            focusNode: focus,
             controller: controller,
             validator: (value) {
               if (value.isEmpty) {
@@ -181,9 +278,9 @@ class TextInputField extends StatelessWidget {
               }
               return null;
             },
+            textAlignVertical: TextAlignVertical.center,
             style: TextStyle(
-              fontSize: 16,
-              height: 0.8,
+              fontSize: space * 0.04,
               color: Colors.black,
             ),
             obscureText: (text == "Password") ? true : false,
@@ -196,7 +293,7 @@ class TextInputField extends StatelessWidget {
               filled: true,
               fillColor: Colors.white,
               hintText: 'Enter $text',
-              hintStyle: TextStyle(fontSize: 16),
+              hintStyle: TextStyle(fontSize: space * 0.04),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(6),
@@ -209,96 +306,3 @@ class TextInputField extends StatelessWidget {
     );
   }
 }
-
-// Container(
-// padding: EdgeInsets.symmetric(vertical: 10),
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// Text(
-// 'Last Name',
-// style: TextStyle(fontSize: 18, color: Colors.white),
-// ),
-// ],
-// ),
-// ),
-// Container(
-// child: TextField(
-// onChanged: (value){
-// lastName = value;
-// },
-// decoration: InputDecoration(
-// filled: true,
-// fillColor: Colors.white,
-// hintText: 'Smith',
-// hintStyle: TextStyle(fontSize: 16),
-// border: OutlineInputBorder()),
-// ),
-// ),
-// Container(
-// padding: EdgeInsets.symmetric(vertical: 10),
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// Text(
-// 'Email',
-// style: TextStyle(fontSize: 18, color: Colors.white),
-// ),
-// ],
-// ),
-// ),
-// Container(
-// child: TextField(
-// decoration: InputDecoration(
-// filled: true,
-// fillColor: Colors.white,
-// hintText: 'example@email.com',
-// hintStyle: TextStyle(fontSize: 16),
-// border: OutlineInputBorder()),
-// ),
-// ),
-// Container(
-// padding: EdgeInsets.symmetric(vertical: 10),
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// Text(
-// 'Phone',
-// style: TextStyle(fontSize: 18, color: Colors.white),
-// ),
-// ],
-// ),
-// ),
-// Container(
-// child: TextField(
-// decoration: InputDecoration(
-// filled: true,
-// fillColor: Colors.white,
-// hintText: '0000000000',
-// hintStyle: TextStyle(fontSize: 16),
-// border: OutlineInputBorder()),
-// ),
-// ),
-// Container(
-// padding: EdgeInsets.symmetric(vertical: 10),
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// Text(
-// 'Password',
-// style: TextStyle(fontSize: 18, color: Colors.white),
-// ),
-// ],
-// ),
-// ),
-// Container(
-// child: TextField(
-// obscureText: true,
-// decoration: InputDecoration(
-// filled: true,
-// fillColor: Colors.white,
-// hintText: 'Enter Password',
-// hintStyle: TextStyle(fontSize: 16),
-// border: OutlineInputBorder()),
-// ),
-// ),

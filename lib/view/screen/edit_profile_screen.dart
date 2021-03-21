@@ -64,7 +64,6 @@ class EditProfileScreen extends HookWidget {
 
     final double space = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: MyCustomAppBar(),
       drawer: MyCustomDrawer(),
       body: SafeArea(
@@ -194,8 +193,7 @@ class EditProfileScreen extends HookWidget {
                         bool status =
                             await context.read(userProvider).editUser(tempuser);
                         if (status == true) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, Dashboard.id, (route) => false);
+                          Navigator.pop(context);
                         }
                       },
                       child: Container(
@@ -259,16 +257,16 @@ class TextEditingField extends StatelessWidget {
       children: <Widget>[
         Text(
           text,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: space * 0.04),
         ),
-        SizedBox(
-          height: space * 0.1,
-          width: space * 0.5,
+        ConstrainedBox(
+          constraints: BoxConstraints.tight(Size(space * 0.5, space * 0.145)),
           child: TextFormField(
             controller: controller,
             focusNode: focusNode,
+            textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-              hintStyle: TextStyle(fontSize: 16),
+              hintStyle: TextStyle(fontSize: space * 0.04),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(6),

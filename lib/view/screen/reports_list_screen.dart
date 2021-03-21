@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/prescriptionReport.dart';
@@ -13,10 +14,8 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../constants.dart';
 import '../constants.dart';
 
 class ReportsListScreen extends StatefulWidget {
@@ -33,12 +32,21 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
   bool loading = false;
   double progress = 0;
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
 //=======================
 
   @override
   void initState() {
     // TODO: implement initState
     getReports();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final iOS = IOSInitializationSettings();
+    final initSettings = InitializationSettings(android: android, iOS: iOS);
+
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: _onSelectNotification);
     super.initState();
   }
 
@@ -76,112 +84,105 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
     }
   }
 
-  // Future<bool> _requestPermission(Permission permission) async {
-  //   if (await permission.isGranted) {
-  //     return true;
-  //   } else {
-  //     var result = await permission.request();
-  //     if (result == PermissionStatus.granted) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-  //
-  // Future<String> getFilePath() async {
-  //   Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
-  //   String newPath = "";
-  //   print(appDocumentsDirectory);
-  //   List<String> paths = appDocumentsDirectory.path.split("/");
-  //   for (int x = 1; x < paths.length; x++) {
-  //     String folder = paths[x];
-  //     if (folder != "Android") {
-  //       newPath += "/" + folder;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   newPath = newPath + "/Meditec";
-  //   appDocumentsDirectory = Directory(newPath); // 2
-  //   String filePath = '$appDocumentsDirectory/demoTextFile.txt'; // 3
-  //
-  //   return filePath;
-  // }
-  //
-  // void saveFile() async {
-  //   File file = File(await getFilePath()); // 1
-  //   file.writeAsString(
-  //       "This is my demo text that will be saved to : demoTextFile.txt");
-  //   print(file.path); // 2
-  // }
-  //
-  // writeToFile(PrescriptionReport report) async {
-  //   Directory directory;
-  //   try {
-  //     if (Platform.isAndroid) {
-  //       if (await _requestPermission(Permission.storage)) {
-  //         directory = await getExternalStorageDirectory();
-  //         String newPath = "";
-  //         print(directory);
-  //         List<String> paths = directory.path.split("/");
-  //         for (int x = 1; x < paths.length; x++) {
-  //           String folder = paths[x];
-  //           if (folder != "Android") {
-  //             newPath += "/" + folder;
-  //           } else {
-  //             break;
-  //           }
-  //         }
-  //         newPath = newPath + "/Meditec";
-  //         directory = Directory(newPath);
-  //       } else {
-  //         return false;
-  //       }
-  //     }
-  //     File saveFile = await File(directory.path + "/${report.fileTye}");
-  //     if (!await directory.exists()) {
-  //       await directory.create(recursive: true);
-  //     }
-  //     if (await directory.exists()) {
-  //       await saveFile.writeAsBytes(base64.decode(report.image));
-  //       return true;
-  //     }
-  //     return false;
-  //   } catch (e) {
-  //     print(e);
-  //     return false;
-  //   }
-  //   // Directory tempDir = await getTemporaryDirectory();
-  //   // String tempPath = tempDir.path;
-  //   // var filePath = tempPath +
-  //   //     '/${report.fileTye}'; // file_01.tmp is dump file, can be anything
-  //   // print(filePath);
-  //   // return new File(filePath).writeAsBytes(base64.decode(report.image));
-  // }
-  //
-  // savePDF(PrescriptionReport report) async {
-  //   setState(() {
-  //     loading = true;
-  //   });
-  //   bool save = await writeToFile(report);
-  //   if (save) {
-  //     setState(() {
-  //       loading = false;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       loading = false;
-  //     });
-  //     Fluttertoast.showToast(
-  //         msg: "Save file failed!",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.red,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0);
-  //   }
-  // }
+  Future<void> _onSelectNotification(String json) async {
+    final obj = jsonDecode(json);
+
+    if (obj['isSuccess']) {
+      OpenFile.open(obj['filePath']);
+    } else {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('${obj['error']}'),
+        ),
+      );
+    }
+  }
+
+  Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
+    final android = AndroidNotificationDetails(
+        'channel id', 'channel name', 'channel description',
+        priority: Priority.high, importance: Importance.max);
+    final iOS = IOSNotificationDetails();
+    final platform = NotificationDetails(android: android, iOS: iOS);
+    final json = jsonEncode(downloadStatus);
+    final isSuccess = downloadStatus['isSuccess'];
+
+    await flutterLocalNotificationsPlugin.show(
+        0, // notification id
+        isSuccess ? 'Success' : 'Failure',
+        isSuccess
+            ? 'File has been downloaded successfully!'
+            : 'There was an error while downloading the file.',
+        platform,
+        payload: json);
+  }
+
+  _save(PrescriptionReport report) async {
+    Map<String, dynamic> result = {
+      'isSuccess': false,
+      'filePath': null,
+      'error': null,
+    };
+    setState(() {
+      loading = true;
+    });
+    Uint8List data = base64Decode(report.image);
+    String name = report.fileTye;
+
+    var file = await writeFile(data, name);
+    if (file != null) {
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(
+          msg: "Successfully saved to Downloads folder",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      result['isSuccess'] = true;
+      result['filePath'] = file.path;
+      await _showNotification(result);
+    } else {
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(
+          msg: "Something went wrong! Failed to save the file.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      result['error'] = "Failed to save the file";
+      await _showNotification(result);
+    }
+  }
+
+  Future<File> writeFile(Uint8List data, String name) async {
+    // storage permission ask
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    // the downloads folder path
+    Directory tempDir = await DownloadsPathProvider.downloadsDirectory;
+    String tempPath = tempDir.path;
+    var filePath = tempPath + '/$name';
+    //
+
+    // the data
+    var bytes = ByteData.view(data.buffer);
+    final buffer = bytes.buffer;
+    // save the data in the path
+    return File(filePath).writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +249,9 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                                                                                 report,
                                                                           )));
                                                         }
-                                                      : () {},
+                                                      : () {
+                                                          _save(report);
+                                                        },
                                                   child: (!report.fileTye
                                                           .endsWith(".pdf"))
                                                       ? Container(
@@ -294,7 +297,29 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                                       SizedBox(
                                         width: space * 0.02,
                                       ),
-                                      Text(report.fileTye),
+                                      Padding(
+                                        padding: EdgeInsets.all(space * 0.02),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            _save(report);
+                                          },
+                                          child: Container(
+                                            height: space * 0.1,
+                                            width: space * 0.1,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.blueAccent),
+                                            child: Icon(
+                                              Icons.save,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: space * 0.02,
+                                      ),
                                       Padding(
                                         padding: EdgeInsets.all(space * 0.02),
                                         child: TextButton(

@@ -36,10 +36,12 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
   TextEditingController ageController;
   TextEditingController weightController;
   TextEditingController bloodGroupController;
+  TextEditingController genderController;
   FocusNode nameFocus;
   FocusNode ageFocus;
   FocusNode weightFocus;
   FocusNode bloodGroupFocus;
+  FocusNode genderFocus;
 
   @override
   void initState() {
@@ -48,10 +50,12 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     ageController = TextEditingController();
     weightController = TextEditingController();
     bloodGroupController = TextEditingController();
+    genderController = TextEditingController();
     nameFocus = FocusNode();
     ageFocus = FocusNode();
     weightFocus = FocusNode();
     bloodGroupFocus = FocusNode();
+    genderFocus = FocusNode();
     super.initState();
   }
 
@@ -62,10 +66,12 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     ageController.dispose();
     weightController.dispose();
     bloodGroupController.dispose();
+    genderController.dispose();
     nameFocus.dispose();
     ageFocus.dispose();
     weightFocus.dispose();
     bloodGroupFocus.dispose();
+    genderFocus.dispose();
     super.dispose();
   }
 
@@ -79,12 +85,14 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
       appointment.friendlyUserWeight =
           double.tryParse(weightController.text.trim());
       appointment.friendlyUserBloodGroup = bloodGroupController.text.trim();
+      appointment.friendlyUserGender = genderController.text.trim();
     } else {
       appointment.originalUser = true;
       appointment.friendlyUserName = null;
       appointment.friendlyUserAge = null;
       appointment.friendlyUserWeight = null;
       appointment.friendlyUserBloodGroup = null;
+      appointment.friendlyUserGender = null;
     }
   }
 
@@ -127,6 +135,17 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
           appointment.friendlyUserBloodGroup == "") {
         Fluttertoast.showToast(
             msg: "Patient Blood Group Cannot Be Empty!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      } else if (appointment.friendlyUserGender == null ||
+          appointment.friendlyUserGender == "") {
+        Fluttertoast.showToast(
+            msg: "Patient Gender Cannot Be Empty!",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
@@ -493,6 +512,15 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             space: space,
                                             controller: bloodGroupController,
                                             focusNode: bloodGroupFocus,
+                                          ),
+                                          SizedBox(
+                                            height: space * 0.02,
+                                          ),
+                                          TextEditingField(
+                                            text: "Gender",
+                                            space: space,
+                                            controller: genderController,
+                                            focusNode: genderFocus,
                                           )
                                         ],
                                       ),

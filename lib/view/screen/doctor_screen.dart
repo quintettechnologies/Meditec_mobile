@@ -261,14 +261,19 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                               FontWeight.bold),
                                                     ),
                                                     Text(
-                                                      doctor.degree
-                                                              .degreeName ??
-                                                          "",
+                                                      (doctor.degree != null)
+                                                          ? doctor
+                                                              .degree.degreeName
+                                                          : "",
                                                       style: TextStyle(
                                                           fontSize: 12),
                                                     ),
                                                     Text(
-                                                      doctor.categories[0].name,
+                                                      (doctor.categories
+                                                              .isNotEmpty)
+                                                          ? doctor.categories[0]
+                                                              .name
+                                                          : "",
                                                       style: TextStyle(
                                                           fontSize: 12),
                                                     ),
@@ -429,15 +434,20 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                                     .bold),
                                                       ),
                                                       Text(
-                                                        doctor.degree
-                                                                .degreeName ??
-                                                            "",
+                                                        (doctor.degree != null)
+                                                            ? doctor.degree
+                                                                .degreeName
+                                                            : "",
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                       ),
                                                       Text(
-                                                        doctor
-                                                            .categories[0].name,
+                                                        (doctor.categories
+                                                                .isNotEmpty)
+                                                            ? doctor
+                                                                .categories[0]
+                                                                .name
+                                                            : "",
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                       ),

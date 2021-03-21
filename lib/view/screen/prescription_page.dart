@@ -57,11 +57,11 @@ class PrescriptionPage extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Doctor's name: ${prescription.doctor.name}",
+                        "Doctor: ${prescription.doctor.name}",
                         style: TextStyle(fontSize: space * 0.038),
                       ),
                       Text(
-                        "Doctor Category: ${prescription.doctor.categories[0].name}",
+                        "Category: ${prescription.doctor.categories[0].name}",
                         style: TextStyle(fontSize: space * 0.038),
                       ),
                       Text(
@@ -97,7 +97,7 @@ class PrescriptionPage extends HookWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Patients name: ${prescription.patient.name}",
+                      Text("Patient: ${prescription.patient.name}",
                           style: TextStyle(fontSize: space * 0.038)),
                       Text(
                           "Mobile Number: ${prescription.patient.mobileNumber}",
@@ -168,6 +168,14 @@ class PrescriptionPage extends HookWidget {
                                                           fontWeight:
                                                               FontWeight.bold),
                                                       children: [])),
+                                              Text(
+                                                (schedule.afterMeal)
+                                                    ? "After Meal"
+                                                    : "Before Meal",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
@@ -260,257 +268,292 @@ class PrescriptionPage extends HookWidget {
               SizedBox(
                 height: 10,
               ),
-              Text(
-                "Tests",
-                style: TextStyle(
-                    color: Color(0xFF00BABA),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              Column(
-                children: [
-                  (prescription != null)
-                      ? SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              for (Test test in prescription.tests)
-                                Container(
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.blueGrey
-                                                  .withOpacity(0.3),
-                                              width: 2))),
-                                  child: SizedBox(
-                                    width: space * 0.8,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Container(
-                                                  height: space * 0.15,
-                                                  width: space * 0.15,
-                                                  color: Colors.grey,
+              (prescription.tests.isNotEmpty)
+                  ? Column(
+                      children: [
+                        Text(
+                          "Tests",
+                          style: TextStyle(
+                              color: Color(0xFF00BABA),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        Column(
+                          children: [
+                            (prescription != null)
+                                ? SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        for (Test test in prescription.tests)
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        color: Colors.blueGrey
+                                                            .withOpacity(0.3),
+                                                        width: 2))),
+                                            child: SizedBox(
+                                              width: space * 0.8,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          child: Container(
+                                                            height:
+                                                                space * 0.15,
+                                                            width: space * 0.15,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            RichText(
+                                                                text: TextSpan(
+                                                                    text: test
+                                                                        .testName,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                    children: [
+                                                                  // TextSpan(
+                                                                  //     text:
+                                                                  //         "100mg",
+                                                                  //     style: TextStyle(
+                                                                  //         color: Colors
+                                                                  //             .black,
+                                                                  //         fontWeight:
+                                                                  //             FontWeight.normal))
+                                                                ])),
+                                                            // RichText(
+                                                            //     text: TextSpan(
+                                                            //         text: "Tablet ",
+                                                            //         style: TextStyle(
+                                                            //             fontSize: 12, color: Colors.blueGrey),
+                                                            //         children: [
+                                                            //           TextSpan(text: "Beximco Pharma")
+                                                            //         ]))
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  RichText(
-                                                      text: TextSpan(
-                                                          text: test.testName,
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                          children: [
-                                                        // TextSpan(
-                                                        //     text:
-                                                        //         "100mg",
-                                                        //     style: TextStyle(
-                                                        //         color: Colors
-                                                        //             .black,
-                                                        //         fontWeight:
-                                                        //             FontWeight.normal))
-                                                      ])),
-                                                  // RichText(
-                                                  //     text: TextSpan(
-                                                  //         text: "Tablet ",
-                                                  //         style: TextStyle(
-                                                  //             fontSize: 12, color: Colors.blueGrey),
-                                                  //         children: [
-                                                  //           TextSpan(text: "Beximco Pharma")
-                                                  //         ]))
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                            ],
-                          ),
-                        )
-                      : Container(),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Advice",
-                style: TextStyle(
-                    color: Color(0xFF00BABA),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                (prescription.advice != null) ? prescription.advice : "",
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Referred to",
-                style: TextStyle(
-                    color: Color(0xFF00BABA),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              (prescription.referredDoctor != null)
-                  ? GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DoctorProfileScreen(
-                                doctor: prescription.referredDoctor),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Color(0xFF000000).withOpacity(0.1),
-                                offset: Offset.fromDirection(1),
-                                blurRadius: 10,
-                                spreadRadius: 1)
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            (prescription.referredDoctor.userAvatar != null)
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        height: space * 0.17,
-                                        width: space * 0.17,
-                                        child: Image(
-                                          image: Image.memory(base64.decode(
-                                                  prescription.referredDoctor
-                                                      .userAvatar.image))
-                                              .image,
-                                        ),
-                                      ),
+                                            ),
+                                          )
+                                      ],
                                     ),
                                   )
                                 : Container(),
-                            SizedBox(
-                              width: space * 0.02,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    prescription.referredDoctor.name,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  // Text(
-                                  //   doctor.degree
-                                  //           .degreeName ??
-                                  //       "",
-                                  //   style: TextStyle(
-                                  //       fontSize: 12),
-                                  // ),
-                                  // Text(
-                                  //   doctor.categories[0].name,
-                                  //   style: TextStyle(
-                                  //       fontSize: 12),
-                                  // ),
-                                  // Text(doctors[index].hospital,
-                                  //     style: TextStyle(
-                                  //         fontSize: 13,
-                                  //         fontWeight: FontWeight.w500)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: space * 0.02,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Available",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF00BABA))),
-                                  SizedBox(
-                                    height: space * 0.05,
-                                  ),
-                                  Container(
-                                    height: space * 0.05,
-                                    //width: space * 0.15,
-                                    child: RatingBar(
-                                      itemSize: 10,
-                                      wrapAlignment: WrapAlignment.end,
-                                      initialRating: 5,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      ratingWidget: RatingWidget(
-                                        full: Icon(
-                                          Icons.star,
-                                          color: Color(0xFF3C4858),
-                                        ),
-                                        half: Icon(
-                                          Icons.star_half,
-                                          color: Color(0xFF3C4858),
-                                        ),
-                                        empty: Icon(
-                                          Icons.star_border,
-                                          color: Color(0xFF3C4858),
-                                        ),
-                                      ),
-                                      itemPadding:
-                                          EdgeInsets.symmetric(horizontal: 0),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
-                      ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )
+                  : Container(),
+              (prescription.advice != null)
+                  ? Column(
+                      children: [
+                        Text(
+                          "Advice",
+                          style: TextStyle(
+                              color: Color(0xFF00BABA),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          prescription.advice,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              SizedBox(
+                height: 10,
+              ),
+              (prescription.referredDoctor != null)
+                  ? Column(
+                      children: [
+                        Text(
+                          "Referred to",
+                          style: TextStyle(
+                              color: Color(0xFF00BABA),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        (prescription.referredDoctor != null)
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DoctorProfileScreen(
+                                          doctor: prescription.referredDoctor),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Color(0xFF000000)
+                                              .withOpacity(0.1),
+                                          offset: Offset.fromDirection(1),
+                                          blurRadius: 10,
+                                          spreadRadius: 1)
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      (prescription.referredDoctor.userAvatar !=
+                                              null)
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Container(
+                                                  height: space * 0.17,
+                                                  width: space * 0.17,
+                                                  child: Image(
+                                                    image: Image.memory(base64
+                                                            .decode(prescription
+                                                                .referredDoctor
+                                                                .userAvatar
+                                                                .image))
+                                                        .image,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      SizedBox(
+                                        width: space * 0.02,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              prescription.referredDoctor.name,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            // Text(
+                                            //   doctor.degree
+                                            //           .degreeName ??
+                                            //       "",
+                                            //   style: TextStyle(
+                                            //       fontSize: 12),
+                                            // ),
+                                            // Text(
+                                            //   doctor.categories[0].name,
+                                            //   style: TextStyle(
+                                            //       fontSize: 12),
+                                            // ),
+                                            // Text(doctors[index].hospital,
+                                            //     style: TextStyle(
+                                            //         fontSize: 13,
+                                            //         fontWeight: FontWeight.w500)),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: space * 0.02,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Available",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xFF00BABA))),
+                                            SizedBox(
+                                              height: space * 0.05,
+                                            ),
+                                            Container(
+                                              height: space * 0.05,
+                                              //width: space * 0.15,
+                                              child: RatingBar(
+                                                itemSize: 10,
+                                                wrapAlignment:
+                                                    WrapAlignment.end,
+                                                initialRating: 5,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                ratingWidget: RatingWidget(
+                                                  full: Icon(
+                                                    Icons.star,
+                                                    color: Color(0xFF3C4858),
+                                                  ),
+                                                  half: Icon(
+                                                    Icons.star_half,
+                                                    color: Color(0xFF3C4858),
+                                                  ),
+                                                  empty: Icon(
+                                                    Icons.star_border,
+                                                    color: Color(0xFF3C4858),
+                                                  ),
+                                                ),
+                                                itemPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 0),
+                                                onRatingUpdate: (rating) {
+                                                  print(rating);
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
                     )
                   : Container(),
             ],
