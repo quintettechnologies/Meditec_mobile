@@ -34,50 +34,50 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // isDashboard
-                  //     ? (context.read(userProvider).currentUser().userAvatar !=
-                  //             null)
-                  //         ? Padding(
-                  //             padding: EdgeInsets.symmetric(horizontal: 20),
-                  //             child: ClipRRect(
-                  //                 borderRadius: BorderRadius.circular(5.0),
-                  //                 child: Image(
-                  //                   image: Image.memory(base64.decode(context
-                  //                           .read(userProvider)
-                  //                           .currentUser()
-                  //                           .userAvatar
-                  //                           .image))
-                  //                       .image,
-                  //                   fit: BoxFit.fitHeight,
-                  //                   height: 40,
-                  //                 )
-                  //                 // child: Image(
-                  //                 //   image:
-                  //                 //       AssetImage('assets/images/profiles/user.png'),
-                  //                 // ),
-                  //                 ),
-                  //           )
-                  //         : Container(
-                  //             height: 40,
-                  //             width: 40,
-                  //           )
-                  FlatButton(
-                      onPressed: !isDashboard
-                          ? () {
-                              Navigator.pop(context);
-                            }
-                          : null,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEDF0F0),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Color(0xFF00CACA),
-                        ),
-                      )),
+                  isDashboard
+                      ? (context.read(userProvider).currentUser().userAvatar !=
+                              null)
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  child: Image(
+                                    image: Image.memory(base64.decode(context
+                                            .read(userProvider)
+                                            .currentUser()
+                                            .userAvatar
+                                            .image))
+                                        .image,
+                                    fit: BoxFit.fitHeight,
+                                    height: 40,
+                                  )
+                                  // child: Image(
+                                  //   image:
+                                  //       AssetImage('assets/images/profiles/user.png'),
+                                  // ),
+                                  ),
+                            )
+                          : Container(
+                              height: 40,
+                              width: 40,
+                            )
+                      : FlatButton(
+                          onPressed: !isDashboard
+                              ? () {
+                                  Navigator.pop(context);
+                                }
+                              : null,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                color: Color(0xFFEDF0F0),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Color(0xFF00CACA),
+                            ),
+                          )),
                   Text(
                     "Meditec",
                     style: TextStyle(

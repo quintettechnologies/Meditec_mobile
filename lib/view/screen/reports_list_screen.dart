@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -171,8 +171,9 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
       await Permission.storage.request();
     }
     // the downloads folder path
-    Directory tempDir = await DownloadsPathProvider.downloadsDirectory;
-    String tempPath = tempDir.path;
+    String tempDir = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+    String tempPath = tempDir;
     var filePath = tempPath + '/$name';
     //
 
@@ -377,12 +378,13 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                       }
                     },
                     child: Container(
-                      width: space * 0.2,
+                      width: space * 0.21,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Icon(
                             Icons.upload_file,
+                            size: space * 0.07,
                             color: Color(0xFF00BABA),
                           ),
                           SizedBox(
@@ -395,7 +397,16 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                   )
                 ],
               ),
-              loading ? Center(child: CircularProgressIndicator()) : Container()
+              loading
+                  ? Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: space,
+                      color: Colors.white,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : Container()
             ],
           ),
         ),

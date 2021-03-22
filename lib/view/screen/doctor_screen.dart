@@ -255,18 +255,13 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                   children: [
                                                     Text(
                                                       doctor.name,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                           fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.bold),
-                                                    ),
-                                                    Text(
-                                                      (doctor.degree != null)
-                                                          ? doctor
-                                                              .degree.degreeName
-                                                          : "",
-                                                      style: TextStyle(
-                                                          fontSize: 12),
                                                     ),
                                                     Text(
                                                       (doctor.categories
@@ -274,11 +269,29 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                           ? doctor.categories[0]
                                                               .name
                                                           : "",
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                           fontSize: 12),
                                                     ),
                                                     Text(
+                                                      (doctor.degree != null)
+                                                          ? doctor
+                                                              .degree.degreeName
+                                                          : "",
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+
+                                                    Text(
                                                       doctor.hospitalName ?? "",
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                           fontSize: 12),
                                                     ),
@@ -432,19 +445,14 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                     children: [
                                                       Text(
                                                         doctor.name,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: TextStyle(
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
-                                                      ),
-                                                      Text(
-                                                        (doctor.degree != null)
-                                                            ? doctor.degree
-                                                                .degreeName
-                                                            : "",
-                                                        style: TextStyle(
-                                                            fontSize: 12),
                                                       ),
                                                       Text(
                                                         (doctor.categories
@@ -453,9 +461,33 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                                 .categories[0]
                                                                 .name
                                                             : "",
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                       ),
+                                                      Text(
+                                                        (doctor.degree != null)
+                                                            ? doctor.degree
+                                                                .degreeName
+                                                            : "",
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                      Text(
+                                                        doctor.hospitalName ??
+                                                            "",
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+
                                                       // Text(doctors[index].hospital,
                                                       //     style: TextStyle(
                                                       //         fontSize: 13,

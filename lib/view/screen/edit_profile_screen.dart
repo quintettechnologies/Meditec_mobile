@@ -260,7 +260,7 @@ class TextEditingField extends StatelessWidget {
           style: TextStyle(fontSize: space * 0.04),
         ),
         ConstrainedBox(
-          constraints: BoxConstraints.tight(Size(space * 0.5, space * 0.145)),
+          constraints: BoxConstraints.tight(Size(space * 0.5, space * 0.16)),
           child: TextFormField(
             controller: controller,
             focusNode: focusNode,

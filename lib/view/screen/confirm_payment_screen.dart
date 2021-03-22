@@ -82,6 +82,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                     Text(
                                       widget.appointment.doctorSlot.chamber.user
                                           .categories[0].name,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -89,6 +90,14 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                     Text(
                                       widget.appointment.doctorSlot.chamber.user
                                           .degree.degreeName,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.appointment.doctorSlot.chamber.user
+                                          .hospitalName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),

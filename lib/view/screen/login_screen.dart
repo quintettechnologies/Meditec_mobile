@@ -202,13 +202,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                     setState(() {
                                       _inProcess = false;
                                     });
+                                    Fluttertoast.showToast(
+                                        msg: "Successfully signed in",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.green,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
                                     Navigator.pushNamed(context, Dashboard.id);
                                   } else {
                                     setState(() {
                                       _inProcess = false;
                                     });
                                     Fluttertoast.showToast(
-                                        msg: "Login Failed",
+                                        msg: "Sign in Failed",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         timeInSecForIosWeb: 1,

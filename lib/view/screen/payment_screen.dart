@@ -213,13 +213,21 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
+                                      widget.doctor.categories[0].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
                                       widget.doctor.degree.degreeName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
+                                      textAlign: TextAlign.center,
                                     ),
                                     Text(
-                                      widget.doctor.categories[0].name,
+                                      widget.doctor.hospitalName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),

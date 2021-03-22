@@ -28,6 +28,7 @@ class DoctorProfileScreen extends StatefulWidget {
 }
 
 class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
+  bool loading = false;
   DatePickerController _controller = DatePickerController();
   DateTime _selectedValue = DateTime.now();
   getSlotsByDate() async {
@@ -42,6 +43,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     List<DoctorSlot> doctorSlots = context.read(userProvider).doctorSlots;
     DoctorSlot selectedSlot = context.read(userProvider).selectedSlot;
     final double space = MediaQuery.of(context).size.width;
+    final double verticalSpace = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MyCustomAppBar(),
@@ -50,265 +52,256 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(
                 vertical: space * 0.01, horizontal: space * 0.05),
-            child: Consumer(
-              builder: (context, watch, child) {
-                List<Doctor> doctors = watch(doctorsProvider);
-                return Container(
-                  child: Column(
+            child: Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: space * 0.03,
+                  ),
+                  Row(
                     children: [
-                      SizedBox(
-                        height: space * 0.03,
-                      ),
-                      Row(
-                        children: [
-                          (widget.doctor.userAvatar != null)
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    height: space * 0.3,
-                                    width: space * 0.3,
-                                    child: Image(
-                                      image: Image.memory(base64.decode(
-                                              widget.doctor.userAvatar.image))
-                                          .image,
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-                          SizedBox(
-                            width: space * 0.05,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.doctor.name,
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                widget.doctor.degree.degreeName,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Text(
-                                widget.doctor.categories[0].name,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              // Text(
-                              //   widget.doctor.chambers[0].adress,
-                              //   style: TextStyle(
-                              //     fontSize: 16,
-                              //   ),
-                              // ),
-                              Container(
-                                height: space * 0.12,
-                                width: space * 0.43,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: space * 0.09,
-                                      width: space * 0.09,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Icon(
-                                        Icons.chat_bubble_rounded,
-                                        color: Colors.white,
-                                        size: space * 0.06,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: space * 0.05,
-                                    ),
-                                    Container(
-                                      height: space * 0.09,
-                                      width: space * 0.09,
-                                      decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Icon(
-                                        Icons.favorite,
-                                        color: Colors.white,
-                                        size: space * 0.06,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: space * 0.01,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Text(
-                              //   "Fee - 500",
-                              //   style: TextStyle(
-                              //     fontSize: 14,
-                              //     fontWeight: FontWeight.bold,
-                              //   ),
-                              // ),
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: space * 0.08,
-                      ),
-                      // Container(
-                      //   height: space * 0.15,
-                      //   alignment: Alignment.center,
-                      //   child: RichText(
-                      //     overflow: TextOverflow.clip,
-                      //     text: TextSpan(
-                      //       text:
-                      //           "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
-                      //       style: TextStyle(
-                      //           fontSize: 13,
-                      //           height: 1.5,
-                      //           color: Colors.black87),
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: space * 0.05,
-                      ),
-                      // Row(
-                      //   children: [
-                      //     Text(
-                      //       'Today ${DateFormat.yMMMMd(_selectedValue).toString()}',
-                      //       style: TextStyle(
-                      //           fontSize: 16, fontWeight: FontWeight.bold),
-                      //     ),
-                      //     Icon(Icons.keyboard_arrow_down)
-                      //   ],
-                      // ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Select Date",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        child: DatePicker(
-                          DateTime.now(),
-                          width: 60,
-                          height: 80,
-                          controller: _controller,
-                          initialSelectedDate: DateTime.now(),
-                          selectionColor: Colors.black,
-                          selectedTextColor: Colors.white,
-                          inactiveDates: [
-                            // DateTime.now().add(Duration(days: )),
-                            // DateTime.now().add(Duration(days: 4)),
-                            // DateTime.now().add(Duration(days: 7))
-                          ],
-                          onDateChange: (date) async {
-                            _selectedValue = date;
-                            print(_selectedValue.toIso8601String());
-                            await getSlotsByDate();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Slots",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: space * 0.02,
-                      ),
-                      Column(
-                        children: [
-                          for (DoctorSlot doctorSlot in doctorSlots)
-                            Padding(
-                              padding: EdgeInsets.only(bottom: space * 0.05),
-                              child: FlatButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    context
-                                        .read(userProvider)
-                                        .selectSlot(doctorSlot);
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(space * 0.01),
-                                    height: space * 0.1,
-                                    width: space * 0.36,
-                                    decoration: BoxDecoration(
-                                        color:
-                                            (selectedSlot.id == doctorSlot.id)
-                                                ? Color(0xFF00BABA)
-                                                : Color(0xFFDDFDE1),
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    child: Text(
-                                      "${DateFormat.jm().format(doctorSlot.startTime)} - ${DateFormat.jm().format(doctorSlot.endTime)}",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            (selectedSlot.id == doctorSlot.id)
-                                                ? Colors.white
-                                                : Colors.black,
-                                      ),
-                                    ),
-                                  )),
-                            ),
-                        ],
-                      ),
-                      (doctorSlots.isNotEmpty)
-                          ? TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PaymentScreen(
-                                              doctor: widget.doctor,
-                                              doctorSlot: selectedSlot,
-                                            )));
-                              },
+                      (widget.doctor.userAvatar != null)
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
                               child: Container(
-                                height: space * .12,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF00BABA),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Book an Appointment",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
+                                height: space * 0.3,
+                                width: space * 0.3,
+                                child: Image(
+                                  image: Image.memory(base64.decode(
+                                          widget.doctor.userAvatar.image))
+                                      .image,
                                 ),
                               ),
                             )
                           : Container(),
                       SizedBox(
-                        height: space * 0.1,
+                        width: space * 0.05,
+                      ),
+                      Container(
+                        width: space * 0.55,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.doctor.name,
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              widget.doctor.categories[0].name,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+
+                            Text(
+                              widget.doctor.degree.degreeName,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+
+                            Text(
+                              widget.doctor.hospitalName,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            Container(
+                              height: space * 0.12,
+                              width: space * 0.43,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: space * 0.09,
+                                    width: space * 0.09,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Icon(
+                                      Icons.chat_bubble_rounded,
+                                      color: Colors.white,
+                                      size: space * 0.06,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: space * 0.05,
+                                  ),
+                                  Container(
+                                    height: space * 0.09,
+                                    width: space * 0.09,
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: Colors.white,
+                                      size: space * 0.06,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: space * 0.01,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Text(
+                            //   "Fee - 500",
+                            //   style: TextStyle(
+                            //     fontSize: 14,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: space * 0.03,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Select Date",
+                        style: TextStyle(fontSize: 18),
                       ),
                     ],
                   ),
-                );
-              },
+                  Container(
+                    child: DatePicker(
+                      DateTime.now(),
+                      width: 60,
+                      height: 80,
+                      controller: _controller,
+                      initialSelectedDate: DateTime.now(),
+                      selectionColor: Colors.black,
+                      selectedTextColor: Colors.white,
+                      inactiveDates: [
+                        // DateTime.now().add(Duration(days: )),
+                        // DateTime.now().add(Duration(days: 4)),
+                        // DateTime.now().add(Duration(days: 7))
+                      ],
+                      onDateChange: (date) async {
+                        setState(() {
+                          loading = true;
+                        });
+                        _selectedValue = date;
+                        print(_selectedValue.toIso8601String());
+                        await getSlotsByDate();
+                        setState(() {
+                          loading = false;
+                        });
+                      },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Slots",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: space * 0.02,
+                  ),
+                  SizedBox(
+                    height: verticalSpace * 0.2,
+                    child: loading
+                        ? Container(
+                            height: MediaQuery.of(context).size.height,
+                            width: space,
+                            color: Colors.white,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: space * 0.01,
+                                    mainAxisSpacing: space * 0.01,
+                                    childAspectRatio: 2.3 / 1),
+                            shrinkWrap: true,
+                            itemCount: doctorSlots.length,
+                            itemBuilder: (BuildContext ctx, index) {
+                              return FlatButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
+                                    context
+                                        .read(userProvider)
+                                        .selectSlot(doctorSlots[index]);
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(space * 0.01),
+                                    margin: EdgeInsets.zero,
+                                    height: space * 0.1,
+                                    width: space * 0.36,
+                                    decoration: BoxDecoration(
+                                        color: (selectedSlot.id ==
+                                                doctorSlots[index].id)
+                                            ? Color(0xFF00BABA)
+                                            : Color(0xFFDDFDE1),
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: Text(
+                                      "${DateFormat.jm().format(doctorSlots[index].startTime)} - ${DateFormat.jm().format(doctorSlots[index].endTime)}",
+                                      style: TextStyle(
+                                        fontSize: space * 0.035,
+                                        fontWeight: FontWeight.bold,
+                                        color: (selectedSlot.id ==
+                                                doctorSlots[index].id)
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ));
+                            }),
+                  ),
+                  (doctorSlots.isNotEmpty)
+                      ? TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PaymentScreen(
+                                          doctor: widget.doctor,
+                                          doctorSlot: selectedSlot,
+                                        )));
+                          },
+                          child: Container(
+                            height: space * .12,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00BABA),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Book an Appointment",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: space * 0.1,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

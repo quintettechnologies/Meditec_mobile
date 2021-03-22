@@ -49,7 +49,7 @@ dependencies:
   open_file:
   path_provider:
   permission_handler:
-  downloads_path_provider: ^0.1.0
+  ext_storage:
   flutter_local_notifications:
   custom_switch: ^0.0.1
 

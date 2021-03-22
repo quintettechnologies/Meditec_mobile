@@ -334,126 +334,133 @@ class _DashboardState extends State<Dashboard> {
                                             ],
                                           ),
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              doctors[0].name,
-                                              style: TextStyle(
+                                        Container(
+                                          height: space * 0.34,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                doctors[0].name,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: space * 0.043,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                doctors[0].categories[0].name ??
+                                                    "",
+                                                maxLines: 1,
+                                                style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: space * 0.043,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              doctors[0].categories[0].name ??
-                                                  "",
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: space * 0.035,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: space * 0.35,
-                                              child: SingleChildScrollView(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                child: Text(
-                                                  doctors[0]
-                                                          .degree
-                                                          .degreeName ??
-                                                      "",
-                                                  maxLines: 1,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: space * 0.035,
-                                                  ),
+                                                  fontSize: space * 0.035,
                                                 ),
                                               ),
-                                            ),
-                                            Text(
-                                              doctors[0].hospitalName ?? "",
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: space * 0.035,
-                                              ),
-                                            ),
-                                            Container(
-                                              height: space * 0.05,
-                                              //width: space * 0.15,
-                                              child: RatingBar(
-                                                itemSize: 15,
-                                                wrapAlignment:
-                                                    WrapAlignment.end,
-                                                initialRating: 5,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                ratingWidget: RatingWidget(
-                                                  full: Icon(
-                                                    Icons.star,
-                                                    color: Colors.white,
-                                                  ),
-                                                  half: Icon(
-                                                    Icons.star_half,
-                                                    color: Colors.white,
-                                                  ),
-                                                  empty: Icon(
-                                                    Icons.star_border,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                itemPadding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 0),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DoctorProfileScreen(
-                                                                doctor:
-                                                                    doctors[0]),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                        border: Border.all(
-                                                            color: Color(
-                                                                0xFF9CD9EF)),
-                                                        color:
-                                                            Color(0xFF38A1C7)),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical:
-                                                                space * 0.01,
-                                                            horizontal:
-                                                                space * 0.03),
-                                                    child: Text(
-                                                      'Appointment',
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.white),
+                                              SizedBox(
+                                                width: space * 0.35,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Text(
+                                                    doctors[0]
+                                                            .degree
+                                                            .degreeName ??
+                                                        "",
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: space * 0.035,
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            )
-                                          ],
+                                              ),
+                                              Text(
+                                                doctors[0].hospitalName ?? "",
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: space * 0.035,
+                                                ),
+                                              ),
+                                              Container(
+                                                height: space * 0.05,
+                                                //width: space * 0.15,
+                                                child: RatingBar(
+                                                  itemSize: 15,
+                                                  wrapAlignment:
+                                                      WrapAlignment.end,
+                                                  initialRating: 5,
+                                                  direction: Axis.horizontal,
+                                                  allowHalfRating: true,
+                                                  itemCount: 5,
+                                                  ratingWidget: RatingWidget(
+                                                    full: Icon(
+                                                      Icons.star,
+                                                      color: Colors.white,
+                                                    ),
+                                                    half: Icon(
+                                                      Icons.star_half,
+                                                      color: Colors.white,
+                                                    ),
+                                                    empty: Icon(
+                                                      Icons.star_border,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  itemPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 0),
+                                                  onRatingUpdate: (rating) {
+                                                    print(rating);
+                                                  },
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DoctorProfileScreen(
+                                                                  doctor:
+                                                                      doctors[
+                                                                          0]),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          border: Border.all(
+                                                              color: Color(
+                                                                  0xFF9CD9EF)),
+                                                          color: Color(
+                                                              0xFF38A1C7)),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical:
+                                                                  space * 0.01,
+                                                              horizontal:
+                                                                  space * 0.03),
+                                                      child: Text(
+                                                        'Appointment',
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                space * 0.04,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                         )
                                       ],
                                     ),
@@ -619,7 +626,8 @@ class _DashboardState extends State<Dashboard> {
                                                       child: Text(
                                                         'Appointment',
                                                         style: TextStyle(
-                                                            fontSize: 16,
+                                                            fontSize:
+                                                                space * 0.04,
                                                             color:
                                                                 Colors.white),
                                                       ),
