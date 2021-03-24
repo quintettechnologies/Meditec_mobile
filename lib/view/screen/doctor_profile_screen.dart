@@ -59,6 +59,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     height: space * 0.03,
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       (widget.doctor.userAvatar != null)
                           ? ClipRRect(
@@ -227,8 +228,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                     crossAxisSpacing: space * 0.01,
-                                    mainAxisSpacing: space * 0.01,
-                                    childAspectRatio: 2.3 / 1),
+                                    childAspectRatio: 2.5 / 1),
                             shrinkWrap: true,
                             itemCount: doctorSlots.length,
                             itemBuilder: (BuildContext ctx, index) {
@@ -256,12 +256,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                     child: Text(
                                       "${DateFormat.jm().format(doctorSlots[index].startTime)} - ${DateFormat.jm().format(doctorSlots[index].endTime)}",
                                       style: TextStyle(
-                                        fontSize: space * 0.035,
+                                        fontSize: space * 0.03,
                                         fontWeight: FontWeight.bold,
                                         color: (selectedSlot.id ==
                                                 doctorSlots[index].id)
                                             ? Colors.white
-                                            : Colors.black,
+                                            : Color(0xFF495767),
                                       ),
                                     ),
                                   ));
