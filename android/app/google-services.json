@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1049842981844",
+    "project_id": "meditec-35dd0",
+    "storage_bucket": "meditec-35dd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049842981844:android:ae3ff8356492bb5ff71441",
+        "android_client_info": {
+          "package_name": "com.meditec.mobile.meditec_mobile_doctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049842981844-1ktinnt373g35h45h4ef3jtcoqqkkbad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHnJBr71wVXEXw53A09Dvp-bWcaHn3h4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049842981844-1ktinnt373g35h45h4ef3jtcoqqkkbad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049842981844:android:6eb08ff077886360f71441",
+        "android_client_info": {
+          "package_name": "com.quintet.meditec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049842981844-1ktinnt373g35h45h4ef3jtcoqqkkbad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHnJBr71wVXEXw53A09Dvp-bWcaHn3h4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049842981844-1ktinnt373g35h45h4ef3jtcoqqkkbad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

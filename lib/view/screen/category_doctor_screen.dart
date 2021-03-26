@@ -107,16 +107,22 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
                                       children: [
                                         Text(
                                           doctor.name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           doctor.degree.degreeName,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
                                           doctor.categories[0].name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         // Text(doctors[index].hospital,

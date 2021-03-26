@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/view/screen/chat_page.dart';
 import 'package:meditec/view/screen/reports_list_screen.dart';
 import 'package:meditec/view/screen/samples_list_screen.dart';
 import 'package:meditec/view/screen/upload_previous_report_page.dart';
@@ -141,28 +142,30 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                           width: space * 0.05,
                                         ),
                                         GestureDetector(
-                                          // onTap: () {
-                                          //   Navigator.push(
-                                          //       context,
-                                          //       MaterialPageRoute(
-                                          //           builder: (context) =>
-                                          //               VideoCall(
-                                          //                 appointment:
-                                          //                     widget.appointment,
-                                          //               )));
-                                          // },
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatPage(
+                                                            user: widget
+                                                                .appointment
+                                                                .doctorSlot
+                                                                .chamber
+                                                                .user)));
+                                          },
                                           child: Container(
                                             height: space * 0.09,
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: space * 0.01),
                                             decoration: BoxDecoration(
-                                                color: Colors.blueAccent,
+                                                color: Colors.blue,
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Row(
                                               children: [
                                                 Icon(
-                                                  Icons.messenger,
+                                                  Icons.chat_bubble_rounded,
                                                   color: Colors.white,
                                                   size: space * 0.06,
                                                 ),
@@ -170,7 +173,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                   width: space * 0.01,
                                                 ),
                                                 Text(
-                                                  "Send Text Message",
+                                                  "Send Messages",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,

@@ -21,6 +21,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final double space = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Container(
         padding: EdgeInsets.zero,
@@ -38,7 +39,8 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ? (context.read(userProvider).currentUser().userAvatar !=
                               null)
                           ? Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: space * 0.06),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5.0),
                                   child: Image(

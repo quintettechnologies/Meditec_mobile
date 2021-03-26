@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meditec/model/category.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
 import 'package:meditec/view/screen/category_doctor_screen.dart';
-import 'package:meditec/view/screen/doctor_profile_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
@@ -15,11 +13,13 @@ import 'package:meditec/view/screen/profile_screen.dart';
 import 'package:meditec/view/screen/signup_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
-import 'package:meditec/view/screen/video_call_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'constants.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(ProviderScope(child: MyApp()));
 }
 
