@@ -17,7 +17,7 @@ class MessagesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StreamBuilder<List<Message>>(
-        stream: FirebaseApi.getMessages(doctorID: toID, myID: myID),
+        stream: FirebaseApi.getMessages(doctorID: toID, patientID: myID),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:

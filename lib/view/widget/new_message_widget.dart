@@ -28,11 +28,11 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
     FocusScope.of(context).unfocus();
 
     await FirebaseApi.uploadMessage(
-        myID: widget.myID,
-        myName: widget.myName,
+        patientID: widget.myID,
+        patientName: widget.myName,
         message: message,
-        toID: widget.toID,
-        toName: widget.toName);
+        doctorID: widget.toID,
+        doctorName: widget.toName);
 
     _controller.clear();
   }
