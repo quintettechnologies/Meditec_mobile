@@ -9,7 +9,7 @@ part of 'appointment.dart';
 Appointment _$AppointmentFromJson(Map<String, dynamic> json) {
   return Appointment()
     ..id = json['id'] as num
-    ..time = DateTime.parse(json['time'])
+    //..time = DateTime.parse(json['time'])
     ..serialNumber = json['serialNumber'] as num
     ..status = json['status'] as String
     ..friendlyUserName = json['friendlyUserName'] as String
@@ -32,7 +32,7 @@ Appointment _$AppointmentFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'time': instance.time,
+      //'time': instance.time,
       'serialNumber': instance.serialNumber,
       'status': instance.status,
       'friendlyUserName': instance.friendlyUserName,

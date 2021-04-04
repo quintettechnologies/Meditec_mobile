@@ -180,6 +180,36 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<String> deleteAppointment(Appointment appointment) async {
+    var uri = Uri.http('$url', '/deleteAppoinment');
+    try {
+      var response = await http.post(
+        uri,
+        headers: {
+          HttpHeaders.authorizationHeader:
+              "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: jsonEncode(appointment.toJson()),
+      );
+      print(response.body);
+      if (response.body != null &&
+          response.statusCode == 200 &&
+          response.body == "archived") {
+        return "success";
+      } else if (response.body != null &&
+          response.statusCode == 200 &&
+          response.body == "activated") {
+        return "activated";
+      } else {
+        return "failed";
+      }
+    } catch (e) {
+      print(e);
+      return "failed";
+    }
+  }
+
   void selectSlot(DoctorSlot doctorSlot) {
     selectedSlot = doctorSlot;
   }

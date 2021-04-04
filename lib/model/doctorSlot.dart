@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meditec/model/appointment.dart';
 import "user.dart";
 import "chamber.dart";
 part 'doctorSlot.g.dart';
@@ -17,6 +18,7 @@ class DoctorSlot {
   Chamber chamber;
   String dayName;
   num weekToRepeat;
+  List<Appointment> appoinments;
 
   factory DoctorSlot.fromJson(Map<String, dynamic> json) =>
       _$DoctorSlotFromJson(json);

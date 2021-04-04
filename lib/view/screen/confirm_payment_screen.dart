@@ -63,136 +63,149 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                     spreadRadius: 1)
                               ],
                             ),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: space * 0.14,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.appointment.doctorSlot.chamber.user
-                                          .name,
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      widget.appointment.doctorSlot.chamber.user
-                                          .categories[0].name,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.appointment.doctorSlot.chamber.user
-                                          .degree.degreeName,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.appointment.doctorSlot.chamber.user
-                                          .hospitalName,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Container(
-                                      height: space * 0.12,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: space * 0.09,
-                                            width: space * 0.09,
-                                            decoration: BoxDecoration(
-                                                color: Colors.deepOrange,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Icon(
-                                              Icons.videocam,
-                                              color: Colors.white,
-                                              size: space * 0.06,
-                                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: space * 0.14,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(space * 0.01),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          widget.appointment.doctorSlot.chamber
+                                              .user.name,
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          widget.appointment.doctorSlot.chamber
+                                              .user.categories[0].name,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
                                           ),
-                                          SizedBox(
-                                            width: space * 0.05,
+                                        ),
+                                        Text(
+                                          widget.appointment.doctorSlot.chamber
+                                              .user.degree.degreeName,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
                                           ),
-                                          Container(
-                                            height: space * 0.09,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFF00BABA),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Container(
-                                              height: space * 0.15,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Center(
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                      text: DateFormat.E()
-                                                          .format(widget
-                                                              .appointment
-                                                              .doctorSlot
-                                                              .startTime),
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          height: 1.5,
-                                                          color: Colors.white),
-                                                      children: [
-                                                        TextSpan(
-                                                            text:
-                                                                ' ${DateFormat.d().format(widget.appointment.doctorSlot.startTime)}',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold))
-                                                      ]),
+                                        ),
+                                        Text(
+                                          widget.appointment.doctorSlot.chamber
+                                              .user.hospitalName,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Container(
+                                          height: space * 0.12,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: space * 0.09,
+                                                width: space * 0.09,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.deepOrange,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Icon(
+                                                  Icons.videocam,
+                                                  color: Colors.white,
+                                                  size: space * 0.06,
                                                 ),
                                               ),
-                                            ),
+                                              SizedBox(
+                                                width: space * 0.05,
+                                              ),
+                                              Container(
+                                                height: space * 0.09,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xFF00BABA),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Container(
+                                                  height: space * 0.15,
+                                                  alignment: Alignment.center,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Center(
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                          text: DateFormat.E()
+                                                              .format(widget
+                                                                  .appointment
+                                                                  .doctorSlot
+                                                                  .startTime),
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              height: 1.5,
+                                                              color:
+                                                                  Colors.white),
+                                                          children: [
+                                                            TextSpan(
+                                                                text:
+                                                                    ' ${DateFormat.d().format(widget.appointment.doctorSlot.startTime)}',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold))
+                                                          ]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: space * 0.05,
+                                              ),
+                                              Container(
+                                                height: space * 0.09,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Container(
+                                                  height: space * 0.15,
+                                                  alignment: Alignment.center,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Center(
+                                                      child: Text(
+                                                    "${DateFormat.jm().format(widget.appointment.doctorSlot.startTime)}-${DateFormat.jm().format(widget.appointment.doctorSlot.endTime)}",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                        color: Colors.white),
+                                                  )),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(
-                                            width: space * 0.05,
-                                          ),
-                                          Container(
-                                            height: space * 0.09,
-                                            decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Container(
-                                              height: space * 0.15,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Center(
-                                                  child: Text(
-                                                "${DateFormat.jm().format(widget.appointment.doctorSlot.startTime)}-${DateFormat.jm().format(widget.appointment.doctorSlot.endTime)}",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: Colors.white),
-                                              )),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: space * 0.05,
-                                ),
-                              ],
+                                  ),
+                                  SizedBox(
+                                    height: space * 0.05,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -269,7 +282,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                           height: space * 0.02,
                                         ),
                                         Text(
-                                          "${DateFormat.jm().format(widget.appointment.time)} ",
+                                          "${DateFormat.jm().format(widget.appointment.doctorSlot.startTime)} ",
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(
@@ -452,6 +465,53 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
+                              TextButton(
+                                onPressed: () async {
+                                  String status = await context
+                                      .read(userProvider)
+                                      .deleteAppointment(widget.appointment);
+                                  if (status == "success") {
+                                    Fluttertoast.showToast(
+                                        msg: "Successully Deleted.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.green,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(
+                                        context, AppointmentsScreen.id);
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Failed to delete!",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                },
+                                child: Container(
+                                  height: space * .12,
+                                  width: space * 0.36,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.deepOrange,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                          fontSize: space * 0.04,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               TextButton(
                                 onPressed: () async {
                                   bool status = await context

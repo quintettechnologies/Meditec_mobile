@@ -101,9 +101,14 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                 fontSize: 16,
                               ),
                             ),
-
                             Text(
-                              widget.doctor.hospitalName,
+                              "BMDC No. ${widget.doctor.doctorRegistrationNumber.toString() ?? ""}",
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              widget.doctor.hospitalName ?? "",
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -200,11 +205,14 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                       },
                     ),
                   ),
+                  SizedBox(
+                    height: space * 0.02,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Slots",
+                        "Available Time",
                         style: TextStyle(fontSize: 18),
                       ),
                     ],
@@ -234,12 +242,16 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                             itemBuilder: (BuildContext ctx, index) {
                               return FlatButton(
                                   padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    context
-                                        .read(userProvider)
-                                        .selectSlot(doctorSlots[index]);
-                                    setState(() {});
-                                  },
+                                  onPressed: doctorSlots[index]
+                                          .appoinments
+                                          .isEmpty
+                                      ? () {
+                                          context
+                                              .read(userProvider)
+                                              .selectSlot(doctorSlots[index]);
+                                          setState(() {});
+                                        }
+                                      : null,
                                   child: Container(
                                     alignment: Alignment.center,
                                     padding: EdgeInsets.all(space * 0.01),
@@ -247,10 +259,14 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                     height: space * 0.1,
                                     width: space * 0.36,
                                     decoration: BoxDecoration(
-                                        color: (selectedSlot.id ==
-                                                doctorSlots[index].id)
-                                            ? Color(0xFF00BABA)
-                                            : Color(0xFFDDFDE1),
+                                        color: doctorSlots[index]
+                                                .appoinments
+                                                .isNotEmpty
+                                            ? Colors.grey
+                                            : (selectedSlot.id ==
+                                                    doctorSlots[index].id)
+                                                ? Color(0xFF00BABA)
+                                                : Color(0xFFDDFDE1),
                                         borderRadius:
                                             BorderRadius.circular(50)),
                                     child: Text(
@@ -258,10 +274,14 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                       style: TextStyle(
                                         fontSize: space * 0.03,
                                         fontWeight: FontWeight.bold,
-                                        color: (selectedSlot.id ==
-                                                doctorSlots[index].id)
+                                        color: doctorSlots[index]
+                                                .appoinments
+                                                .isNotEmpty
                                             ? Colors.white
-                                            : Color(0xFF495767),
+                                            : (selectedSlot.id ==
+                                                    doctorSlots[index].id)
+                                                ? Colors.white
+                                                : Color(0xFF495767),
                                       ),
                                     ),
                                   ));

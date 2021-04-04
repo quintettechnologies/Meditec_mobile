@@ -172,7 +172,7 @@ class _AppointmentSampleListScreenState
                                         ),
                                       ),
                                       Text(
-                                        "Start: ${DateFormat.jm().format(appointment.time)} ",
+                                        "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),

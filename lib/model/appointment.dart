@@ -9,7 +9,7 @@ class Appointment {
   Appointment();
 
   num id;
-  DateTime time;
+  //DateTime time;
   num serialNumber;
   String status;
   String friendlyUserName;

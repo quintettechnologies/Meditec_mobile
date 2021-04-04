@@ -227,7 +227,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
-                                      widget.doctor.hospitalName,
+                                      widget.doctor.hospitalName ?? "",
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),

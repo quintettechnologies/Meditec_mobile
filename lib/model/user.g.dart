@@ -30,6 +30,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..age = json['age'] as num
     ..bloodGroup = json['bloodGroup'] as String
     ..hospitalName = json['hospitalName'] as String
+    ..doctorFee = json['doctorFee'] as num
+    ..doctorSecondTimeFee = json['doctorSecondTimeFee'] as num
+    // ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as String
+    ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as num
     ..failedLoginAttempts = json['failedLoginAttempts'] as num
     ..aggreedToTermOfUse = json['aggreedToTermOfUse'] as bool
     ..emailVerified = json['emailVerified'] as bool
@@ -82,6 +86,9 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'age': instance.age,
       'bloodGroup': instance.bloodGroup,
       'hospitalName': instance.hospitalName,
+      'doctorFee': instance.doctorFee,
+      'doctorSecondTimeFee': instance.doctorSecondTimeFee,
+      'doctorRegistrationNumber': instance.doctorRegistrationNumber,
       'failedLoginAttempts': instance.failedLoginAttempts,
       'aggreedToTermOfUse': instance.aggreedToTermOfUse,
       'emailVerified': instance.emailVerified,
