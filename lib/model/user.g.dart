@@ -32,8 +32,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..hospitalName = json['hospitalName'] as String
     ..doctorFee = json['doctorFee'] as num
     ..doctorSecondTimeFee = json['doctorSecondTimeFee'] as num
-    // ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as String
-    ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as num
+    ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as String
     ..failedLoginAttempts = json['failedLoginAttempts'] as num
     ..aggreedToTermOfUse = json['aggreedToTermOfUse'] as bool
     ..emailVerified = json['emailVerified'] as bool

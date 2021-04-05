@@ -18,6 +18,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../constants.dart';
+import 'callscreens/pickup/pickup_layout.dart';
 
 class ReportsListScreen extends StatefulWidget {
   final Appointment appointment;
@@ -188,241 +189,246 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyCustomAppBar(),
-      drawer: MyCustomDrawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Stack(
-            children: [
-              Container(
-                width: space * 0.9,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Reports',
-                      style: TextStyle(
-                          fontSize: space * 0.05, color: kPrimaryTextColor),
-                    ),
-                    SizedBox(
-                      height: space * 0.1,
-                    ),
-                    Column(
-                      children: [
-                        for (PrescriptionReport report in reports)
-                          Padding(
-                            padding: EdgeInsets.all(space * 0.01),
-                            child: Container(
-                              width: space * 0.9,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  width: space * 0.9,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      (report.image != null)
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: GestureDetector(
-                                                  onTap: (!report.fileTye
-                                                          .endsWith(".pdf"))
-                                                      ? () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          ReportDetailScreen(
-                                                                            report:
-                                                                                report,
-                                                                          )));
-                                                        }
-                                                      : () {
-                                                          _save(report);
-                                                        },
-                                                  child: (!report.fileTye
-                                                          .endsWith(".pdf"))
-                                                      ? Container(
-                                                          height: space * 0.17,
-                                                          width: space * 0.17,
-                                                          child: Image(
-                                                            image: Image.memory(
-                                                                    base64.decode(
-                                                                        report
-                                                                            .image))
-                                                                .image,
-                                                          ),
-                                                        )
-                                                      : Container(
-                                                          height: space * 0.17,
-                                                          width: space * 0.17,
-                                                          color: Colors.green,
-                                                          child: Icon(
-                                                            Icons
-                                                                .picture_as_pdf,
-                                                            color: Colors.white,
-                                                            size: space * 0.17,
-                                                          )),
+    return PickupLayout(
+      scaffold: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: MyCustomAppBar(),
+        drawer: MyCustomDrawer(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Stack(
+              children: [
+                Container(
+                  width: space * 0.9,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Reports',
+                        style: TextStyle(
+                            fontSize: space * 0.05, color: kPrimaryTextColor),
+                      ),
+                      SizedBox(
+                        height: space * 0.1,
+                      ),
+                      Column(
+                        children: [
+                          for (PrescriptionReport report in reports)
+                            Padding(
+                              padding: EdgeInsets.all(space * 0.01),
+                              child: Container(
+                                width: space * 0.9,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Container(
+                                    width: space * 0.9,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        (report.image != null)
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: GestureDetector(
+                                                    onTap: (!report.fileTye
+                                                            .endsWith(".pdf"))
+                                                        ? () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ReportDetailScreen(
+                                                                              report: report,
+                                                                            )));
+                                                          }
+                                                        : () {
+                                                            _save(report);
+                                                          },
+                                                    child: (!report.fileTye
+                                                            .endsWith(".pdf"))
+                                                        ? Container(
+                                                            height:
+                                                                space * 0.17,
+                                                            width: space * 0.17,
+                                                            child: Image(
+                                                              image: Image.memory(
+                                                                      base64.decode(
+                                                                          report
+                                                                              .image))
+                                                                  .image,
+                                                            ),
+                                                          )
+                                                        : Container(
+                                                            height:
+                                                                space * 0.17,
+                                                            width: space * 0.17,
+                                                            color: Colors.green,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .picture_as_pdf,
+                                                              color:
+                                                                  Colors.white,
+                                                              size:
+                                                                  space * 0.17,
+                                                            )),
+                                                  ),
                                                 ),
-                                              ),
-                                            )
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: GestureDetector(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    height: space * 0.17,
-                                                    width: space * 0.17,
-                                                    color: Colors.grey,
+                                              )
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: GestureDetector(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      height: space * 0.17,
+                                                      width: space * 0.17,
+                                                      color: Colors.grey,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                      SizedBox(
-                                        width: space * 0.02,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(space * 0.02),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            _save(report);
-                                          },
-                                          child: Container(
-                                            height: space * 0.1,
-                                            width: space * 0.1,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.blueAccent),
-                                            child: Icon(
-                                              Icons.save,
-                                              color: Colors.white,
+                                        SizedBox(
+                                          width: space * 0.02,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(space * 0.02),
+                                          child: TextButton(
+                                            onPressed: () {
+                                              _save(report);
+                                            },
+                                            child: Container(
+                                              height: space * 0.1,
+                                              width: space * 0.1,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.blueAccent),
+                                              child: Icon(
+                                                Icons.save,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: space * 0.02,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(space * 0.02),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            deleteReport(report);
-                                          },
-                                          child: Container(
-                                            height: space * 0.1,
-                                            width: space * 0.1,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.redAccent),
-                                            child: Icon(
-                                              Icons.delete_forever,
-                                              color: Colors.white,
+                                        SizedBox(
+                                          width: space * 0.02,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(space * 0.02),
+                                          child: TextButton(
+                                            onPressed: () {
+                                              deleteReport(report);
+                                            },
+                                            child: Container(
+                                              height: space * 0.1,
+                                              width: space * 0.1,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.redAccent),
+                                              child: Icon(
+                                                Icons.delete_forever,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        (reports.isEmpty)
-                            ? Text(
-                                'No previous documents to show',
-                                style: TextStyle(
-                                    fontSize: space * 0.04,
-                                    color: kPrimaryTextColor),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  RaisedButton(
-                    onPressed: () async {
-                      bool upload = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UploadPreviousReportScreen(
-                            appointment: widget.appointment,
-                          ),
-                        ),
-                      );
-                      if (upload) {
-                        await getReports();
-                      }
-                    },
-                    child: Container(
-                      width: space * 0.21,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(
-                            Icons.upload_file,
-                            size: space * 0.07,
-                            color: Color(0xFF00BABA),
-                          ),
-                          SizedBox(
-                            width: space * 0.02,
-                          ),
-                          Text('Upload')
+                          (reports.isEmpty)
+                              ? Text(
+                                  'No previous documents to show',
+                                  style: TextStyle(
+                                      fontSize: space * 0.04,
+                                      color: kPrimaryTextColor),
+                                )
+                              : Container(),
                         ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-              loading
-                  ? Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: space,
-                      color: Colors.white,
-                      child: Center(
-                        child: CircularProgressIndicator(),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    RaisedButton(
+                      onPressed: () async {
+                        bool upload = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UploadPreviousReportScreen(
+                              appointment: widget.appointment,
+                            ),
+                          ),
+                        );
+                        if (upload) {
+                          await getReports();
+                        }
+                      },
+                      child: Container(
+                        width: space * 0.21,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Icon(
+                              Icons.upload_file,
+                              size: space * 0.07,
+                              color: Color(0xFF00BABA),
+                            ),
+                            SizedBox(
+                              width: space * 0.02,
+                            ),
+                            Text('Upload')
+                          ],
+                        ),
                       ),
                     )
-                  : Container()
-            ],
+                  ],
+                ),
+                loading
+                    ? Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: space,
+                        color: Colors.white,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
           ),
         ),
+        // body: Center(
+        //   child: Container(
+        //     child: FlatButton(
+        //         onPressed: () {
+        //           Navigator.pushNamed(context, DoctorScreen.id);
+        //         },
+        //         child: Text("Doctors")),
+        //   ),
+        // ),
+        floatingActionButton: MyCustomFAB(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: MyCustomNavBar(),
       ),
-      // body: Center(
-      //   child: Container(
-      //     child: FlatButton(
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, DoctorScreen.id);
-      //         },
-      //         child: Text("Doctors")),
-      //   ),
-      // ),
-      floatingActionButton: MyCustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: MyCustomNavBar(),
     );
   }
 }

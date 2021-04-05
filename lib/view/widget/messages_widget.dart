@@ -27,7 +27,6 @@ class MessagesWidget extends StatelessWidget {
                 return buildText('Something Went Wrong Try later');
               } else {
                 final messages = snapshot.data;
-
                 return messages.isEmpty
                     ? buildText('Say Hi..')
                     : ListView.builder(

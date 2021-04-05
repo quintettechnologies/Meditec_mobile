@@ -14,6 +14,7 @@ import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/model/category.dart';
 import '../constants.dart';
+import 'callscreens/pickup/pickup_layout.dart';
 
 class CategoryDoctorScreen extends StatefulWidget {
   static const String id = 'category_doctor_screen';
@@ -27,180 +28,184 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
     final double space = MediaQuery.of(context).size.width;
     List<User> doctors = context.read(userProvider).categoryDoctors;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyCustomAppBar(
-        enableSearch: true,
-      ),
-      drawer: MyCustomDrawer(),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: space * 0.01, horizontal: space * 0.07),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Doctors',
-                  style: TextStyle(
-                      fontSize: space * 0.05, color: kPrimaryTextColor),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        for (User doctor in doctors)
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DoctorProfileScreen(doctor: doctor),
+    return PickupLayout(
+      scaffold: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: MyCustomAppBar(
+          enableSearch: true,
+        ),
+        drawer: MyCustomDrawer(),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: space * 0.01, horizontal: space * 0.07),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Doctors',
+                    style: TextStyle(
+                        fontSize: space * 0.05, color: kPrimaryTextColor),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          for (User doctor in doctors)
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DoctorProfileScreen(doctor: doctor),
+                                  ),
+                                );
+                              },
+                              padding: EdgeInsets.all(space * 0.015),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color:
+                                            Color(0xFF000000).withOpacity(0.1),
+                                        offset: Offset.fromDirection(1),
+                                        blurRadius: 10,
+                                        spreadRadius: 1)
+                                  ],
                                 ),
-                              );
-                            },
-                            padding: EdgeInsets.all(space * 0.015),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0xFF000000).withOpacity(0.1),
-                                      offset: Offset.fromDirection(1),
-                                      blurRadius: 10,
-                                      spreadRadius: 1)
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  (doctor.userAvatar != null)
-                                      ? Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Container(
-                                              height: space * 0.17,
-                                              width: space * 0.17,
-                                              child: Image(
-                                                image: Image.memory(
-                                                        base64.decode(doctor
-                                                            .userAvatar.image))
-                                                    .image,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    (doctor.userAvatar != null)
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Container(
+                                                height: space * 0.17,
+                                                width: space * 0.17,
+                                                child: Image(
+                                                  image: Image.memory(
+                                                          base64.decode(doctor
+                                                              .userAvatar
+                                                              .image))
+                                                      .image,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      : Container(),
-                                  SizedBox(
-                                    width: space * 0.02,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          doctor.name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          doctor.degree.degreeName,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          doctor.categories[0].name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        // Text(doctors[index].hospital,
-                                        //     style: TextStyle(
-                                        //         fontSize: 13,
-                                        //         fontWeight: FontWeight.w500)),
-                                      ],
+                                          )
+                                        : Container(),
+                                    SizedBox(
+                                      width: space * 0.02,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: space * 0.02,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Available",
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            doctor.name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF00BABA))),
-                                        SizedBox(
-                                          height: space * 0.05,
-                                        ),
-                                        Container(
-                                          height: space * 0.05,
-                                          //width: space * 0.15,
-                                          child: RatingBar(
-                                            itemSize: 10,
-                                            wrapAlignment: WrapAlignment.end,
-                                            initialRating: 5,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            ratingWidget: RatingWidget(
-                                              full: Icon(
-                                                Icons.star,
-                                                color: Color(0xFF3C4858),
-                                              ),
-                                              half: Icon(
-                                                Icons.star_half,
-                                                color: Color(0xFF3C4858),
-                                              ),
-                                              empty: Icon(
-                                                Icons.star_border,
-                                                color: Color(0xFF3C4858),
-                                              ),
-                                            ),
-                                            itemPadding: EdgeInsets.symmetric(
-                                                horizontal: 0),
-                                            onRatingUpdate: (rating) {
-                                              print(rating);
-                                            },
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                            doctor.degree.degreeName,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          Text(
+                                            doctor.categories[0].name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          // Text(doctors[index].hospital,
+                                          //     style: TextStyle(
+                                          //         fontSize: 13,
+                                          //         fontWeight: FontWeight.w500)),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: space * 0.02,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Available",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF00BABA))),
+                                          SizedBox(
+                                            height: space * 0.05,
+                                          ),
+                                          Container(
+                                            height: space * 0.05,
+                                            //width: space * 0.15,
+                                            child: RatingBar(
+                                              itemSize: 10,
+                                              wrapAlignment: WrapAlignment.end,
+                                              initialRating: 5,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              ratingWidget: RatingWidget(
+                                                full: Icon(
+                                                  Icons.star,
+                                                  color: Color(0xFF3C4858),
+                                                ),
+                                                half: Icon(
+                                                  Icons.star_half,
+                                                  color: Color(0xFF3C4858),
+                                                ),
+                                                empty: Icon(
+                                                  Icons.star_border,
+                                                  color: Color(0xFF3C4858),
+                                                ),
+                                              ),
+                                              itemPadding: EdgeInsets.symmetric(
+                                                  horizontal: 0),
+                                              onRatingUpdate: (rating) {
+                                                print(rating);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                      ],
+                            )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
+        floatingActionButton: MyCustomFAB(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: MyCustomNavBar(),
       ),
-      floatingActionButton: MyCustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: MyCustomNavBar(),
     );
   }
 }

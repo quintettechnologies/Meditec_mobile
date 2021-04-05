@@ -22,6 +22,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../constants.dart';
 import '../constants.dart';
+import 'callscreens/pickup/pickup_layout.dart';
 
 class SampleListScreen extends StatefulWidget {
   final Appointment appointment;
@@ -189,229 +190,232 @@ class _SampleListScreenState extends State<SampleListScreen> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyCustomAppBar(),
-      drawer: MyCustomDrawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Stack(
-            children: [
-              Container(
-                width: space * 0.9,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Samples',
-                      style: TextStyle(
-                          fontSize: space * 0.05, color: kPrimaryTextColor),
-                    ),
-                    SizedBox(
-                      height: space * 0.1,
-                    ),
-                    Column(
-                      children: [
-                        for (SamplePicture sample in samples)
-                          Padding(
-                            padding: EdgeInsets.all(space * 0.01),
-                            child: Container(
-                              width: space * 0.9,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  width: space * 0.9,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      (sample.image != null)
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                SamplePreviewScreen(
-                                                                  sample:
-                                                                      sample,
-                                                                )));
-                                                  },
-                                                  child: Container(
-                                                    height: space * 0.17,
-                                                    width: space * 0.17,
-                                                    child: Image(
-                                                      image: Image.memory(
-                                                              base64.decode(
-                                                                  sample.image))
-                                                          .image,
+    return PickupLayout(
+      scaffold: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: MyCustomAppBar(),
+        drawer: MyCustomDrawer(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Stack(
+              children: [
+                Container(
+                  width: space * 0.9,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Samples',
+                        style: TextStyle(
+                            fontSize: space * 0.05, color: kPrimaryTextColor),
+                      ),
+                      SizedBox(
+                        height: space * 0.1,
+                      ),
+                      Column(
+                        children: [
+                          for (SamplePicture sample in samples)
+                            Padding(
+                              padding: EdgeInsets.all(space * 0.01),
+                              child: Container(
+                                width: space * 0.9,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Container(
+                                    width: space * 0.9,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        (sample.image != null)
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SamplePreviewScreen(
+                                                                    sample:
+                                                                        sample,
+                                                                  )));
+                                                    },
+                                                    child: Container(
+                                                      height: space * 0.17,
+                                                      width: space * 0.17,
+                                                      child: Image(
+                                                        image: Image.memory(
+                                                                base64.decode(
+                                                                    sample
+                                                                        .image))
+                                                            .image,
+                                                      ),
+                                                    ),
+                                                    // child: Container(
+                                                    //     height: space * 0.17,
+                                                    //     width: space * 0.17,
+                                                    //     color: Colors.green,
+                                                    //     child: Icon(
+                                                    //       Icons.picture_as_pdf,
+                                                    //       color: Colors.white,
+                                                    //       size: space * 0.17,
+                                                    //     )),
+                                                  ),
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: GestureDetector(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      height: space * 0.17,
+                                                      width: space * 0.17,
+                                                      color: Colors.grey,
                                                     ),
                                                   ),
-                                                  // child: Container(
-                                                  //     height: space * 0.17,
-                                                  //     width: space * 0.17,
-                                                  //     color: Colors.green,
-                                                  //     child: Icon(
-                                                  //       Icons.picture_as_pdf,
-                                                  //       color: Colors.white,
-                                                  //       size: space * 0.17,
-                                                  //     )),
                                                 ),
                                               ),
-                                            )
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: GestureDetector(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    height: space * 0.17,
-                                                    width: space * 0.17,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
+                                        SizedBox(
+                                          width: space * 0.02,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(space * 0.02),
+                                          child: TextButton(
+                                            onPressed: () {
+                                              _save(sample);
+                                            },
+                                            child: Container(
+                                              height: space * 0.1,
+                                              width: space * 0.1,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.blueAccent),
+                                              child: Icon(
+                                                Icons.save,
+                                                color: Colors.white,
                                               ),
-                                            ),
-                                      SizedBox(
-                                        width: space * 0.02,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(space * 0.02),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            _save(sample);
-                                          },
-                                          child: Container(
-                                            height: space * 0.1,
-                                            width: space * 0.1,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.blueAccent),
-                                            child: Icon(
-                                              Icons.save,
-                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(space * 0.02),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            deleteSample(sample);
-                                          },
-                                          child: Container(
-                                            height: space * 0.1,
-                                            width: space * 0.1,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.redAccent),
-                                            child: Icon(
-                                              Icons.delete_forever,
-                                              color: Colors.white,
+                                        Padding(
+                                          padding: EdgeInsets.all(space * 0.02),
+                                          child: TextButton(
+                                            onPressed: () {
+                                              deleteSample(sample);
+                                            },
+                                            child: Container(
+                                              height: space * 0.1,
+                                              width: space * 0.1,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.redAccent),
+                                              child: Icon(
+                                                Icons.delete_forever,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        (samples.isEmpty)
-                            ? Text(
-                                'No previous documents to show',
-                                style: TextStyle(
-                                    fontSize: space * 0.04,
-                                    color: kPrimaryTextColor),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  RaisedButton(
-                    onPressed: () async {
-                      bool upload = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UploadSampleScreen(
-                            appointment: widget.appointment,
-                          ),
-                        ),
-                      );
-
-                      if (upload) {
-                        await getSamples();
-                      }
-                    },
-                    child: Container(
-                      width: space * 0.21,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(
-                            Icons.upload_file,
-                            size: space * 0.07,
-                            color: Color(0xFF00BABA),
-                          ),
-                          SizedBox(
-                            width: space * 0.02,
-                          ),
-                          Text('Upload')
+                          (samples.isEmpty)
+                              ? Text(
+                                  'No previous documents to show',
+                                  style: TextStyle(
+                                      fontSize: space * 0.04,
+                                      color: kPrimaryTextColor),
+                                )
+                              : Container(),
                         ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-              loading
-                  ? Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: space,
-                      color: Colors.white,
-                      child: Center(
-                        child: CircularProgressIndicator(),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    RaisedButton(
+                      onPressed: () async {
+                        bool upload = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UploadSampleScreen(
+                              appointment: widget.appointment,
+                            ),
+                          ),
+                        );
+
+                        if (upload) {
+                          await getSamples();
+                        }
+                      },
+                      child: Container(
+                        width: space * 0.21,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Icon(
+                              Icons.upload_file,
+                              size: space * 0.07,
+                              color: Color(0xFF00BABA),
+                            ),
+                            SizedBox(
+                              width: space * 0.02,
+                            ),
+                            Text('Upload')
+                          ],
+                        ),
                       ),
                     )
-                  : Container()
-            ],
+                  ],
+                ),
+                loading
+                    ? Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: space,
+                        color: Colors.white,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
           ),
         ),
+        // body: Center(
+        //   child: Container(
+        //     child: FlatButton(
+        //         onPressed: () {
+        //           Navigator.pushNamed(context, DoctorScreen.id);
+        //         },
+        //         child: Text("Doctors")),
+        //   ),
+        // ),
+        floatingActionButton: MyCustomFAB(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: MyCustomNavBar(),
       ),
-      // body: Center(
-      //   child: Container(
-      //     child: FlatButton(
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, DoctorScreen.id);
-      //         },
-      //         child: Text("Doctors")),
-      //   ),
-      // ),
-      floatingActionButton: MyCustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: MyCustomNavBar(),
     );
   }
 }

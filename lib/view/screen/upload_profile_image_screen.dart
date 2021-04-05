@@ -16,6 +16,8 @@ import 'package:meditec/view/widget/customFAB.dart';
 import 'dart:io';
 import 'package:meditec/model/user.dart';
 
+import 'callscreens/pickup/pickup_layout.dart';
+
 class UploadProfileImageScreen extends StatefulWidget {
   static const String id = 'upload_profile_image';
   @override
@@ -61,147 +63,151 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyCustomAppBar(),
-      drawer: MyCustomDrawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  (context.read(userProvider).currentUser().userAvatar != null)
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image(
-                            image: _image != null
-                                ? FileImage(_image)
-                                : Image.memory(base64.decode(context
-                                        .read(userProvider)
-                                        .currentUser()
-                                        .userAvatar
-                                        .image))
-                                    .image,
-                            fit: BoxFit.fill,
-                            height: space * 0.5,
-                            width: space * 0.5,
-                          ),
-                        )
-                      : _image != null
-                          ? Image(
-                              image: FileImage(_image),
-                            )
-                          : Container(
+    return PickupLayout(
+      scaffold: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: MyCustomAppBar(),
+        drawer: MyCustomDrawer(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    (context.read(userProvider).currentUser().userAvatar !=
+                            null)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image(
+                              image: _image != null
+                                  ? FileImage(_image)
+                                  : Image.memory(base64.decode(context
+                                          .read(userProvider)
+                                          .currentUser()
+                                          .userAvatar
+                                          .image))
+                                      .image,
+                              fit: BoxFit.fill,
                               height: space * 0.5,
                               width: space * 0.5,
-                              color: Colors.transparent,
-                              child: Icon(
-                                Icons.account_circle,
-                                color: Color(0xFF00BABA),
-                                size: space * 0.5,
-                              )),
-                  SizedBox(
-                    height: space * 0.1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      RaisedButton(
-                        onPressed: () {
-                          _getImage(ImageSource.camera);
-                        },
-                        child: Container(
-                          width: space * 0.2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                color: Color(0xFF00BABA),
-                              ),
-                              SizedBox(
-                                width: space * 0.02,
-                              ),
-                              Text('Camera')
-                            ],
-                          ),
-                        ),
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          _getImage(ImageSource.gallery);
-                        },
-                        child: Container(
-                          width: space * 0.2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(
-                                Icons.image,
-                                color: Color(0xFF00BABA),
-                              ),
-                              SizedBox(
-                                width: space * 0.02,
-                              ),
-                              Text('Gallery')
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: space * 0.1,
-                  ),
-                  RaisedButton(
-                    onPressed: () async {
-                      bool upload =
-                          await context.read(userProvider).uploadImage(_image);
-                      if (upload) {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, ProfileScreen.id);
-                      }
-                    },
-                    child: Container(
-                      width: space * 0.2,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(
-                            Icons.save,
-                            color: Color(0xFF00BABA),
-                          ),
-                          SizedBox(
-                            width: space * 0.02,
-                          ),
-                          Text('Save')
-                        ],
-                      ),
+                            ),
+                          )
+                        : _image != null
+                            ? Image(
+                                image: FileImage(_image),
+                              )
+                            : Container(
+                                height: space * 0.5,
+                                width: space * 0.5,
+                                color: Colors.transparent,
+                                child: Icon(
+                                  Icons.account_circle,
+                                  color: Color(0xFF00BABA),
+                                  size: space * 0.5,
+                                )),
+                    SizedBox(
+                      height: space * 0.1,
                     ),
-                  )
-                ],
-              ),
-              (_inProcess)
-                  ? Container(
-                      color: Colors.white,
-                      height: MediaQuery.of(context).size.height * 0.95,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        RaisedButton(
+                          onPressed: () {
+                            _getImage(ImageSource.camera);
+                          },
+                          child: Container(
+                            width: space * 0.2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Color(0xFF00BABA),
+                                ),
+                                SizedBox(
+                                  width: space * 0.02,
+                                ),
+                                Text('Camera')
+                              ],
+                            ),
+                          ),
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+                            _getImage(ImageSource.gallery);
+                          },
+                          child: Container(
+                            width: space * 0.2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.image,
+                                  color: Color(0xFF00BABA),
+                                ),
+                                SizedBox(
+                                  width: space * 0.02,
+                                ),
+                                Text('Gallery')
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: space * 0.1,
+                    ),
+                    RaisedButton(
+                      onPressed: () async {
+                        bool upload = await context
+                            .read(userProvider)
+                            .uploadImage(_image);
+                        if (upload) {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, ProfileScreen.id);
+                        }
+                      },
+                      child: Container(
+                        width: space * 0.2,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Icon(
+                              Icons.save,
+                              color: Color(0xFF00BABA),
+                            ),
+                            SizedBox(
+                              width: space * 0.02,
+                            ),
+                            Text('Save')
+                          ],
                         ),
                       ),
                     )
-                  : Center()
-            ],
+                  ],
+                ),
+                (_inProcess)
+                    ? Container(
+                        color: Colors.white,
+                        height: MediaQuery.of(context).size.height * 0.95,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Center()
+              ],
+            ),
           ),
         ),
+        floatingActionButton: MyCustomFAB(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: MyCustomNavBar(),
       ),
-      floatingActionButton: MyCustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: MyCustomNavBar(),
     );
   }
 }

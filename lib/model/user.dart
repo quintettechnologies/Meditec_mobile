@@ -36,8 +36,7 @@ class User {
   String hospitalName;
   num doctorFee;
   num doctorSecondTimeFee;
-  // String doctorRegistrationNumber;
-  num doctorRegistrationNumber;
+  String doctorRegistrationNumber;
   num failedLoginAttempts;
   bool aggreedToTermOfUse;
   bool emailVerified;

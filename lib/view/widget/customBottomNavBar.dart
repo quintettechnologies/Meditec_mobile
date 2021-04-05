@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:meditec/view/screen/24x7doctor_screen.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/profile_screen.dart';
@@ -38,8 +39,8 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                   route: "",
                 ),
                 NavbarButton(
-                  text: 'Blog',
-                  route: Dashboard.id,
+                  text: 'Emergency',
+                  route: EmergencyDoctorScreen.id,
                 ),
                 NavbarButton(
                   text: 'Profile',
