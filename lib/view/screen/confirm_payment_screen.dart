@@ -98,6 +98,8 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                                 .name,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
+                                              color: Color(0xFF00BABA),
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                             ),
                                           ),

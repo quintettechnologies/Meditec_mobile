@@ -410,25 +410,36 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                           fontSize: 14,
                                                         ),
                                                       ),
-                                                      Text(
-                                                        "${appointment.status}",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: (appointment
-                                                                        .status ==
-                                                                    "Payment Complete")
-                                                                ? (appointment
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color: (appointment
                                                                             .status ==
-                                                                        "Complete")
-                                                                    ? Color(
-                                                                        0xFFBABA)
+                                                                        "Payment Complete")
+                                                                    ? (appointment.status ==
+                                                                            "Complete")
+                                                                        ? Color(
+                                                                            0xFFBABA)
+                                                                        : Colors
+                                                                            .green
                                                                     : Colors
-                                                                        .green
-                                                                : Colors
-                                                                    .deepOrange,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                                        .deepOrange,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5)),
+                                                        padding: EdgeInsets.all(
+                                                            space * 0.01),
+                                                        child: Text(
+                                                          "${appointment.status}",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -593,16 +604,30 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                 fontSize: 14,
                                                               ),
                                                             ),
-                                                            Text(
-                                                              "${appointment.status}",
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .green,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: (appointment.status == "Payment Complete")
+                                                                      ? (appointment.status == "Complete")
+                                                                          ? Color(0xFFBABA)
+                                                                          : Colors.green
+                                                                      : Colors.deepOrange,
+                                                                  borderRadius: BorderRadius.circular(5)),
+                                                              padding:
+                                                                  EdgeInsets.all(
+                                                                      space *
+                                                                          0.01),
+                                                              child: Text(
+                                                                "${appointment.status}",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            )
                                                           ],
                                                         ),
                                                       ),
@@ -767,16 +792,30 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                 fontSize: 14,
                                                               ),
                                                             ),
-                                                            Text(
-                                                              "${appointment.status}",
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .deepOrange,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: (appointment.status == "Payment Complete")
+                                                                      ? (appointment.status == "Complete")
+                                                                          ? Color(0xFFBABA)
+                                                                          : Colors.green
+                                                                      : Colors.deepOrange,
+                                                                  borderRadius: BorderRadius.circular(5)),
+                                                              padding:
+                                                                  EdgeInsets.all(
+                                                                      space *
+                                                                          0.01),
+                                                              child: Text(
+                                                                "${appointment.status}",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            )
                                                           ],
                                                         ),
                                                       ),

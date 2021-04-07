@@ -27,12 +27,12 @@ class DoctorScreen extends StatefulWidget {
 }
 
 class _DoctorScreenState extends State<DoctorScreen> {
+  bool expanded = false;
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
     List<Category> categories = context.read(userProvider).categories;
     List<User> doctors = context.read(userProvider).doctors;
-    bool showButtons = true;
     return PickupLayout(
       scaffold: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -48,10 +48,34 @@ class _DoctorScreenState extends State<DoctorScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Category',
-                    style: TextStyle(
-                        fontSize: space * 0.05, color: kPrimaryTextColor),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Category',
+                        style: TextStyle(
+                            fontSize: space * 0.05, color: kPrimaryTextColor),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              expanded = !expanded;
+                            });
+                          },
+                          child: !expanded
+                              ? Row(
+                                  children: [
+                                    Icon(Icons.expand_more),
+                                    Text("See All")
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Icon(Icons.expand_less),
+                                    Text("Close")
+                                  ],
+                                ))
+                    ],
                   ),
                   SizedBox(height: 10),
                   // FittedBox(
@@ -79,68 +103,139 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   //     ],
                   //   ),
                   // ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        for (Category category in categories)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () async {
-                                bool list = await context
-                                    .read(userProvider)
-                                    .getCategoryDoctorList(category.id);
-                                if (list) {
-                                  Navigator.pushNamed(
-                                      context, CategoryDoctorScreen.id);
-                                }
-                              },
-                              child: Container(
-                                // padding: EdgeInsets.all(10),
-                                height: space * 0.25,
-                                width: space * 0.25,
-                                decoration: kButtonDecoration,
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: Material(
+                  !expanded
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (Category category in categories)
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      bool list = await context
+                                          .read(userProvider)
+                                          .getCategoryDoctorList(category.id);
+                                      if (list) {
+                                        Navigator.pushNamed(
+                                            context, CategoryDoctorScreen.id);
+                                      }
+                                    },
+                                    child: Container(
+                                      // padding: EdgeInsets.all(10),
+                                      height: space * 0.25,
+                                      width: space * 0.25,
+                                      decoration: kButtonDecoration,
+                                      child: Column(
+                                        children: [
+                                          ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                child: Material(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: Colors.white,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    child: Container(
+                                                      height: space * 0.1,
+                                                      width: space * 0.1,
+                                                      // child: Icon(
+                                                      //   Icons.account_circle,
+                                                      //   size: space * 0.1,
+                                                      //   color: Color(0xFF00BABA),
+                                                      // )
+                                                      child: SvgPicture.asset(
+                                                        "assets/icons/doctor_page/${category.name}.svg",
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ) ??
+                                              Container(),
+                                          Text(
+                                            category.name,
+                                            style: kButtonTextStyle.copyWith(
+                                                fontSize: space * 0.036),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        )
+                      : GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            // crossAxisCount: 2,
+                            // crossAxisSpacing: space * 0.01,
+                            // childAspectRatio: 2.5 / 1
+                          ),
+                          shrinkWrap: true,
+                          itemCount: categories.length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  bool list = await context
+                                      .read(userProvider)
+                                      .getCategoryDoctorList(
+                                          categories[index].id);
+                                  if (list) {
+                                    Navigator.pushNamed(
+                                        context, CategoryDoctorScreen.id);
+                                  }
+                                },
+                                child: Container(
+                                  // padding: EdgeInsets.all(10),
+                                  height: space * 0.25,
+                                  width: space * 0.25,
+                                  decoration: kButtonDecoration,
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            color: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(10),
-                                              child: Container(
-                                                height: space * 0.1,
-                                                width: space * 0.1,
-                                                // child: Icon(
-                                                //   Icons.account_circle,
-                                                //   size: space * 0.1,
-                                                //   color: Color(0xFF00BABA),
-                                                // )
-                                                child: SvgPicture.asset(
-                                                  "assets/icons/doctor_page/${category.name}.svg",
+                                            child: Material(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              color: Colors.white,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: Container(
+                                                  height: space * 0.1,
+                                                  width: space * 0.1,
+                                                  // child: Icon(
+                                                  //   Icons.account_circle,
+                                                  //   size: space * 0.1,
+                                                  //   color: Color(0xFF00BABA),
+                                                  // )
+                                                  child: SvgPicture.asset(
+                                                    "assets/icons/doctor_page/${categories[index].name}.svg",
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ) ??
-                                        Container(),
-                                    Text(
-                                      category.name,
-                                      style: kButtonTextStyle.copyWith(
-                                          fontSize: space * 0.036),
-                                    ),
-                                  ],
+                                          ) ??
+                                          Container(),
+                                      Text(
+                                        categories[index].name,
+                                        style: kButtonTextStyle.copyWith(
+                                            fontSize: space * 0.036),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                            );
+                          }),
                   SizedBox(height: 20),
 
                   DefaultTabController(

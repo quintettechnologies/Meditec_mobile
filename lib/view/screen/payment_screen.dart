@@ -37,13 +37,13 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
   TextEditingController nameController;
   TextEditingController ageController;
   TextEditingController weightController;
-  TextEditingController bloodGroupController;
-  TextEditingController genderController;
   FocusNode nameFocus;
   FocusNode ageFocus;
   FocusNode weightFocus;
-  FocusNode bloodGroupFocus;
-  FocusNode genderFocus;
+  String bloodGroup;
+  String gender;
+  int bloodValue;
+  int genderValue;
 
   @override
   void initState() {
@@ -51,13 +51,9 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     nameController = TextEditingController();
     ageController = TextEditingController();
     weightController = TextEditingController();
-    bloodGroupController = TextEditingController();
-    genderController = TextEditingController();
     nameFocus = FocusNode();
     ageFocus = FocusNode();
     weightFocus = FocusNode();
-    bloodGroupFocus = FocusNode();
-    genderFocus = FocusNode();
     super.initState();
   }
 
@@ -67,13 +63,9 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     nameController.dispose();
     ageController.dispose();
     weightController.dispose();
-    bloodGroupController.dispose();
-    genderController.dispose();
     nameFocus.dispose();
     ageFocus.dispose();
     weightFocus.dispose();
-    bloodGroupFocus.dispose();
-    genderFocus.dispose();
     super.dispose();
   }
 
@@ -86,8 +78,8 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
       appointment.friendlyUserAge = int.tryParse(ageController.text.trim());
       appointment.friendlyUserWeight =
           double.tryParse(weightController.text.trim());
-      appointment.friendlyUserBloodGroup = bloodGroupController.text.trim();
-      appointment.friendlyUserGender = genderController.text.trim();
+      appointment.friendlyUserBloodGroup = bloodGroup;
+      appointment.friendlyUserGender = gender;
     } else {
       appointment.originalUser = true;
       appointment.friendlyUserName = null;
@@ -163,6 +155,36 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     }
   }
 
+  setGender() {
+    if (genderValue == 1) {
+      gender = "Male";
+    } else if (genderValue == 2) {
+      gender = "Female";
+    } else if (genderValue == 3) {
+      gender = "Transgender";
+    }
+  }
+
+  setBloodGroup() {
+    if (bloodValue == 1) {
+      bloodGroup = "O-";
+    } else if (bloodValue == 2) {
+      bloodGroup = "O+";
+    } else if (bloodValue == 3) {
+      bloodGroup = "A-";
+    } else if (bloodValue == 4) {
+      bloodGroup = "A+";
+    } else if (bloodValue == 5) {
+      bloodGroup = "B-";
+    } else if (bloodValue == 6) {
+      bloodGroup = "B+";
+    } else if (bloodValue == 7) {
+      bloodGroup = "AB-";
+    } else if (bloodValue == 8) {
+      bloodGroup = "AB+";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
@@ -219,6 +241,8 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                       Text(
                                         widget.doctor.categories[0].name,
                                         style: TextStyle(
+                                          color: Color(0xFF00BABA),
+                                          fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                         ),
                                         textAlign: TextAlign.center,
@@ -527,20 +551,132 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             SizedBox(
                                               height: space * 0.02,
                                             ),
-                                            TextEditingField(
-                                              text: "Blood Group",
-                                              space: space,
-                                              controller: bloodGroupController,
-                                              focusNode: bloodGroupFocus,
+                                            // TextEditingField(
+                                            //   text: "Blood Group",
+                                            //   space: space,
+                                            //   controller: bloodGroupController,
+                                            //   focusNode: bloodGroupFocus,
+                                            // ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Text(
+                                                  "Blood Group",
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                SizedBox(
+                                                  height: space * 0.1,
+                                                  width: space * 0.5,
+                                                  child: DropdownButton(
+                                                    key: Key("gender"),
+                                                    value: bloodValue,
+                                                    hint: Text(
+                                                        "Select your blood group"),
+                                                    items: [
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('O-'),
+                                                        value: 1,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('O+'),
+                                                        value: 2,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('A-'),
+                                                        value: 3,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('A+'),
+                                                        value: 4,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('B-'),
+                                                        value: 5,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('B+'),
+                                                        value: 6,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('AB-'),
+                                                        value: 7,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('AB+'),
+                                                        value: 8,
+                                                      ),
+                                                    ],
+                                                    onChanged: (int value) {
+                                                      setState(() {
+                                                        bloodValue = value;
+                                                        setBloodGroup();
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
                                               height: space * 0.02,
                                             ),
-                                            TextEditingField(
-                                              text: "Gender",
-                                              space: space,
-                                              controller: genderController,
-                                              focusNode: genderFocus,
+                                            // TextEditingField(
+                                            //   text: "Gender",
+                                            //   space: space,
+                                            //   controller: genderController,
+                                            //   focusNode: genderFocus,
+                                            // )
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Text(
+                                                  "Gender",
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                //     if (genderValue == 1) {
+                                                //   gender = "Male";
+                                                // } else if (genderValue == 2) {
+                                                // gender = "Female";
+                                                // } else if (genderValue == 3) {
+                                                // gender = "Transgender";
+                                                // }
+                                                SizedBox(
+                                                  height: space * 0.1,
+                                                  width: space * 0.5,
+                                                  child: DropdownButton(
+                                                    key: Key("gender"),
+                                                    value: genderValue,
+                                                    hint: Text(
+                                                        "Select your gender"),
+                                                    items: [
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('Male'),
+                                                        value: 1,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child: Text('Female'),
+                                                        value: 2,
+                                                      ),
+                                                      DropdownMenuItem<int>(
+                                                        child:
+                                                            Text('Transgender'),
+                                                        value: 3,
+                                                      ),
+                                                    ],
+                                                    onChanged: (int value) {
+                                                      setState(() {
+                                                        genderValue = value;
+                                                        setGender();
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
                                             )
                                           ],
                                         ),

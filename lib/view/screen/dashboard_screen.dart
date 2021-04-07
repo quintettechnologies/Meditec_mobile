@@ -12,6 +12,7 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../debouncer.dart';
 import '../constants.dart';
@@ -34,6 +35,14 @@ class _DashboardState extends State<Dashboard> {
   FocusNode searchFocus;
   List<User> doctors = [];
   List<User> result = [];
+  YoutubePlayerController _controller = YoutubePlayerController(
+      initialVideoId: 'QkpweP6sLNM',
+      params: YoutubePlayerParams(
+        autoPlay: true,
+        mute: true,
+        loop: true,
+        showControls: false,
+      ));
 
   @override
   void initState() {
@@ -48,6 +57,7 @@ class _DashboardState extends State<Dashboard> {
     // TODO: implement dispose
     searchController.dispose();
     searchFocus.dispose();
+    _controller.close();
     super.dispose();
   }
 
@@ -230,10 +240,38 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         SizedBox(height: space * 0.05),
+                        // YoutubePlayerIFrame(
+                        //   controller: _controller,
+                        //   aspectRatio: 16 / 9,
+                        // ),
+                        // SizedBox(height: space * 0.05),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
+                              Container(
+                                width: 220,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Color(0xFFD2D2D2)),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  child: YoutubePlayerIFrame(
+                                    controller: _controller,
+                                    aspectRatio: 16 / 9,
+                                  ),
+                                  // child: Image(
+                                  //   image:
+                                  //       AssetImage('assets/images/profiles/user.png'),
+                                  // ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
                               Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
