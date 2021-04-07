@@ -199,6 +199,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                                 doctorID: widget
                                                                     .appointment
                                                                     .doctorSlot
+                                                                    .chamber
                                                                     .user
                                                                     .userId
                                                                     .toString(),
