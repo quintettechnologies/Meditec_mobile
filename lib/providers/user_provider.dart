@@ -181,6 +181,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<String> deleteAppointment(Appointment appointment) async {
+    appointment.doctorSlot = null;
     var uri = Uri.http('$url', '/deleteAppoinment');
     try {
       var response = await http.post(
@@ -274,10 +275,6 @@ class UserProvider extends ChangeNotifier {
           ?.map((e) =>
               e == null ? null : DoctorSlot.fromJson(e as Map<String, dynamic>))
           ?.toList();
-      for (DoctorSlot slot in doctorSlots) {
-        print(slot.name);
-        print(slot.startTime.toIso8601String());
-      }
       return true;
     } else {
       return false;

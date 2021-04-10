@@ -39,9 +39,9 @@ class _DashboardState extends State<Dashboard> {
       initialVideoId: 'QkpweP6sLNM',
       params: YoutubePlayerParams(
         autoPlay: true,
-        mute: true,
+        mute: false,
         loop: true,
-        showControls: false,
+        showControls: true,
       ));
 
   @override
@@ -69,6 +69,7 @@ class _DashboardState extends State<Dashboard> {
       onWillPop: () async {
         return false;
       },
+      key: Key("dashboard"),
       child: PickupLayout(
         scaffold: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -126,6 +127,7 @@ class _DashboardState extends State<Dashboard> {
                               CatagoryButtonDashBoard(
                                 onTap: () {
                                   Navigator.pushNamed(context, DoctorScreen.id);
+                                  _controller.stop();
                                 },
                                 category: 'Doctor',
                                 color: Color(0xFFE2F2F8),
@@ -717,7 +719,20 @@ class _DashboardState extends State<Dashboard> {
                                     : Container(),
                                 for (User doctor in result)
                                   FlatButton(
-                                    onPressed: () {},
+                                    onPressed:
+                                        (doctor.roles.name.toUpperCase() ==
+                                                "DOCTOR")
+                                            ? () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DoctorProfileScreen(
+                                                            doctor: doctor),
+                                                  ),
+                                                );
+                                              }
+                                            : null,
                                     padding: EdgeInsets.all(space * 0.015),
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -757,7 +772,14 @@ class _DashboardState extends State<Dashboard> {
                                                     ),
                                                   ),
                                                 )
-                                              : Container(),
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    height: space * 0.17,
+                                                    width: space * 0.17,
+                                                  ),
+                                                ),
                                           SizedBox(
                                             width: space * 0.02,
                                           ),
@@ -773,70 +795,128 @@ class _DashboardState extends State<Dashboard> {
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
+                                                (doctor.roles.name
+                                                            .toUpperCase() ==
+                                                        "DOCTOR")
+                                                    ? Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            (doctor.categories
+                                                                    .isNotEmpty)
+                                                                ? doctor
+                                                                    .categories[
+                                                                        0]
+                                                                    .name
+                                                                : "",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                fontSize: 12),
+                                                          ),
+                                                          Text(
+                                                            (doctor.degree !=
+                                                                    null)
+                                                                ? doctor.degree
+                                                                    .degreeName
+                                                                : "",
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                fontSize: 12),
+                                                          ),
+                                                          Text(
+                                                            doctor.hospitalName ??
+                                                                "",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                fontSize: 12),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : Container()
                                               ],
                                             ),
                                           ),
                                           SizedBox(
                                             width: space * 0.02,
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("Available",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Color(0xFF00BABA))),
-                                                SizedBox(
-                                                  height: space * 0.05,
-                                                ),
-                                                Container(
-                                                  height: space * 0.05,
-                                                  //width: space * 0.15,
-                                                  child: RatingBar(
-                                                    itemSize: 10,
-                                                    wrapAlignment:
-                                                        WrapAlignment.end,
-                                                    initialRating: 5,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    itemCount: 5,
-                                                    ratingWidget: RatingWidget(
-                                                      full: Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            Color(0xFF3C4858),
+                                          (doctor.roles.name.toUpperCase() ==
+                                                  "DOCTOR")
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text("Available",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Color(
+                                                                  0xFF00BABA))),
+                                                      SizedBox(
+                                                        height: space * 0.05,
                                                       ),
-                                                      half: Icon(
-                                                        Icons.star_half,
-                                                        color:
-                                                            Color(0xFF3C4858),
+                                                      Container(
+                                                        height: space * 0.05,
+                                                        //width: space * 0.15,
+                                                        child: RatingBar(
+                                                          itemSize: 10,
+                                                          wrapAlignment:
+                                                              WrapAlignment.end,
+                                                          initialRating: 5,
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          allowHalfRating: true,
+                                                          itemCount: 5,
+                                                          ratingWidget:
+                                                              RatingWidget(
+                                                            full: Icon(
+                                                              Icons.star,
+                                                              color: Color(
+                                                                  0xFF3C4858),
+                                                            ),
+                                                            half: Icon(
+                                                              Icons.star_half,
+                                                              color: Color(
+                                                                  0xFF3C4858),
+                                                            ),
+                                                            empty: Icon(
+                                                              Icons.star_border,
+                                                              color: Color(
+                                                                  0xFF3C4858),
+                                                            ),
+                                                          ),
+                                                          itemPadding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      0),
+                                                          onRatingUpdate:
+                                                              (rating) {
+                                                            print(rating);
+                                                          },
+                                                        ),
                                                       ),
-                                                      empty: Icon(
-                                                        Icons.star_border,
-                                                        color:
-                                                            Color(0xFF3C4858),
-                                                      ),
-                                                    ),
-                                                    itemPadding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 0),
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                    },
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                                )
+                                              : Container(),
                                         ],
                                       ),
                                     ),

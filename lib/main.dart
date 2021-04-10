@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/model/call.dart';
 import 'package:meditec/view/screen/24x7doctor_screen.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
+import 'package:meditec/view/screen/callscreens/call_screen.dart';
 import 'package:meditec/view/screen/category_doctor_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
             AppointmentReportListScreen(),
         AppointmentSampleListScreen.id: (context) =>
             AppointmentSampleListScreen(),
-        EmergencyDoctorScreen.id: (context) => EmergencyDoctorScreen()
+        EmergencyDoctorScreen.id: (context) => EmergencyDoctorScreen(),
       },
     );
   }

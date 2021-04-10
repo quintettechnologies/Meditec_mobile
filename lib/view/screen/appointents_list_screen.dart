@@ -416,14 +416,14 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                 color: (appointment
                                                                             .status ==
                                                                         "Payment Complete")
-                                                                    ? (appointment.status ==
+                                                                    ? Colors
+                                                                        .green
+                                                                    : (appointment.status ==
                                                                             "Complete")
                                                                         ? Color(
-                                                                            0xFFBABA)
+                                                                            0xFF00BABA)
                                                                         : Colors
-                                                                            .green
-                                                                    : Colors
-                                                                        .deepOrange,
+                                                                            .deepOrange,
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(

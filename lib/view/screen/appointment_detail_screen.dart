@@ -160,7 +160,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: space * 0.01,
+                                                width: space * 0.02,
                                               ),
                                               GestureDetector(
                                                 onTap: () {
@@ -332,7 +332,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: space * 0.01,
+                                                width: space * 0.02,
                                               ),
                                               GestureDetector(
                                                 onTap: () {

@@ -247,9 +247,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               itemBuilder: (BuildContext ctx, index) {
                                 return FlatButton(
                                     padding: EdgeInsets.zero,
-                                    onPressed: doctorSlots[index]
-                                            .appoinments
-                                            .isEmpty
+                                    onPressed: (doctorSlots[index]
+                                                .appoinments
+                                                .isEmpty &&
+                                            doctorSlots[index]
+                                                .startTime
+                                                .isAfter(DateTime.now()))
                                         ? () {
                                             context
                                                 .read(userProvider)
@@ -264,14 +267,17 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                       height: space * 0.1,
                                       width: space * 0.36,
                                       decoration: BoxDecoration(
-                                          color: doctorSlots[index]
-                                                  .appoinments
-                                                  .isNotEmpty
+                                          color: (doctorSlots[index]
+                                                      .appoinments
+                                                      .isNotEmpty ||
+                                                  doctorSlots[index]
+                                                      .startTime
+                                                      .isBefore(DateTime.now())
                                               ? Colors.grey
                                               : (selectedSlot.id ==
                                                       doctorSlots[index].id)
                                                   ? Color(0xFF00BABA)
-                                                  : Color(0xFFDDFDE1),
+                                                  : Color(0xFFDDFDE1)),
                                           borderRadius:
                                               BorderRadius.circular(50)),
                                       child: Text(
@@ -279,9 +285,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                         style: TextStyle(
                                           fontSize: space * 0.03,
                                           fontWeight: FontWeight.bold,
-                                          color: doctorSlots[index]
-                                                  .appoinments
-                                                  .isNotEmpty
+                                          color: (doctorSlots[index]
+                                                      .appoinments
+                                                      .isNotEmpty ||
+                                                  doctorSlots[index]
+                                                      .startTime
+                                                      .isBefore(DateTime.now()))
                                               ? Colors.white
                                               : (selectedSlot.id ==
                                                       doctorSlots[index].id)

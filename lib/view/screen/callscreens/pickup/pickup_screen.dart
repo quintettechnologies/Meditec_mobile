@@ -67,6 +67,7 @@ class _PickupScreenState extends State<PickupScreen> {
               children: <Widget>[
                 MaterialButton(
                   onPressed: () {
+                    FlutterRingtonePlayer.stop();
                     Navigator.push(
                       context,
                       MaterialPageRoute(

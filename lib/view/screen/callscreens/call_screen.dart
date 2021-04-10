@@ -83,26 +83,32 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("${widget.call.receiverName} has ended the call"),
-            MaterialButton(
-              onPressed: () {
-                //callMethods.endCall(call: widget.call);
-                Navigator.pop(context);
-              },
-              color: Colors.red,
-              child: Text(
-                "Back",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            )
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      key: Key("call"),
+      child: Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("${widget.call.receiverName} has ended the call"),
+              MaterialButton(
+                onPressed: () async {
+                  await callMethods.endCall(call: widget.call);
+                  Navigator.pop(context);
+                },
+                color: Colors.red,
+                child: Text(
+                  "Back",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -135,6 +141,8 @@ class _CallScreenState extends State<CallScreen> {
       // Full list of feature flags (and defaults) available in the README
       FeatureFlag featureFlag = FeatureFlag();
       featureFlag.welcomePageEnabled = false;
+      featureFlag.pipEnabled = false;
+      featureFlag.toolboxAlwaysVisible = true;
       // Here is an example, disabling features for each platform
       if (Platform.isAndroid) {
         // Disable ConnectionService usage on Android to avoid issues (see README)
