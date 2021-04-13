@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:meditec/model/ChatUser.dart';
 import 'package:meditec/model/message.dart';
 import 'package:meditec/utils/utils.dart';
 
@@ -13,8 +13,21 @@ class FirebaseApi {
       String message}) async {
     final refMessages =
         FirebaseFirestore.instance.collection('messages/$doctorID/$patientID/');
-    // final refMyMessages =
-    //     FirebaseFirestore.instance.collection('chats/$myID/$toID/');
+    final refUsers =
+        FirebaseFirestore.instance.collection('users/chats/$doctorID/');
+    DocumentSnapshot snapshot = await refUsers.doc("$patientID").get();
+    print(snapshot.exists);
+    if (!snapshot.exists) {
+      print("$patientID user does not exist!");
+
+      ChatUser newUser = ChatUser(
+          idUser: patientID,
+          name: patientName,
+          lastMessageTime: DateTime.now());
+      await refUsers.doc("$patientID").set(newUser.toJson());
+    } else {
+      print(refUsers.doc("$patientID").get().toString());
+    }
 
     final newMessage = Message(
       senderID: patientID,
@@ -28,7 +41,9 @@ class FirebaseApi {
     print(newMessage.receiverName);
     print(newMessage.message);
     await refMessages.add(newMessage.toJson());
-    //await refMyMessages.add(newMessage.toJson());
+    await refUsers
+        .doc("$patientID")
+        .update({UserField.lastMessageTime: DateTime.now()});
   }
 
   static Stream<List<Message>> getMessages(
