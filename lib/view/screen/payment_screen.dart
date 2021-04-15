@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
-
 import 'callscreens/pickup/pickup_layout.dart';
 
 class PaymentScreen extends StatefulWidget {
