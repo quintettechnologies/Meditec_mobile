@@ -228,26 +228,26 @@ class _VideoCallState extends State<VideoCall> {
         ..videoMuted = isVideoMuted
         ..featureFlag = featureFlag;
 
-      debugPrint("JitsiMeetingOptions: $options");
+      // debugPrint("JitsiMeetingOptions: $options");
       await JitsiMeet.joinMeeting(
         options,
         listener: JitsiMeetingListener(onConferenceWillJoin: ({message}) {
-          debugPrint("${options.room} will join with message: $message");
+          // debugPrint("${options.room} will join with message: $message");
         }, onConferenceJoined: ({message}) {
-          debugPrint("${options.room} joined with message: $message");
+          // debugPrint("${options.room} joined with message: $message");
         }, onConferenceTerminated: ({message}) {
-          debugPrint("${options.room} terminated with message: $message");
+          // debugPrint("${options.room} terminated with message: $message");
         }, onPictureInPictureWillEnter: ({message}) {
-          debugPrint("${options.room} entered PIP mode with message: $message");
+          // debugPrint("${options.room} entered PIP mode with message: $message");
         }, onPictureInPictureTerminated: ({message}) {
-          debugPrint("${options.room} exited PIP mode with message: $message");
+          // debugPrint("${options.room} exited PIP mode with message: $message");
         }),
         // by default, plugin default constraints are used
         //roomNameConstraints: new Map(), // to disable all constraints
         //roomNameConstraints: customContraints, // to use your own constraint(s)
       );
     } catch (error) {
-      debugPrint("error: $error");
+      // debugPrint("error: $error");
     }
   }
 
@@ -264,28 +264,28 @@ class _VideoCallState extends State<VideoCall> {
   };
 
   void _onConferenceWillJoin({message}) {
-    debugPrint("_onConferenceWillJoin broadcasted with message: $message");
+    // debugPrint("_onConferenceWillJoin broadcasted with message: $message");
   }
 
   void _onConferenceJoined({message}) {
-    debugPrint("_onConferenceJoined broadcasted with message: $message");
+    // debugPrint("_onConferenceJoined broadcasted with message: $message");
   }
 
   void _onConferenceTerminated({message}) {
-    debugPrint("_onConferenceTerminated broadcasted with message: $message");
+    // debugPrint("_onConferenceTerminated broadcasted with message: $message");
   }
 
   void _onPictureInPictureWillEnter({message}) {
-    debugPrint(
-        "_onPictureInPictureWillEnter broadcasted with message: $message");
+    // debugPrint(
+    //      "_onPictureInPictureWillEnter broadcasted with message: $message");
   }
 
   void _onPictureInPictureTerminated({message}) {
-    debugPrint(
-        "_onPictureInPictureTerminated broadcasted with message: $message");
+    // debugPrint(
+    //      "_onPictureInPictureTerminated broadcasted with message: $message");
   }
 
   _onError(error) {
-    debugPrint("_onError broadcasted: $error");
+    // debugPrint("_onError broadcasted: $error");
   }
 }

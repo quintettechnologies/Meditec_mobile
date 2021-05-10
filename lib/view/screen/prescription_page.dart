@@ -7,6 +7,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:meditec/model/medicineSchedule.dart';
 import 'package:meditec/model/prescription.dart';
 import 'package:meditec/model/test.dart';
+import 'package:meditec/utils/pdfPrescription_api.dart';
+import 'package:meditec/utils/pdf_api.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
@@ -36,6 +38,13 @@ class PrescriptionPage extends HookWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  "c-Prescription",
+                  style: TextStyle(
+                      color: Color(0xFF00BABA),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
                 Row(
                   children: [
                     (prescription.doctor.userAvatar != null)
@@ -51,7 +60,10 @@ class PrescriptionPage extends HookWidget {
                               ),
                             ),
                           )
-                        : Container(),
+                        : Container(
+                            height: space * 0.3,
+                            width: space * 0.3,
+                          ),
                     SizedBox(
                       width: 10,
                     ),
@@ -59,14 +71,19 @@ class PrescriptionPage extends HookWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Doctor's name: ${prescription.doctor.name}",
+                          "${prescription.doctor.name}",
                           style: TextStyle(fontSize: space * 0.038),
                         ),
-                        Text(
-                            "Doctor's type: ${prescription.doctor.categories[0].name}",
+                        Text("${prescription.doctor.categories[0].name}",
+                            style: TextStyle(fontSize: space * 0.038)),
+                        Text("${prescription.doctor.degree.degreeName}",
+                            style: TextStyle(fontSize: space * 0.038)),
+                        Text("${prescription.doctor.speciality.speciality}",
+                            style: TextStyle(fontSize: space * 0.038)),
+                        Text("${prescription.doctor.hospitalName}",
                             style: TextStyle(fontSize: space * 0.038)),
                         Text(
-                          "Doctor's Number: ${prescription.doctor.mobileNumber}",
+                          "${prescription.doctor.mobileNumber}",
                           style: TextStyle(fontSize: space * 0.038),
                         ),
                       ],
@@ -110,11 +127,14 @@ class PrescriptionPage extends HookWidget {
                         Text(
                             "Patient: ${prescription.appoinment.originalUser ? prescription.patient.name : prescription.appoinment.friendlyUserName}",
                             style: TextStyle(fontSize: space * 0.038)),
-                        // Text(
-                        //     "Patient's type: ${prescription.doctor.categories[0].name}",
-                        //     style: TextStyle(fontSize: space * 0.038)),
                         Text(
-                          "Mobile Number: ${prescription.patient.mobileNumber}",
+                            "Age: ${prescription.appoinment.originalUser ? prescription.patient.age : prescription.appoinment.friendlyUserAge}",
+                            style: TextStyle(fontSize: space * 0.038)),
+                        Text(
+                            "Gender: ${prescription.appoinment.originalUser ? prescription.patient.gender : prescription.appoinment.friendlyUserGender}",
+                            style: TextStyle(fontSize: space * 0.038)),
+                        Text(
+                          "Phone: ${prescription.patient.mobileNumber}",
                           style: TextStyle(fontSize: space * 0.038),
                         ),
                       ],
@@ -150,7 +170,7 @@ class PrescriptionPage extends HookWidget {
                                       width: space * 0.9,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
+                                            vertical: 4),
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
                                           child: Row(
@@ -167,6 +187,10 @@ class PrescriptionPage extends HookWidget {
                                                       height: space * 0.15,
                                                       width: space * 0.15,
                                                       color: Colors.grey,
+                                                      child: Image(
+                                                        image: AssetImage(
+                                                            'assets/images/capsule.png'),
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -295,7 +319,7 @@ class PrescriptionPage extends HookWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Text(
                   "Tests",
@@ -322,7 +346,7 @@ class PrescriptionPage extends HookWidget {
                                       width: space * 0.9,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
+                                            vertical: 4),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -336,6 +360,10 @@ class PrescriptionPage extends HookWidget {
                                                     height: space * 0.15,
                                                     width: space * 0.15,
                                                     color: Colors.grey,
+                                                    child: Image(
+                                                      image: AssetImage(
+                                                          'assets/images/test.png'),
+                                                    ),
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -391,7 +419,7 @@ class PrescriptionPage extends HookWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Text(
                   "Advice",
@@ -401,14 +429,14 @@ class PrescriptionPage extends HookWidget {
                       fontSize: 16),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Text(
                   (prescription.advice != null) ? prescription.advice : "",
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Text(
                   "Referred to",
@@ -528,7 +556,7 @@ class PrescriptionPage extends HookWidget {
                                       itemPadding:
                                           EdgeInsets.symmetric(horizontal: 0),
                                       onRatingUpdate: (rating) {
-                                        print(rating);
+                                        // print(rating);
                                       },
                                     ),
                                   ),
@@ -539,12 +567,48 @@ class PrescriptionPage extends HookWidget {
                         ),
                       )
                     : Container(),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     TextButton(
+                //       onPressed: () async {
+                //         final pdfFile =
+                //             await PdfPrescriptionApi.generate(prescription);
+                //
+                //         PdfApi.openFile(pdfFile);
+                //       },
+                //       child: Container(
+                //         height: space * 0.08,
+                //         width: space * 0.25,
+                //         alignment: Alignment.center,
+                //         decoration: BoxDecoration(
+                //           color: Color(0xFF00BABA),
+                //           borderRadius: BorderRadius.circular(5),
+                //         ),
+                //         child: Text(
+                //           "Save As PDF",
+                //           style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: 14,
+                //               fontWeight: FontWeight.bold),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // )
               ],
             ),
           ),
         ),
-        floatingActionButton: MyCustomFAB(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final pdfFile = await PdfPrescriptionApi.generate(prescription);
+
+            PdfApi.openFile(pdfFile);
+          },
+          child: Icon(Icons.picture_as_pdf),
+          backgroundColor: Color(0xFF00BABA),
+        ),
         bottomNavigationBar: MyCustomNavBar(),
       ),
     );

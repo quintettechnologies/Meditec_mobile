@@ -22,7 +22,7 @@ class CallMethods {
       await callCollection.doc(call.receiverId).set(hasNotDialledMap);
       return true;
     } catch (e) {
-      print(e);
+      // print(e);
       return false;
     }
   }
@@ -33,7 +33,7 @@ class CallMethods {
       await callCollection.doc(call.receiverId).delete();
       return true;
     } catch (e) {
-      print(e);
+      // print(e);
       return false;
     }
   }

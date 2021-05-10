@@ -7,6 +7,7 @@ import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
 import 'package:meditec/view/screen/callscreens/call_screen.dart';
 import 'package:meditec/view/screen/category_doctor_screen.dart';
+import 'package:meditec/view/screen/changePassword_Screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
@@ -15,6 +16,7 @@ import 'package:meditec/view/screen/prescriptions_list_screen.dart';
 import 'package:meditec/view/screen/profile_screen.dart';
 import 'package:meditec/view/screen/signup_screen.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
+import 'package:meditec/view/screen/start_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -37,8 +39,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: HomeScreen.id,
+      initialRoute: StartScreen.id,
       routes: {
+        StartScreen.id: (context) => StartScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
         LoginScreen.id: (context) => LoginScreen(),
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
         CategoryDoctorScreen.id: (context) => CategoryDoctorScreen(),
         Dashboard.id: (context) => Dashboard(),
         EditProfileScreen.id: (context) => EditProfileScreen(),
+        ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
         UploadProfileImageScreen.id: (context) => UploadProfileImageScreen(),
         AppointmentsScreen.id: (context) => AppointmentsScreen(),
         ProfileScreen.id: (context) => ProfileScreen(),

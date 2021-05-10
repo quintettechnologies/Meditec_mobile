@@ -56,8 +56,7 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
             child: Stack(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: space * 0.01, horizontal: space * 0.05),
+                  padding: EdgeInsets.symmetric(horizontal: space * 0.05),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +150,14 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
                                                 ),
                                               ),
                                             )
-                                          : Container(),
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: space * 0.17,
+                                                width: space * 0.17,
+                                              ),
+                                            ),
                                       SizedBox(
                                         width: space * 0.02,
                                       ),

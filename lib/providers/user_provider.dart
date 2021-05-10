@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:meditec/model/auth.dart';
@@ -9,25 +10,41 @@ import 'package:meditec/model/index.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
-  String url = "182.48.90.214:8080";
+  // String url = "182.48.90.214:8080";
+  String url = "139.162.19.50:8080";
   // String url = "192.168.0.100:8080";
   User _user;
   String number;
-  String password;
+  // String password;
   bool loginStatus = false;
   String authToken;
   var image1;
   File selectedImage;
   List<Category> categories;
+  Category selectedCategory;
   List<User> doctors = [];
+  List<AdvertisementCategory> advertisementCategories = [];
+  List<Advertisement> advertisements = [];
+  List<User> emergencyDoctors = [];
   List<User> categoryDoctors = [];
   List<DoctorSlot> doctorSlots = [];
   List<Appointment> appointments = [];
   DoctorSlot selectedSlot = DoctorSlot();
   Auth _auth;
   Prescription prescriptionTemp;
+
+  String token;
+  SharedPreferences loginData;
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  Future<String> getToken() async {
+    token = await _firebaseMessaging.getToken();
+    return token;
+  }
 
   User currentUser() {
     return _user;
@@ -42,8 +59,7 @@ class UserProvider extends ChangeNotifier {
     var response = await http.get(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
@@ -54,7 +70,7 @@ class UserProvider extends ChangeNotifier {
         searchResult.add(User.fromJson(d));
       }
       for (User d in searchResult) {
-        print(d.name);
+        // print(d.name);
       }
       return searchResult;
     } else {
@@ -68,10 +84,9 @@ class UserProvider extends ChangeNotifier {
     };
     var uri = Uri.http('$url', '/getFullPrescription', queryParameters);
     var response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
     });
-    print(response.body);
+    // print(response.body);
     if (response.body != null && response.statusCode == 200) {
       try {
         Map prescriptionMap = jsonDecode(response.body);
@@ -81,7 +96,7 @@ class UserProvider extends ChangeNotifier {
         notifyListeners();
         return true;
       } catch (e) {
-        print(e);
+        // print(e);
         return false;
       }
     }
@@ -93,13 +108,12 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode(appointment.toJson()),
     );
-    print(response.body);
+    // print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
@@ -109,12 +123,12 @@ class UserProvider extends ChangeNotifier {
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "taken") {
-      print(response.body.toString());
+      // print(response.body.toString());
       return "taken";
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "overloaded") {
-      print(response.body.toString());
+      // print(response.body.toString());
       return "overloaded";
     } else {
       return "failed";
@@ -129,19 +143,18 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
-    print(response.body);
+    // print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
       await getAppointments();
       return true;
     } else {
-      print(response.body.toString());
+      // print(response.body.toString());
       return false;
     }
   }
@@ -152,13 +165,12 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode(appointment.toJson()),
     );
-    print(response.body);
+    // print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
@@ -168,12 +180,12 @@ class UserProvider extends ChangeNotifier {
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "taken") {
-      print(response.body.toString());
+      // print(response.body.toString());
       return "taken";
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "overloaded") {
-      print(response.body.toString());
+      // print(response.body.toString());
       return "overloaded";
     } else {
       return "failed";
@@ -187,13 +199,12 @@ class UserProvider extends ChangeNotifier {
       var response = await http.post(
         uri,
         headers: {
-          HttpHeaders.authorizationHeader:
-              "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+          HttpHeaders.authorizationHeader: authToken,
           HttpHeaders.contentTypeHeader: 'application/json',
         },
         body: jsonEncode(appointment.toJson()),
       );
-      print(response.body);
+      // print(response.body);
       if (response.body != null &&
           response.statusCode == 200 &&
           response.body == "archived") {
@@ -206,7 +217,7 @@ class UserProvider extends ChangeNotifier {
         return "failed";
       }
     } catch (e) {
-      print(e);
+      // print(e);
       return "failed";
     }
   }
@@ -223,8 +234,7 @@ class UserProvider extends ChangeNotifier {
     var response = await http.get(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
@@ -252,7 +262,7 @@ class UserProvider extends ChangeNotifier {
       day = "0$day";
     }
     String formatDate = "$year-$month-$day";
-    print(formatDate);
+    // print(formatDate);
     var queryParameters = {
       'date': '$formatDate',
       'chamberId': '$chamberId',
@@ -261,13 +271,12 @@ class UserProvider extends ChangeNotifier {
     var response = await http.get(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.body != null && response.statusCode == 200) {
       List<dynamic> slots = jsonDecode(response.body);
@@ -315,8 +324,8 @@ class UserProvider extends ChangeNotifier {
         'samples', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
     var res = await request.send();
-    print(res.statusCode);
-    print(res);
+    // print(res.statusCode);
+    // print(res);
     if (res != null && res.statusCode == 200) {
       return true;
     } else {
@@ -330,10 +339,9 @@ class UserProvider extends ChangeNotifier {
     };
     var uri = Uri.http('$url', '/getSamples', queryParameters);
     var response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
     });
-    print(response.body);
+    // print(response.body);
 
     if (response.body != null && response.statusCode == 200) {
       List<dynamic> samples = jsonDecode(response.body);
@@ -352,19 +360,18 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode(samplePicture.toJson()),
     );
-    print(response.body);
+    // print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
       return true;
     } else {
-      print(response.body.toString());
+      // print(response.body.toString());
       return false;
     }
   }
@@ -376,8 +383,8 @@ class UserProvider extends ChangeNotifier {
         'reports', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
     var res = await request.send();
-    print(res.statusCode);
-    print(res);
+    // print(res.statusCode);
+    // print(res);
     if (res != null && res.statusCode == 200) {
       await _getUser();
       notifyListeners();
@@ -393,10 +400,9 @@ class UserProvider extends ChangeNotifier {
     };
     var uri = Uri.http('$url', '/getPreviousReports', queryParameters);
     var response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
     });
-    print(response.body);
+    // print(response.body);
 
     if (response.body != null && response.statusCode == 200) {
       List<dynamic> slots = jsonDecode(response.body);
@@ -415,19 +421,18 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode(report.toJson()),
     );
-    print(response.body);
+    // print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
       return true;
     } else {
-      print(response.body.toString());
+      // print(response.body.toString());
       return false;
     }
   }
@@ -439,7 +444,7 @@ class UserProvider extends ChangeNotifier {
         'profileImage', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
     var res = await request.send();
-    print(res.statusCode);
+    // print(res.statusCode);
     if (res != null && res.statusCode == 200) {
       await _getUser();
       notifyListeners();
@@ -487,14 +492,13 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode(tempUser.toJson()),
     );
 
-    print(response.body);
+    // print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
@@ -502,6 +506,35 @@ class UserProvider extends ChangeNotifier {
       return loginStatus;
     } else {
       await _getUser();
+      return false;
+    }
+  }
+
+  Future changePassword({String previousPassword, String newPassword}) async {
+    var queryParameters = {
+      'previousPass': '$previousPassword',
+      'newPass': '$newPassword',
+      'mobileNumber': '$number',
+    };
+    var uri = Uri.http('$url', '/changePassword', queryParameters);
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    // print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      this.authToken = "Basic " +
+          base64.encode(utf8.encode(_user.mobileNumber + ":" + newPassword));
+      loginData = await SharedPreferences.getInstance();
+      loginData.setString("authToken", authToken);
+      return loginStatus;
+    } else {
       return false;
     }
   }
@@ -521,8 +554,10 @@ class UserProvider extends ChangeNotifier {
       body: jsonEncode(queryParameters),
     );
 
-    print(response.body);
-    if (response.body != null && response.statusCode == 200) {
+    // print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
       bool status = await login(user.mobileNumber, user.password);
       return status;
     } else {
@@ -536,10 +571,9 @@ class UserProvider extends ChangeNotifier {
     };
     var uri = Uri.http('$url', '/myAppoinments', queryParameters);
     var response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
     });
-    print(response.body);
+    // print(response.body);
     List<dynamic> updatedAppointments = jsonDecode(response.body);
     appointments = (updatedAppointments)
         ?.map((e) =>
@@ -550,8 +584,7 @@ class UserProvider extends ChangeNotifier {
   Future getCategories() async {
     var uri = Uri.http('$url', '/getCategories');
     var response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
     });
     List<dynamic> cats = jsonDecode(response.body);
     //print(cats);
@@ -561,13 +594,109 @@ class UserProvider extends ChangeNotifier {
         ?.toList();
   }
 
+  Future getEmergencyDoctorList() async {
+    var uri = Uri.http('$url', '/getEmmergencyDoctors');
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> docs = jsonDecode(response.body);
+      emergencyDoctors.clear();
+      for (dynamic d in docs) {
+        emergencyDoctors.add(User.fromJson(d));
+      }
+      for (User d in emergencyDoctors) {
+        // print(d.name);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future getAdvertisementCategories() async {
+    var uri = Uri.http('$url', '/getAdvertisementCategories');
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> cats = jsonDecode(response.body);
+      advertisementCategories = (cats)
+          ?.map((e) => e == null
+              ? null
+              : AdvertisementCategory.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future getAdvertisementsByCategory(int id) async {
+    var queryParameters = {
+      'id': '$id',
+    };
+    var uri = Uri.http('$url', '/getAdvertisementsByCategory', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> cats = jsonDecode(response.body);
+      advertisements = (cats)
+          ?.map((e) => e == null
+              ? null
+              : Advertisement.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future getAdvertisements() async {
+    var uri = Uri.http('$url', '/getAdvertisements');
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> cats = jsonDecode(response.body);
+      advertisements = (cats)
+          ?.map((e) => e == null
+              ? null
+              : Advertisement.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future getDoctorList() async {
     var uri = Uri.http('$url', '/getAppDoctors');
     var response = await http.get(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
@@ -579,7 +708,7 @@ class UserProvider extends ChangeNotifier {
         doctors.add(User.fromJson(d));
       }
       for (User d in doctors) {
-        print(d.name);
+        // print(d.name);
       }
       return true;
     } else {
@@ -595,8 +724,7 @@ class UserProvider extends ChangeNotifier {
     var response = await http.get(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader:
-            "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+        HttpHeaders.authorizationHeader: authToken,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
@@ -608,9 +736,9 @@ class UserProvider extends ChangeNotifier {
         categoryDoctors.add(User.fromJson(d));
       }
       for (User d in categoryDoctors) {
-        print(d.name);
-        print(d.degree.degreeName);
-        print(d.categories[0].name);
+        // print(d.name);
+        // print(d.degree.degreeName);
+        // print(d.categories[0].name);
       }
       return true;
     } else {
@@ -624,29 +752,68 @@ class UserProvider extends ChangeNotifier {
     };
     var uri = Uri.http('$url', '/getUser', queryParameters);
     var response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      // HttpHeaders.authorizationHeader:
+      //     "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
     });
 
-    print(response.body);
+    // print(response.body);
     if (response.body != null && response.statusCode == 200) {
       Map userMap = jsonDecode(response.body);
       _user = User.fromJson(userMap);
-      print(_user.name);
+      // print(_user.name);
       // image1 = _user.userAvatar.image;
       var image = base64.decode(image1.toString());
       await getCategories();
       await getAppointments();
       await getDoctorList();
+      await getEmergencyDoctorList();
+      await getAdvertisementCategories();
+      await getAdvertisements();
     }
     notifyListeners();
   }
 
-  Future login(String number, String password) async {
+  Future loginRenew() async {
     bool timedOut = false;
-    print("$number $password");
+    String deviceToken = await getToken();
     var queryParameters = {
       'number': '$number',
+      'token': '$deviceToken',
+    };
+    var uri = Uri.http('$url', '/loginRenewal', queryParameters);
+    var response = await http.get(uri, headers: {
+      HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
+    });
+    // print(response.body);
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      this.number = number;
+      await _getUser().timeout(Duration(seconds: 60), onTimeout: () {
+        // time has run out, do what you wanted to do
+        timedOut = true;
+        return null;
+      });
+      if (timedOut) {
+        await logout();
+        this.loginStatus = false;
+      } else {
+        this.loginStatus = true;
+      }
+      notifyListeners();
+    }
+    return loginStatus;
+  }
+
+  Future login(String number, String password) async {
+    bool timedOut = false;
+    // print("$number $password");
+    String deviceToken = await getToken();
+    var queryParameters = {
+      'number': '$number',
+      'token': '$deviceToken',
     };
     var uri = Uri.http('$url', '/login', queryParameters);
     var response = await http.get(uri, headers: {
@@ -654,13 +821,13 @@ class UserProvider extends ChangeNotifier {
           "Basic " + base64.encode(utf8.encode(number + ":" + password)),
       HttpHeaders.contentTypeHeader: 'application/json',
     });
-    print(response.body);
+    // print(response.body);
     if (response.body != null && response.statusCode == 200) {
       Map loginMap = jsonDecode(response.body);
       _auth = Auth.fromJson(loginMap);
       if (_auth.authorities[0].authority == "patient") {
         this.number = number;
-        this.password = password;
+        // this.password = password;
         this.authToken = "Basic " +
             base64.encode(utf8.encode(
                 _auth.principal.username + ":" + _auth.principal.password));
@@ -674,33 +841,44 @@ class UserProvider extends ChangeNotifier {
           this.loginStatus = false;
         } else {
           this.loginStatus = true;
+          loginData = await SharedPreferences.getInstance();
+          loginData.setBool("login", false);
+          loginData.setString("number", number);
+          loginData.setString("authToken", authToken);
         }
         notifyListeners();
       } else {
-        print("Not Patient");
+        // print("Not Patient");
       }
     }
     return loginStatus;
   }
 
   Future logout() async {
-    print("$number $password");
-    var uri = Uri.http('$url', '/logoutUser');
+    String deviceToken = await getToken();
+    var queryParameters = {
+      'token': '$deviceToken',
+    };
+    var uri = Uri.http('$url', '/logoutUser', queryParameters);
     var response = await http.post(uri, headers: {
-      HttpHeaders.authorizationHeader:
-          "Basic " + base64.encode(utf8.encode(number + ":" + password)),
+      HttpHeaders.authorizationHeader: authToken,
       HttpHeaders.contentTypeHeader: 'application/json',
     });
-    print(response.body);
+    // print(response.body);
     if (response.body != null && response.statusCode == 200) {
       this.loginStatus = false;
       this._user = null;
       this.number = null;
-      this.password = null;
+      // this.password = null;
       this.authToken = null;
       this.image1 = null;
       this.selectedImage = null;
       notifyListeners();
+      loginData = await SharedPreferences.getInstance();
+      loginData.clear();
+      // loginData.setBool("login", false);
+      // loginData.setString("number", number);
+      // loginData.setString("authToken", authToken);
     }
     return false;
   }

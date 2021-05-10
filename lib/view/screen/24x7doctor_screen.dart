@@ -31,7 +31,7 @@ class _EmergencyDoctorScreenState extends State<EmergencyDoctorScreen> {
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
     List<Category> categories = context.read(userProvider).categories;
-    List<User> doctors = context.read(userProvider).doctors;
+    List<User> doctors = context.read(userProvider).emergencyDoctors;
     bool showButtons = true;
     return PickupLayout(
       scaffold: Scaffold(

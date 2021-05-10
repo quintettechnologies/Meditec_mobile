@@ -31,44 +31,86 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               height: 10,
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  isDashboard
-                      ? (context.read(userProvider).currentUser().userAvatar !=
-                              null)
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: space * 0.06),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  child: Image(
-                                    image: Image.memory(base64.decode(context
+            Stack(
+              children: [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      isDashboard
+                          ? Row(
+                              children: [
+                                (context
                                             .read(userProvider)
                                             .currentUser()
-                                            .userAvatar
-                                            .image))
-                                        .image,
-                                    fit: BoxFit.fitHeight,
-                                    height: 40,
-                                  )
-                                  // child: Image(
-                                  //   image:
-                                  //       AssetImage('assets/images/profiles/user.png'),
-                                  // ),
+                                            .userAvatar !=
+                                        null)
+                                    ? Padding(
+                                        padding:
+                                            EdgeInsets.only(left: space * 0.06),
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            child: Image(
+                                              image: Image.memory(base64.decode(
+                                                      context
+                                                          .read(userProvider)
+                                                          .currentUser()
+                                                          .userAvatar
+                                                          .image))
+                                                  .image,
+                                              fit: BoxFit.fitHeight,
+                                              height: 40,
+                                            )
+                                            // child: Image(
+                                            //   image:
+                                            //       AssetImage('assets/images/profiles/user.png'),
+                                            // ),
+                                            ),
+                                      )
+                                    : Padding(
+                                        padding:
+                                            EdgeInsets.only(left: space * 0.06),
+                                        child: Container(
+                                          height: 40,
+                                          width: 40,
+                                        ),
+                                      ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: space * 0.02),
+                                  child: Text(
+                                    // "Welcome\n${context.read(userProvider).currentUser().name}",
+                                    "Welcome",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color(0xFF00CACA),
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.start,
                                   ),
+                                ),
+                              ],
                             )
-                          : Container(
-                              height: 40,
-                              width: 40,
-                            )
-                      : FlatButton(
-                          onPressed: !isDashboard
-                              ? () {
-                                  Navigator.pop(context);
-                                }
-                              : null,
+                          : FlatButton(
+                              onPressed: !isDashboard
+                                  ? () {
+                                      Navigator.pop(context);
+                                    }
+                                  : null,
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFFEDF0F0),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: Color(0xFF00CACA),
+                                ),
+                              )),
+                      FlatButton(
+                          onPressed: () {
+                            //Navigator.pushNamed(context, NotificationScreen.id);
+                          },
                           child: Container(
                             height: 40,
                             width: 40,
@@ -76,35 +118,24 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 color: Color(0xFFEDF0F0),
                                 borderRadius: BorderRadius.circular(5)),
                             child: Icon(
-                              Icons.arrow_back,
+                              Icons.notifications,
                               color: Color(0xFF00CACA),
                             ),
                           )),
-                  Text(
-                    "Meditec",
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    "cicil",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Color(0xFF00CACA)),
                     textAlign: TextAlign.center,
                   ),
-                  FlatButton(
-                      onPressed: () {
-                        //Navigator.pushNamed(context, NotificationScreen.id);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEDF0F0),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Icon(
-                          Icons.notifications,
-                          color: Color(0xFF00CACA),
-                        ),
-                      )),
-                ],
-              ),
+                )
+              ],
             ),
             enableSearch
                 ? Container(

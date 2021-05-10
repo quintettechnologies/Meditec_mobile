@@ -16,9 +16,9 @@ class FirebaseApi {
     final refUsers =
         FirebaseFirestore.instance.collection('users/chats/$doctorID/');
     DocumentSnapshot snapshot = await refUsers.doc("$patientID").get();
-    print(snapshot.exists);
+    // print(snapshot.exists);
     if (!snapshot.exists) {
-      print("$patientID user does not exist!");
+      // print("$patientID user does not exist!");
 
       ChatUser newUser = ChatUser(
           idUser: patientID,
@@ -26,7 +26,7 @@ class FirebaseApi {
           lastMessageTime: DateTime.now());
       await refUsers.doc("$patientID").set(newUser.toJson());
     } else {
-      print(refUsers.doc("$patientID").get().toString());
+      // print(refUsers.doc("$patientID").get().toString());
     }
 
     final newMessage = Message(
@@ -37,9 +37,9 @@ class FirebaseApi {
       message: message,
       createdAt: DateTime.now(),
     );
-    print(newMessage.senderName);
-    print(newMessage.receiverName);
-    print(newMessage.message);
+    // print(newMessage.senderName);
+    // print(newMessage.receiverName);
+    // print(newMessage.message);
     await refMessages.add(newMessage.toJson());
     await refUsers
         .doc("$patientID")

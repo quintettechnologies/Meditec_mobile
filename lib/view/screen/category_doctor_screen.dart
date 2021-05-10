@@ -27,6 +27,7 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
     List<User> doctors = context.read(userProvider).categoryDoctors;
+    Category selectedCategory = context.read(userProvider).selectedCategory;
 
     return PickupLayout(
       scaffold: Scaffold(
@@ -37,14 +38,13 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
         drawer: MyCustomDrawer(),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: space * 0.01, horizontal: space * 0.07),
+            padding: EdgeInsets.symmetric(horizontal: space * 0.05),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Doctors',
+                    "${selectedCategory.name}",
                     style: TextStyle(
                         fontSize: space * 0.05, color: kPrimaryTextColor),
                   ),
@@ -64,7 +64,8 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
                                   ),
                                 );
                               },
-                              padding: EdgeInsets.all(space * 0.015),
+                              padding:
+                                  EdgeInsets.symmetric(vertical: space * 0.015),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -100,7 +101,13 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
                                               ),
                                             ),
                                           )
-                                        : Container(),
+                                        : Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              height: space * 0.17,
+                                              width: space * 0.17,
+                                            ),
+                                          ),
                                     SizedBox(
                                       width: space * 0.02,
                                     ),
@@ -182,7 +189,7 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
                                               itemPadding: EdgeInsets.symmetric(
                                                   horizontal: 0),
                                               onRatingUpdate: (rating) {
-                                                print(rating);
+                                                // print(rating);
                                               },
                                             ),
                                           ),

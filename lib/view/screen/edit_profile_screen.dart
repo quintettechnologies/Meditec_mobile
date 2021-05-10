@@ -24,8 +24,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   FocusNode nameFocus;
   TextEditingController emailController;
   FocusNode emailFocus;
-  TextEditingController mobileNumberController;
-  FocusNode mobileNumberFocus;
+  // TextEditingController mobileNumberController;
+  // FocusNode mobileNumberFocus;
   TextEditingController weightController;
   FocusNode weightFocus;
   TextEditingController ageController;
@@ -54,8 +54,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     nameFocus = FocusNode();
     emailController = TextEditingController();
     emailFocus = FocusNode();
-    mobileNumberController = TextEditingController();
-    mobileNumberFocus = FocusNode();
+    // mobileNumberController = TextEditingController();
+    // mobileNumberFocus = FocusNode();
     weightController = TextEditingController();
     weightFocus = FocusNode();
     ageController = TextEditingController();
@@ -80,15 +80,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final userRepo = context.read(userProvider);
     nameController.text = userRepo.currentUser().name ?? "";
     emailController.text = userRepo.currentUser().email ?? "";
-    mobileNumberController.text = userRepo.currentUser().mobileNumber ?? "";
+    // mobileNumberController.text = userRepo.currentUser().mobileNumber ?? "";
     weightController.text = userRepo.currentUser().weight.toString() ?? "";
     ageController.text = userRepo.currentUser().age.toString() ?? "";
-    street1Controller.text = userRepo.currentUser().addressBooks.street1 ?? "";
-    street2Controller.text = userRepo.currentUser().addressBooks.street2 ?? "";
-    street3Controller.text = userRepo.currentUser().addressBooks.street3 ?? "";
-    cityController.text = userRepo.currentUser().addressBooks.city ?? "";
-    countryController.text = userRepo.currentUser().addressBooks.country ?? "";
-    zipController.text = userRepo.currentUser().addressBooks.zip ?? "";
+    if (userRepo.currentUser().addressBooks != null) {
+      street1Controller.text =
+          userRepo.currentUser().addressBooks.street1 ?? "";
+      street2Controller.text =
+          userRepo.currentUser().addressBooks.street2 ?? "";
+      street3Controller.text =
+          userRepo.currentUser().addressBooks.street3 ?? "";
+      cityController.text = userRepo.currentUser().addressBooks.city ?? "";
+      countryController.text =
+          userRepo.currentUser().addressBooks.country ?? "";
+      zipController.text = userRepo.currentUser().addressBooks.zip ?? "";
+    }
     bloodGroup = userRepo.currentUser().bloodGroup ?? "";
     gender = userRepo.currentUser().gender ?? "";
     setGenderValue();
@@ -169,7 +175,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Column(
               children: [
                 Text(
-                  "New User",
+                  "Edit Profile",
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -188,12 +194,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   focusNode: emailFocus,
                   space: space,
                 ),
-                Space(space: space),
-                TextEditingField(
-                    text: "Phone",
-                    controller: mobileNumberController,
-                    focusNode: mobileNumberFocus,
-                    space: space),
+                // Space(space: space),
+                // TextEditingField(
+                //     text: "Phone",
+                //     controller: mobileNumberController,
+                //     focusNode: mobileNumberFocus,
+                //     space: space),
                 Space(space: space),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -355,8 +361,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           // Speciality speciality = Speciality();
                           user.name = nameController.text.trim();
                           user.email = emailController.text.trim();
-                          user.mobileNumber =
-                              mobileNumberController.text.trim();
+                          // user.mobileNumber =
+                          //     mobileNumberController.text.trim();
                           user.bloodGroup = bloodGroup;
                           user.weight =
                               double.parse(weightController.text.trim());
@@ -426,8 +432,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     nameFocus.dispose();
     emailController.dispose();
     emailFocus.dispose();
-    mobileNumberController.dispose();
-    mobileNumberFocus.dispose();
+    // mobileNumberController.dispose();
+    // mobileNumberFocus.dispose();
     weightController.dispose();
     weightFocus.dispose();
     ageController.dispose();

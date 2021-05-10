@@ -28,7 +28,7 @@ class ProfileScreen extends HookWidget {
         drawer: MyCustomDrawer(),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
                 Text(
@@ -37,7 +37,9 @@ class ProfileScreen extends HookWidget {
                     fontSize: 24,
                   ),
                 ),
-                Space(space: space),
+                SizedBox(
+                  height: space * 0.02,
+                ),
                 Container(
                   width: space,
                   height: space * 0.4,

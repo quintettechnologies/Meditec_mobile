@@ -56,7 +56,7 @@ class _CallScreenState extends State<CallScreen> {
               uid: context.read(userProvider).currentUser().userId.toString())
           .listen((DocumentSnapshot ds) async {
         // defining the logic
-        print(ds.data());
+        // print(ds.data());
         switch (ds.data()) {
           case null:
             // snapshot is null which means that call is hanged and documents are deleted
@@ -167,35 +167,35 @@ class _CallScreenState extends State<CallScreen> {
         ..videoMuted = isVideoMuted
         ..featureFlag = featureFlag;
 
-      debugPrint("JitsiMeetingOptions: $options");
+      // debugPrint("JitsiMeetingOptions: $options");
       await JitsiMeet.joinMeeting(
         options,
         listener: JitsiMeetingListener(onConferenceWillJoin: ({message}) {
-          debugPrint("${options.room} will join with message: $message");
+          // debugPrint("${options.room} will join with message: $message");
         }, onConferenceJoined: ({message}) {
-          debugPrint("${options.room} joined with message: $message");
+          // debugPrint("${options.room} joined with message: $message");
         }, onConferenceTerminated: ({message}) {
-          debugPrint("${options.room} terminated with message: $message");
+          // debugPrint("${options.room} terminated with message: $message");
         }, onPictureInPictureWillEnter: ({message}) {
-          debugPrint("${options.room} entered PIP mode with message: $message");
+          // debugPrint("${options.room} entered PIP mode with message: $message");
         }, onPictureInPictureTerminated: ({message}) {
-          debugPrint("${options.room} exited PIP mode with message: $message");
+          // debugPrint("${options.room} exited PIP mode with message: $message");
         }),
         // by default, plugin default constraints are used
         //roomNameConstraints: new Map(), // to disable all constraints
         //roomNameConstraints: customContraints, // to use your own constraint(s)
       );
     } catch (error) {
-      debugPrint("error: $error");
+      // debugPrint("error: $error");
     }
   }
 
   Future<void> _onConferenceTerminated({message}) async {
     await callMethods.endCall(call: widget.call);
-    debugPrint("_onConferenceTerminated broadcasted with message: $message");
+    // debugPrint("_onConferenceTerminated broadcasted with message: $message");
   }
 
   _onError(error) {
-    debugPrint("_onError broadcasted: $error");
+    // debugPrint("_onError broadcasted: $error");
   }
 }

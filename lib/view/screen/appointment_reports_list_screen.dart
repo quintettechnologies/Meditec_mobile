@@ -122,7 +122,13 @@ class _AppointmentReportListScreenState
                                             ),
                                           ),
                                         )
-                                      : Container(),
+                                      : Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            height: space * 0.17,
+                                            width: space * 0.17,
+                                          ),
+                                        ),
                                   SizedBox(
                                     width: space * 0.02,
                                   ),

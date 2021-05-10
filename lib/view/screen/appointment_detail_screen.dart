@@ -48,7 +48,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Container(
                 child: Stack(
                   children: [
@@ -56,7 +56,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: space * 0.2,
+                          height: space * 0.15,
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -100,6 +100,13 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                     Text(
                                       widget.appointment.doctorSlot.chamber.user
                                           .degree.degreeName,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.appointment.doctorSlot.chamber.user
+                                          .hospitalName,
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -318,14 +325,19 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                       SizedBox(
                                                         width: space * 0.01,
                                                       ),
-                                                      Text(
-                                                        "Documents",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color:
-                                                                Colors.white),
+                                                      Expanded(
+                                                        child: Text(
+                                                          "Previous Prescription",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
                                                       )
                                                     ],
                                                   ),
@@ -368,7 +380,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                         width: space * 0.01,
                                                       ),
                                                       Text(
-                                                        "Sample Images",
+                                                        "Disease Photo",
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
@@ -845,7 +857,14 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                 ),
                               ),
                             )
-                          : Container(),
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                height: space * 0.3,
+                                width: space * 0.3,
+                                color: Colors.blueAccent,
+                              ),
+                            ),
                     ),
                   ],
                 ),

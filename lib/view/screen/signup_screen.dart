@@ -61,178 +61,201 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/home.png"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        //resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            // SvgPicture.asset(
-            //   'assets/images/signin-background.svg',
-            //   width: MediaQuery.of(context).size.width,
-            //   height: MediaQuery.of(context).size.height,
-            //   fit: BoxFit.cover,
-            // ),
-            SingleChildScrollView(
-              child: SafeArea(
-                child: Center(
-                  child: Container(
-                    width: space * 0.7,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(top: 20, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Create Account',
-                                style: TextStyle(
-                                    fontFamily: 'Source Sans Pro',
-                                    fontSize: space * 0.06,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+    return Scaffold(
+      //resizeToAvoidBottomInset: false,
+      backgroundColor: Color(0xFF00BABA),
+      body: Stack(
+        children: [
+          // SvgPicture.asset(
+          //   'assets/images/signin-background.svg',
+          //   width: MediaQuery.of(context).size.width,
+          //   height: MediaQuery.of(context).size.height,
+          //   fit: BoxFit.cover,
+          // ),
+          SingleChildScrollView(
+            child: SafeArea(
+              child: Center(
+                child: Container(
+                  width: space * 0.75,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Hero(
+                              tag: 'logo',
+                              child: SvgPicture.asset(
+                                'assets/images/meditec_logo.svg',
+                                height: space * 0.25,
+                                color: Colors.white,
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Create Account',
+                              style: TextStyle(
+                                  fontFamily: 'Source Sans Pro',
+                                  fontSize: space * 0.06,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Sign up to continue',
+                              style: TextStyle(
+                                  fontFamily: 'Source Sans Pro',
+                                  fontSize: space * 0.04,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // SizedBox(
+                      //   height: space * 0.0,
+                      // ),
+                      TextInputField(
+                        text: "Name",
+                        controller: nameController,
+                        focus: nameFocus,
+                      ),
+                      TextInputField(
+                        text: "Email",
+                        controller: emailController,
+                        focus: emailFocus,
+                      ),
+                      TextInputField(
+                        text: "Mobile Number",
+                        controller: mobileNumberController,
+                        focus: mobileNumberFocus,
+                      ),
+                      TextInputField(
+                        text: "Password",
+                        controller: passwordController,
+                        focus: passwordFocus,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            _inProcess = true;
+                          });
+                          User user = new User();
+                          user.name = nameController.text;
+                          user.email = emailController.text;
+                          user.mobileNumber = mobileNumberController.text;
+                          user.password = passwordController.text;
+                          bool signUp =
+                              await context.read(userProvider).signUp(user);
+                          if (signUp) {
+                            setState(() {
+                              _inProcess = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg: "Successfully Signed Up",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            Navigator.pushNamed(context, Dashboard.id);
+                            Navigator.pushNamed(context, ProfileScreen.id);
+                            Navigator.pushNamed(context, EditProfileScreen.id);
+                          } else {
+                            setState(() {
+                              _inProcess = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg: "Signup Failed",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          }
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white,
+                          ),
+                          margin: EdgeInsets.only(top: 10),
+                          width: 300,
+                          // height: 40,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF00BABA)),
+                            ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: space * 0.0,
-                        // ),
-                        TextInputField(
-                          text: "Name",
-                          controller: nameController,
-                          focus: nameFocus,
-                        ),
-                        TextInputField(
-                          text: "Email",
-                          controller: emailController,
-                          focus: emailFocus,
-                        ),
-                        TextInputField(
-                          text: "Mobile Number",
-                          controller: mobileNumberController,
-                          focus: mobileNumberFocus,
-                        ),
-                        TextInputField(
-                          text: "Password",
-                          controller: passwordController,
-                          focus: passwordFocus,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              _inProcess = true;
-                            });
-                            User user = new User();
-                            user.name = nameController.text;
-                            user.email = emailController.text;
-                            user.mobileNumber = mobileNumberController.text;
-                            user.password = passwordController.text;
-                            bool signUp =
-                                await context.read(userProvider).signUp(user);
-                            if (signUp) {
-                              setState(() {
-                                _inProcess = false;
-                              });
-                              Fluttertoast.showToast(
-                                  msg: "Successfully Signed Up",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.green,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                              Navigator.pushNamed(context, Dashboard.id);
-                              Navigator.pushNamed(context, ProfileScreen.id);
-                              Navigator.pushNamed(
-                                  context, EditProfileScreen.id);
-                            } else {
-                              setState(() {
-                                _inProcess = false;
-                              });
-                              Fluttertoast.showToast(
-                                  msg: "Signup Failed",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                            }
+                      ),
+                      Hero(
+                        tag: 'signup_buton',
+                        child: GestureDetector(
+                          onTap: () {
+                            // print('Tapped Login');
+                            Navigator.pushNamed(context, LoginScreen.id);
                           },
                           child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 20),
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color(0xFF2474FE),
-                                border: Border.all(color: Colors.blueAccent)),
-                            margin: EdgeInsets.only(top: 10),
-                            width: 300,
-                            // height: 40,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white),
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Already a user? ',
+                                children: [
+                                  TextSpan(
+                                    text: 'Sign in',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                        Hero(
-                          tag: 'signup_buton',
-                          child: GestureDetector(
-                            onTap: () {
-                              print('Tapped Login');
-                              Navigator.pushNamed(context, LoginScreen.id);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              alignment: Alignment.center,
-                              child: RichText(
-                                text: TextSpan(
-                                  text: 'Already a user? ',
-                                  children: [
-                                    TextSpan(
-                                      text: 'Sign in',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-            (_inProcess)
-                ? Container(
-                    color: Colors.blue,
-                    height: MediaQuery.of(context).size.height,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                      ),
+          ),
+          (_inProcess)
+              ? Container(
+                  color: Colors.blue,
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
                     ),
-                  )
-                : Center()
-          ],
-        ),
+                  ),
+                )
+              : Center()
+        ],
       ),
     );
   }
@@ -262,13 +285,16 @@ class TextInputField extends StatelessWidget {
             children: [
               Text(
                 text,
-                style: TextStyle(fontSize: space * 0.043, color: Colors.white),
+                style: TextStyle(
+                    fontSize: space * 0.043,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ],
           ),
         ),
         ConstrainedBox(
-          constraints: BoxConstraints.tight(Size(space * 0.7, space * 0.14)),
+          constraints: BoxConstraints.tight(Size(space * 0.75, space * 0.14)),
           child: TextFormField(
             focusNode: focus,
             controller: controller,

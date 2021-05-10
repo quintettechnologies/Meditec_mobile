@@ -8,6 +8,7 @@ import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
+import 'package:meditec/view/screen/changePassword_Screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
 import 'package:meditec/view/screen/prescriptions_list_screen.dart';
@@ -33,6 +34,7 @@ class MyCustomDrawer extends HookWidget {
                       children: [
                         DrawerHeader(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -50,7 +52,7 @@ class MyCustomDrawer extends HookWidget {
                                                         .image))
                                                 .image,
                                             fit: BoxFit.fitHeight,
-                                            height: 60,
+                                            height: 100,
                                           ),
                                           // child: Image(
                                           //   image:
@@ -87,35 +89,35 @@ class MyCustomDrawer extends HookWidget {
                               SizedBox(
                                 height: 30,
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Make your profile Premium and Get Offers",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xFFE8DA6C),
-                                            Color(0xFFDEC35F),
-                                            Color(0xFFCFA742),
-                                            Color(0xFFCD9E3D),
-                                            Color(0xFFD4AD49),
-                                            Color(0xFFCFA742),
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        border: Border.all(
-                                            color: Color(0xFFE6C478))),
-                                  )
-                                ],
-                              )
+                              // Row(
+                              //   children: [
+                              //     Container(
+                              //       child: Padding(
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: Text(
+                              //           "Make your profile Premium and Get Offers",
+                              //           style: TextStyle(color: Colors.white),
+                              //         ),
+                              //       ),
+                              //       decoration: BoxDecoration(
+                              //           gradient: LinearGradient(
+                              //             colors: [
+                              //               Color(0xFFE8DA6C),
+                              //               Color(0xFFDEC35F),
+                              //               Color(0xFFCFA742),
+                              //               Color(0xFFCD9E3D),
+                              //               Color(0xFFD4AD49),
+                              //               Color(0xFFCFA742),
+                              //             ],
+                              //           ),
+                              //           borderRadius: BorderRadius.all(
+                              //             Radius.circular(10),
+                              //           ),
+                              //           border: Border.all(
+                              //               color: Color(0xFFE6C478))),
+                              //     )
+                              //   ],
+                              // )
                             ],
                           ),
                         ),
@@ -157,17 +159,28 @@ class MyCustomDrawer extends HookWidget {
                                   context, AppointmentSampleListScreen.id);
                             },
                             child: MenuItem(text: 'Previous Samples')),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(
+                                  context, ChangePasswordScreen.id);
+                            },
+                            child: MenuItem(text: 'Change Password')),
                         // MenuItem(text: 'Feedback'),
                         // MenuItem(text: 'Following'),
                       ],
                     )
                   : DrawerHeader(child: null),
-              MenuHeader(text: 'Notification'),
-              MenuOption(text: 'Notification', switchValue: false),
-              MenuOption(text: 'App notification', switchValue: true),
+              // MenuHeader(text: 'Notification'),
+              // MenuOption(text: 'Notification', switchValue: false),
+              // MenuOption(text: 'App notification', switchValue: true),
               MenuHeader(text: 'More'),
               MenuItem(text: 'Language'),
-              MenuItem(text: 'Support'),
+              MenuItem(text: 'Rating'),
+              MenuItem(text: 'Facebook Page'),
+              MenuItem(text: 'About Us'),
+              MenuItem(text: 'Contact Us'),
+              MenuItem(text: 'Support & FAQ'),
               user.loginStatus
                   ? Padding(
                       padding: const EdgeInsets.all(20.0),

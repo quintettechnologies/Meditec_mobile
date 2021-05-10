@@ -31,13 +31,36 @@ class DoctorProfileScreen extends StatefulWidget {
 
 class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   bool loading = false;
+  bool selected = false;
   DatePickerController _controller = DatePickerController();
   DateTime _selectedValue = DateTime.now();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSlotsByDate();
+  }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   context.read(userProvider).selectedSlot = DoctorSlot();
+  //   super.dispose();
+  // }
+
   getSlotsByDate() async {
+    setState(() {
+      loading = true;
+    });
+    selected = false;
     context.read(userProvider).selectedSlot = DoctorSlot();
     await context
         .read(userProvider)
         .getDoctorSlotsByDate(_selectedValue, widget.doctor.chambers[0].id);
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -53,31 +76,43 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: space * 0.01, horizontal: space * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: space * 0.05),
               child: Container(
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: space * 0.03,
-                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        (widget.doctor.userAvatar != null)
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height: space * 0.3,
-                                  width: space * 0.3,
-                                  child: Image(
-                                    image: Image.memory(base64.decode(
-                                            widget.doctor.userAvatar.image))
-                                        .image,
-                                  ),
+                        Container(
+                          child: Column(
+                            children: [
+                              (widget.doctor.userAvatar != null)
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        height: space * 0.3,
+                                        width: space * 0.3,
+                                        child: Image(
+                                          image: Image.memory(base64.decode(
+                                                  widget
+                                                      .doctor.userAvatar.image))
+                                              .image,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: space * 0.3,
+                                      width: space * 0.3,
+                                    ),
+                              Text(
+                                "${"Fee " + widget.doctor.doctorFee.toString() ?? ""}",
+                                style: TextStyle(
+                                  fontSize: 16,
                                 ),
-                              )
-                            : Container(),
+                              ),
+                            ],
+                          ),
+                        ),
                         SizedBox(
                           width: space * 0.05,
                         ),
@@ -172,7 +207,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                       ],
                     ),
                     SizedBox(
-                      height: space * 0.03,
+                      height: space * 0.02,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -198,15 +233,9 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                           // DateTime.now().add(Duration(days: 7))
                         ],
                         onDateChange: (date) async {
-                          setState(() {
-                            loading = true;
-                          });
                           _selectedValue = date;
-                          print(_selectedValue.toIso8601String());
+                          // print(_selectedValue.toIso8601String());
                           await getSlotsByDate();
-                          setState(() {
-                            loading = false;
-                          });
                         },
                       ),
                     ),
@@ -226,7 +255,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                       height: space * 0.02,
                     ),
                     SizedBox(
-                      height: verticalSpace * 0.2,
+                      height: verticalSpace * 0.25,
                       child: loading
                           ? Container(
                               height: MediaQuery.of(context).size.height,
@@ -257,6 +286,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                             context
                                                 .read(userProvider)
                                                 .selectSlot(doctorSlots[index]);
+                                            selected = true;
                                             setState(() {});
                                           }
                                         : null,
@@ -301,7 +331,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                     ));
                               }),
                     ),
-                    (doctorSlots.isNotEmpty)
+                    (doctorSlots.isNotEmpty && selected)
                         ? TextButton(
                             onPressed: () {
                               Navigator.push(

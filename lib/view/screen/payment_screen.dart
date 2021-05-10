@@ -194,8 +194,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: space * 0.01, horizontal: space * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: space * 0.05),
               child: Consumer(
                 builder: (context, watch, child) {
                   List<Doctor> doctors = watch(doctorsProvider);
@@ -206,7 +205,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: space * 0.2,
+                              height: space * 0.16,
                             ),
                             Container(
                               decoration: BoxDecoration(
@@ -459,7 +458,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: space * 0.05,
+                              height: space * 0.02,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -474,7 +473,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   activeColor: Colors.green,
                                   value: forFNF,
                                   onChanged: (value) {
-                                    print("VALUE : $value");
+                                    // print("VALUE : $value");
                                     setState(() {
                                       forFNF = value;
                                     });
@@ -483,7 +482,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                               ],
                             ),
                             SizedBox(
-                              height: space * 0.05,
+                              height: space * 0.02,
                             ),
                             forFNF
                                 ? Column(
@@ -851,10 +850,10 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                               height: space * 0.05,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                TextButton(
-                                  onPressed: () async {
+                                GestureDetector(
+                                  onTap: () async {
                                     setAppointment(user);
                                     bool valid = validate();
                                     if (valid) {
@@ -908,11 +907,11 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   },
                                   child: Container(
                                     height: space * .12,
-                                    width: space * 0.36,
+                                    width: space * 0.24,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                        color: Color(0xFF00BABA),
-                                        borderRadius: BorderRadius.circular(5)),
+                                      color: Colors.white,
+                                    ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
@@ -920,13 +919,13 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                         style: TextStyle(
                                             fontSize: space * 0.04,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                                            color: Colors.black87),
                                       ),
                                     ),
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () async {
+                                GestureDetector(
+                                  onTap: () async {
                                     setAppointment(user);
                                     bool valid = validate();
                                     if (valid) {
@@ -980,7 +979,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   },
                                   child: Container(
                                     height: space * .12,
-                                    width: space * 0.36,
+                                    width: space * 0.60,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Color(0xFF00BABA),
@@ -988,7 +987,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        "Make Payment",
+                                        "Pay Now",
                                         style: TextStyle(
                                             fontSize: space * 0.04,
                                             fontWeight: FontWeight.bold,
@@ -1018,7 +1017,14 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                     ),
                                   ),
                                 )
-                              : Container(),
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    height: space * 0.3,
+                                    width: space * 0.3,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
