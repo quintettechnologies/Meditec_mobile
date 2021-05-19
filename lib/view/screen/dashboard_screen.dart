@@ -51,6 +51,7 @@ class _DashboardState extends State<Dashboard> {
     // TODO: implement initState
     searchController = TextEditingController();
     searchFocus = FocusNode();
+    initialize();
     super.initState();
   }
 
@@ -61,6 +62,14 @@ class _DashboardState extends State<Dashboard> {
     searchFocus.dispose();
     _controller.close();
     super.dispose();
+  }
+
+  initialize() async {
+    await context.read(userProvider).getAdvertisementCategories();
+    await context.read(userProvider).getAdvertisements();
+    await context.read(userProvider).getDoctorList();
+    await context.read(userProvider).getEmergencyDoctorList();
+    setState(() {});
   }
 
   @override

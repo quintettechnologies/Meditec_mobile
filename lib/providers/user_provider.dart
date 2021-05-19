@@ -21,7 +21,7 @@ class UserProvider extends ChangeNotifier {
   // String password;
   bool loginStatus = false;
   String authToken;
-  var image1;
+  // var image1;
   File selectedImage;
   List<Category> categories;
   Category selectedCategory;
@@ -763,13 +763,13 @@ class UserProvider extends ChangeNotifier {
       _user = User.fromJson(userMap);
       // print(_user.name);
       // image1 = _user.userAvatar.image;
-      var image = base64.decode(image1.toString());
-      await getCategories();
-      await getAppointments();
-      await getDoctorList();
-      await getEmergencyDoctorList();
-      await getAdvertisementCategories();
-      await getAdvertisements();
+      // var image = base64.decode(image1.toString());
+      // await getCategories();
+      // await getAppointments();
+      // await getDoctorList();
+      // await getEmergencyDoctorList();
+      // await getAdvertisementCategories();
+      // await getAdvertisements();
     }
     notifyListeners();
   }
@@ -871,7 +871,7 @@ class UserProvider extends ChangeNotifier {
       this.number = null;
       // this.password = null;
       this.authToken = null;
-      this.image1 = null;
+      // this.image1 = null;
       this.selectedImage = null;
       notifyListeners();
       loginData = await SharedPreferences.getInstance();

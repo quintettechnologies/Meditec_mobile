@@ -28,6 +28,19 @@ class DoctorScreen extends StatefulWidget {
 
 class _DoctorScreenState extends State<DoctorScreen> {
   bool expanded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    initialize();
+    super.initState();
+  }
+
+  initialize() async {
+    await context.read(userProvider).getCategories();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
@@ -209,6 +222,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                         .getCategoryDoctorList(
                                             categories[index].id);
                                     if (list) {
+                                      context
+                                          .read(userProvider)
+                                          .selectedCategory = categories[index];
                                       Navigator.pushNamed(
                                           context, CategoryDoctorScreen.id);
                                     }
