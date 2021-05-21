@@ -31,23 +31,42 @@ class AppointmentSampleListScreen extends StatefulWidget {
 
 class _AppointmentSampleListScreenState
     extends State<AppointmentSampleListScreen> {
+  List<Appointment> appointments = [];
+  List<Appointment> appointmentsDisplay = [];
   @override
   void initState() {
     // TODO: implement initState
+    loadAppointments();
     super.initState();
   }
 
-  @override
-  Future<void> didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
-    context.read(userProvider).getAppointments();
-    super.didChangeDependencies();
+  loadAppointments() async {
+    appointments = context.read(userProvider).appointments;
+    if (appointments.isEmpty) {
+      await fetchAppointments();
+    }
+    filterAppointments();
+  }
+
+  fetchAppointments() async {
+    await context.read(userProvider).getAppointments().then((value) {
+      appointments = context.read(userProvider).appointments;
+      setState(() {});
+    });
+  }
+
+  filterAppointments() {
+    for (Appointment appointment in appointments) {
+      if (appointment.samplePictureExist) {
+        appointmentsDisplay.add(appointment);
+      }
+    }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    List<Appointment> appointments = context.read(userProvider).appointments;
     return PickupLayout(
       scaffold: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -73,7 +92,7 @@ class _AppointmentSampleListScreenState
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        for (Appointment appointment in appointments)
+                        for (Appointment appointment in appointmentsDisplay)
                           GestureDetector(
                             onTap: () async {
                               Navigator.push(

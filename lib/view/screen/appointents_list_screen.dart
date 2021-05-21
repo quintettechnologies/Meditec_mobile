@@ -27,23 +27,31 @@ class AppointmentsScreen extends StatefulWidget {
 }
 
 class _AppointmentsScreenState extends State<AppointmentsScreen> {
+  List<Appointment> appointments = [];
   @override
   void initState() {
     // TODO: implement initState
+    loadAppointments();
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    context.read(userProvider).getAppointments();
-    super.didChangeDependencies();
+  loadAppointments() async {
+    appointments = context.read(userProvider).appointments;
+    if (appointments.isEmpty) {
+      await fetchAppointments();
+    }
+  }
+
+  fetchAppointments() async {
+    await context.read(userProvider).getAppointments().then((value) {
+      appointments = context.read(userProvider).appointments;
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    List<Appointment> appointments = context.read(userProvider).appointments;
     return PickupLayout(
       scaffold: Scaffold(
         resizeToAvoidBottomInset: false,

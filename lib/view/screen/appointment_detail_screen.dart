@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/message.dart';
+import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/resources/firebase_api.dart';
 import 'package:meditec/view/screen/chat_page.dart';
 import 'package:meditec/view/screen/reports_list_screen.dart';
@@ -15,6 +16,7 @@ import 'package:meditec/view/screen/video_call_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'callscreens/pickup/pickup_layout.dart';
 
@@ -201,20 +203,20 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                       // ),
                                                       StreamBuilder<
                                                           List<Message>>(
-                                                        stream: FirebaseApi
-                                                            .getMessages(
-                                                                doctorID: widget
-                                                                    .appointment
-                                                                    .doctorSlot
-                                                                    .chamber
-                                                                    .user
-                                                                    .userId
-                                                                    .toString(),
-                                                                patientID: widget
-                                                                    .appointment
-                                                                    .user
-                                                                    .userId
-                                                                    .toString()),
+                                                        stream: FirebaseApi.getMessages(
+                                                            doctorID: widget
+                                                                .appointment
+                                                                .doctorSlot
+                                                                .chamber
+                                                                .user
+                                                                .userId
+                                                                .toString(),
+                                                            patientID: context
+                                                                .read(
+                                                                    userProvider)
+                                                                .currentUser()
+                                                                .userId
+                                                                .toString()),
                                                         builder: (context,
                                                             snapshot) {
                                                           switch (snapshot
@@ -669,35 +671,35 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "${widget.appointment.user.name}",
+                                              "${context.read(userProvider).currentUser().name}",
                                               style: TextStyle(fontSize: 14),
                                             ),
                                             SizedBox(
                                               height: space * 0.02,
                                             ),
                                             Text(
-                                              "${widget.appointment.user.age ?? ""}",
+                                              "${context.read(userProvider).currentUser().age ?? ""}",
                                               style: TextStyle(fontSize: 14),
                                             ),
                                             SizedBox(
                                               height: space * 0.02,
                                             ),
                                             Text(
-                                              "${widget.appointment.user.weight ?? ""}",
+                                              "${context.read(userProvider).currentUser().weight ?? ""}",
                                               style: TextStyle(fontSize: 14),
                                             ),
                                             SizedBox(
                                               height: space * 0.02,
                                             ),
                                             Text(
-                                              "${widget.appointment.user.gender ?? ""}",
+                                              "${context.read(userProvider).currentUser().gender ?? ""}",
                                               style: TextStyle(fontSize: 14),
                                             ),
                                             SizedBox(
                                               height: space * 0.02,
                                             ),
                                             Text(
-                                              "${widget.appointment.user.bloodGroup ?? ""}",
+                                              "${context.read(userProvider).currentUser().bloodGroup ?? ""}",
                                               style: TextStyle(fontSize: 14),
                                             ),
                                           ],

@@ -363,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           (_inProcess)
               ? Container(
-                  color: Colors.blue,
+                  color: Color(0xFF00BABA),
                   height: MediaQuery.of(context).size.height,
                   child: Center(
                     child: CircularProgressIndicator(

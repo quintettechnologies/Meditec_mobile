@@ -96,7 +96,7 @@ class ProfileScreen extends HookWidget {
                                   ),
                                   color: Color(0xFFF5F6F9),
                                   onPressed: () {
-                                    Navigator.popAndPushNamed(
+                                    Navigator.pushNamed(
                                         context, UploadProfileImageScreen.id);
                                   },
                                   child: Icon(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -162,12 +163,40 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
                     ),
                     RaisedButton(
                       onPressed: () async {
+                        setState(() {
+                          _inProcess = true;
+                        });
                         bool upload = await context
                             .read(userProvider)
                             .uploadImage(_image);
                         if (upload) {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, ProfileScreen.id);
+                          // _inProcess = false;
+                          // Navigator.pop(context);
+                          // Navigator.pushNamed(context, ProfileScreen.id);
+                          Fluttertoast.showToast(
+                              msg: "Upload successful!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          setState(() {
+                            _inProcess = false;
+                          });
+                          Navigator.pop(context, true);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Something went wrong! please try again.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          setState(() {
+                            _inProcess = false;
+                          });
                         }
                       },
                       child: Container(

@@ -15,7 +15,7 @@
         tools:replace="android:label"
         android:name="io.flutter.app.FlutterApplication"
         android:label="Cicil"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

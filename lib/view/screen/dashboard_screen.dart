@@ -36,7 +36,11 @@ class _DashboardState extends State<Dashboard> {
   TextEditingController searchController;
   FocusNode searchFocus;
   List<User> doctors = [];
+  List<AdvertisementCategory> advertisementCategories = [];
+  List<Advertisement> advertisements = [];
+  List<Advertisement> advertisementsDisplay = [];
   List<User> result = [];
+  AdvertisementCategory selectedAdCategory;
   YoutubePlayerController _controller = YoutubePlayerController(
       initialVideoId: 'QkpweP6sLNM',
       params: YoutubePlayerParams(
@@ -64,22 +68,51 @@ class _DashboardState extends State<Dashboard> {
     super.dispose();
   }
 
-  initialize() async {
-    await context.read(userProvider).getAdvertisementCategories();
-    await context.read(userProvider).getAdvertisements();
-    await context.read(userProvider).getDoctorList();
-    await context.read(userProvider).getEmergencyDoctorList();
+  initialize() {
+    advertisementCategories =
+        context.read(userProvider).advertisementCategories;
+    if (advertisementCategories.isEmpty) {
+      fetchAdvertisementCategories();
+    }
+    advertisements = context.read(userProvider).advertisements;
+    if (advertisements.isEmpty) {
+      fetchAdvertisements();
+    }
+    sortAds();
+    loadVideoAd();
+    doctors = context.read(userProvider).doctors;
+    if (doctors.isEmpty) {
+      fetchTopDoctors();
+    }
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final double space = MediaQuery.of(context).size.width;
-    List<User> doctors = context.read(userProvider).doctors;
-    List<AdvertisementCategory> advertisementCategories =
-        context.read(userProvider).advertisementCategories;
-    List<Advertisement> advertisements =
-        context.read(userProvider).advertisements;
+  fetchAdvertisementCategories() async {
+    await context.read(userProvider).getAdvertisementCategories().then((value) {
+      advertisementCategories =
+          context.read(userProvider).advertisementCategories;
+      setState(() {});
+    });
+  }
+
+  fetchAdvertisements() async {
+    await context.read(userProvider).getAdvertisements().then((value) {
+      advertisements = context.read(userProvider).advertisements;
+      sortAds();
+      loadVideoAd();
+      setState(() {});
+    });
+  }
+
+  fetchTopDoctors() async {
+    setState(() {});
+    await context.read(userProvider).getDoctorList().then((value) {
+      doctors = context.read(userProvider).doctors;
+      setState(() {});
+    });
+  }
+
+  loadVideoAd() {
     for (Advertisement advertisement in advertisements) {
       if (advertisement.youtubeLink != "undefined") {
         _controller = YoutubePlayerController(
@@ -93,6 +126,32 @@ class _DashboardState extends State<Dashboard> {
             ));
       }
     }
+  }
+
+  sortAds() {
+    if (selectedAdCategory != null) {
+      advertisementsDisplay.clear();
+      for (Advertisement advertisement in advertisements) {
+        if (advertisement.category.categoryName ==
+            selectedAdCategory.categoryName) {
+          advertisementsDisplay.add(advertisement);
+        }
+      }
+    } else {
+      advertisementsDisplay.clear();
+      for (Advertisement advertisement in advertisements) {
+        advertisementsDisplay.add(advertisement);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double space = MediaQuery.of(context).size.width;
+    // doctors = context.read(userProvider).doctors;
+    // advertisementCategories =
+    //     context.read(userProvider).advertisementCategories;
+    // advertisements = context.read(userProvider).advertisements;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -159,57 +218,9 @@ class _DashboardState extends State<Dashboard> {
                                 category: 'Doctor',
                                 color: Color(0xFFE2F2F8),
                               ),
-                              // SizedBox(width: space * 0.05),
-                              // CatagoryButtonDashBoard(
-                              //   onTap: () {},
-                              //   category: 'Hospital',
-                              //   color: Color(0xFFE2F1EF),
-                              // ),
-                              // SizedBox(width: space * 0.05),
-                              // CatagoryButtonDashBoard(
-                              //   onTap: () {},
-                              //   category: 'Ambulance',
-                              //   color: Color(0xFFE7F1E4),
-                              // ),
-                              // SizedBox(width: space * 0.05),
-                              // CatagoryButtonDashBoard(
-                              //   onTap: () {},
-                              //   category: 'Diagnostic',
-                              //   color: Color(0xFFD6E7F2),
-                              // ),
                             ],
                           ),
                         ),
-                        // SizedBox(height: space * 0.05),
-                        // FittedBox(
-                        //   child: Row(
-                        //     children: [
-                        //       CatagoryButtonDashBoard(
-                        //         onTap: () {},
-                        //         category: 'Blood',
-                        //         color: Color(0xFFF7E0E0),
-                        //       ),
-                        //       SizedBox(width: space * 0.05),
-                        //       CatagoryButtonDashBoard(
-                        //         onTap: () {},
-                        //         category: 'Int. Doctor',
-                        //         color: Color(0xFFF8EBE1),
-                        //       ),
-                        //       SizedBox(width: space * 0.05),
-                        //       CatagoryButtonDashBoard(
-                        //         onTap: () {},
-                        //         category: 'Report',
-                        //         color: Color(0xFFF7E3E9),
-                        //       ),
-                        //       SizedBox(width: space * 0.05),
-                        //       CatagoryButtonDashBoard(
-                        //         onTap: () {},
-                        //         category: 'Blog',
-                        //         color: Color(0xFFF1E5EF),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         SizedBox(height: space * 0.02),
                         Text(
                           "What's New",
@@ -217,80 +228,27 @@ class _DashboardState extends State<Dashboard> {
                               fontSize: space * 0.05, color: kPrimaryTextColor),
                         ),
                         SizedBox(height: space * 0.02),
-                        // SingleChildScrollView(
-                        //   scrollDirection: Axis.horizontal,
-                        //   child: Row(
-                        //     children: [
-                        //       Container(
-                        //         padding: EdgeInsets.all(10),
-                        //         decoration: kSelectedButtonDecoration,
-                        //         child: Text(
-                        //           "Corona Update",
-                        //           style: kSelectedButtonTextStyle,
-                        //         ),
-                        //       ),
-                        //       SizedBox(width: space * 0.03),
-                        //       Container(
-                        //         padding: EdgeInsets.all(10),
-                        //         decoration: kButtonDecoration,
-                        //         child: Text(
-                        //           "Health",
-                        //           style: kButtonTextStyle,
-                        //         ),
-                        //       ),
-                        //       SizedBox(width: space * 0.03),
-                        //       Container(
-                        //         padding: EdgeInsets.all(10),
-                        //         decoration: kButtonDecoration,
-                        //         child: Text(
-                        //           "Doctors",
-                        //           style: kButtonTextStyle,
-                        //         ),
-                        //       ),
-                        //       SizedBox(width: space * 0.03),
-                        //       Container(
-                        //         padding: EdgeInsets.all(10),
-                        //         decoration: kButtonDecoration,
-                        //         child: Text(
-                        //           "Hospital",
-                        //           style: kButtonTextStyle,
-                        //         ),
-                        //       ),
-                        //       SizedBox(width: space * 0.03),
-                        //       Container(
-                        //         padding: EdgeInsets.all(10),
-                        //         decoration: kButtonDecoration,
-                        //         child: Text(
-                        //           "Medicine",
-                        //           style: kButtonTextStyle,
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  setState(() {
-                                    _inProcess = true;
-                                  });
-                                  await context
-                                      .read(userProvider)
-                                      .getAdvertisements();
-                                  setState(() {
-                                    _inProcess = false;
-                                  });
+                                  selectedAdCategory = null;
+                                  sortAds();
+                                  setState(() {});
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(10),
                                   margin: EdgeInsets.only(right: 10),
-                                  decoration: kButtonDecoration,
+                                  decoration: (selectedAdCategory == null)
+                                      ? kSelectedButtonDecoration
+                                      : kButtonDecoration,
                                   child: Text(
                                     "All",
-                                    style: kButtonTextStyle,
+                                    style: (selectedAdCategory == null)
+                                        ? kSelectedButtonTextStyle
+                                        : kButtonTextStyle,
                                   ),
                                 ),
                               ),
@@ -298,24 +256,27 @@ class _DashboardState extends State<Dashboard> {
                                   in advertisementCategories)
                                 GestureDetector(
                                   onTap: () async {
-                                    setState(() {
-                                      _inProcess = true;
-                                    });
-                                    await context
-                                        .read(userProvider)
-                                        .getAdvertisementsByCategory(
-                                            category.id);
-                                    setState(() {
-                                      _inProcess = false;
-                                    });
+                                    selectedAdCategory = category;
+                                    sortAds();
+                                    setState(() {});
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(10),
                                     margin: EdgeInsets.only(right: 10),
-                                    decoration: kButtonDecoration,
+                                    decoration: (selectedAdCategory != null)
+                                        ? (selectedAdCategory.categoryName ==
+                                                category.categoryName)
+                                            ? kSelectedButtonDecoration
+                                            : kButtonDecoration
+                                        : kButtonDecoration,
                                     child: Text(
                                       category.categoryName,
-                                      style: kButtonTextStyle,
+                                      style: (selectedAdCategory != null)
+                                          ? (selectedAdCategory.categoryName ==
+                                                  category.categoryName)
+                                              ? kSelectedButtonTextStyle
+                                              : kButtonTextStyle
+                                          : kButtonTextStyle,
                                     ),
                                   ),
                                 ),
@@ -408,7 +369,7 @@ class _DashboardState extends State<Dashboard> {
                           child: Row(
                             children: [
                               for (Advertisement advertisement
-                                  in advertisements)
+                                  in advertisementsDisplay)
                                 (advertisement.youtubeLink == "undefined")
                                     ? Container(
                                         margin: EdgeInsets.only(right: 10),
@@ -880,8 +841,11 @@ class _DashboardState extends State<Dashboard> {
                 searchFocus.hasFocus
                     ? SingleChildScrollView(
                         child: Container(
-                          decoration: BoxDecoration(color: Colors.white),
-                          height: MediaQuery.of(context).size.height * 0.35,
+                          decoration: BoxDecoration(
+                              color: Colors.white
+                                  .withOpacity(0.5)
+                                  .withAlpha(1000)),
+                          height: MediaQuery.of(context).size.height * 0.85,
                           width: MediaQuery.of(context).size.width,
                           child: SingleChildScrollView(
                             child: Column(
@@ -910,7 +874,9 @@ class _DashboardState extends State<Dashboard> {
                                                 );
                                               }
                                             : null,
-                                    padding: EdgeInsets.all(space * 0.015),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: space * 0.015,
+                                        vertical: space * 0.01),
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: Colors.white,
@@ -966,7 +932,7 @@ class _DashboardState extends State<Dashboard> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  doctor.name,
+                                                  "${doctor.name}",
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

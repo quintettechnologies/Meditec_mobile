@@ -23,7 +23,7 @@ class UserProvider extends ChangeNotifier {
   String authToken;
   // var image1;
   File selectedImage;
-  List<Category> categories;
+  List<Category> categories = [];
   Category selectedCategory;
   List<User> doctors = [];
   List<AdvertisementCategory> advertisementCategories = [];
@@ -740,9 +740,9 @@ class UserProvider extends ChangeNotifier {
         // print(d.degree.degreeName);
         // print(d.categories[0].name);
       }
-      return true;
+      return categoryDoctors.isNotEmpty;
     } else {
-      return false;
+      return categoryDoctors.isNotEmpty;
     }
   }
 
@@ -785,8 +785,12 @@ class UserProvider extends ChangeNotifier {
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: authToken,
       HttpHeaders.contentTypeHeader: 'application/json',
+    }).timeout(Duration(seconds: 60), onTimeout: () {
+      // time has run out, do what you wanted to do
+      timedOut = true;
+      return null;
     });
-    // print(response.body);
+    print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {

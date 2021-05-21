@@ -139,7 +139,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             enableSearch
                 ? Container(
-                    height: MediaQuery.of(context).size.width * 0.15,
+                    height: MediaQuery.of(context).size.height * 0.075,
                     child: Row(
                       children: [
                         FlatButton(

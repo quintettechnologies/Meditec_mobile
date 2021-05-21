@@ -27,12 +27,33 @@ class EmergencyDoctorScreen extends StatefulWidget {
 }
 
 class _EmergencyDoctorScreenState extends State<EmergencyDoctorScreen> {
+  List<User> emergencyDoctors = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    initialize();
+    super.initState();
+  }
+
+  initialize() async {
+    emergencyDoctors = context.read(userProvider).emergencyDoctors;
+    setState(() {});
+    if (emergencyDoctors.isEmpty) {
+      fetchEmergencyDoctors();
+    }
+  }
+
+  fetchEmergencyDoctors() async {
+    await context.read(userProvider).getEmergencyDoctorList().then((value) {
+      emergencyDoctors = context.read(userProvider).emergencyDoctors;
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    List<Category> categories = context.read(userProvider).categories;
-    List<User> doctors = context.read(userProvider).emergencyDoctors;
-    bool showButtons = true;
+
     return PickupLayout(
       scaffold: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -52,7 +73,7 @@ class _EmergencyDoctorScreenState extends State<EmergencyDoctorScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          for (User doctor in doctors)
+                          for (User doctor in emergencyDoctors)
                             Padding(
                               padding: EdgeInsets.all(space * 0.015),
                               child: InkWell(

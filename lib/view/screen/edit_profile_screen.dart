@@ -20,6 +20,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  bool _inProcess = false;
   TextEditingController nameController;
   FocusNode nameFocus;
   TextEditingController emailController;
@@ -172,247 +173,279 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            child: Column(
+            child: Stack(
               children: [
-                Text(
-                  "Edit Profile",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                Space(space: space),
-                TextEditingField(
-                  text: 'Name',
-                  controller: nameController,
-                  focusNode: nameFocus,
-                  space: space,
-                ),
-                Space(space: space),
-                TextEditingField(
-                  text: 'Email',
-                  controller: emailController,
-                  focusNode: emailFocus,
-                  space: space,
-                ),
-                // Space(space: space),
-                // TextEditingField(
-                //     text: "Phone",
-                //     controller: mobileNumberController,
-                //     focusNode: mobileNumberFocus,
-                //     space: space),
-                Space(space: space),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Blood Group",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: space * 0.1,
-                      width: space * 0.5,
-                      child: DropdownButton(
-                        key: Key("blood"),
-                        value: bloodValue,
-                        hint: Text("Select blood group"),
-                        items: [
-                          DropdownMenuItem<int>(
-                            child: Text('O-'),
-                            value: 1,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('O+'),
-                            value: 2,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('A-'),
-                            value: 3,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('A+'),
-                            value: 4,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('B-'),
-                            value: 5,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('B+'),
-                            value: 6,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('AB-'),
-                            value: 7,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('AB+'),
-                            value: 8,
-                          ),
-                        ],
-                        onChanged: (int value) {
-                          setState(() {
-                            bloodValue = value;
-                            setBloodGroup();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Space(space: space),
-                TextEditingField(
-                  text: "Age",
-                  space: space,
-                  controller: ageController,
-                  focusNode: ageFocus,
-                ),
-                Space(space: space),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Gender",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: space * 0.1,
-                      width: space * 0.5,
-                      child: DropdownButton(
-                        key: Key("gender"),
-                        value: genderValue,
-                        hint: Text("Select gender"),
-                        items: [
-                          DropdownMenuItem<int>(
-                            child: Text('Male'),
-                            value: 1,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('Female'),
-                            value: 2,
-                          ),
-                          DropdownMenuItem<int>(
-                            child: Text('Transgender'),
-                            value: 3,
-                          ),
-                        ],
-                        onChanged: (int value) {
-                          setState(() {
-                            genderValue = value;
-                            setGender();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Space(space: space),
-                TextEditingField(
-                  text: "Weight",
-                  space: space,
-                  controller: weightController,
-                  focusNode: weightFocus,
-                ),
-                Space(space: space),
-                TextEditingField(
-                    text: "Street 1",
-                    controller: street1Controller,
-                    focusNode: street1Focus,
-                    space: space),
-                Space(space: space),
-                TextEditingField(
-                    text: "Street 2",
-                    controller: street2Controller,
-                    focusNode: street2Focus,
-                    space: space),
-                Space(space: space),
-                TextEditingField(
-                    text: "Street 3",
-                    controller: street3Controller,
-                    focusNode: street3Focus,
-                    space: space),
-                Space(space: space),
-                TextEditingField(
-                    text: "City",
-                    controller: cityController,
-                    focusNode: cityFocus,
-                    space: space),
-                Space(space: space),
-                TextEditingField(
-                    text: "Country",
-                    controller: countryController,
-                    focusNode: countryFocus,
-                    space: space),
-                Space(space: space),
-                TextEditingField(
-                    text: "Zip",
-                    controller: zipController,
-                    focusNode: zipFocus,
-                    space: space),
-                Space(space: space),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Column(
                   children: [
-                    Consumer(builder: (context, watch, build) {
-                      return InkWell(
-                        onTap: () async {
-                          User user = User();
-                          AddressBooks addressBook = AddressBooks();
-                          // Degree degree = Degree();
-                          // Speciality speciality = Speciality();
-                          user.name = nameController.text.trim();
-                          user.email = emailController.text.trim();
-                          // user.mobileNumber =
-                          //     mobileNumberController.text.trim();
-                          user.bloodGroup = bloodGroup;
-                          user.weight =
-                              double.parse(weightController.text.trim());
-                          user.gender = gender;
-                          user.age = int.parse(ageController.text.trim());
-                          addressBook.street1 = street1Controller.text.trim();
-                          addressBook.street2 = street2Controller.text.trim();
-                          addressBook.street3 = street3Controller.text.trim();
-                          addressBook.city = cityController.text.trim();
-                          addressBook.country = countryController.text.trim();
-                          addressBook.zip = zipController.text.trim();
-                          user.addressBooks = addressBook;
-                          bool status =
-                              await context.read(userProvider).editUser(user);
-                          if (status == true) {
-                            Fluttertoast.showToast(
-                                msg: "Successfully updated your profile!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.green,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                            Navigator.pop(context);
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: "Something went wrong! please try again.",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Color(0xFF00BABA)),
-                          padding: EdgeInsets.symmetric(
-                              vertical: space * 0.02, horizontal: space * 0.05),
-                          child: Text(
-                            'Update',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                    Text(
+                      "Edit Profile",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    Space(space: space),
+                    TextEditingField(
+                      text: 'Name',
+                      controller: nameController,
+                      focusNode: nameFocus,
+                      space: space,
+                    ),
+                    Space(space: space),
+                    TextEditingField(
+                      text: 'Email',
+                      controller: emailController,
+                      focusNode: emailFocus,
+                      space: space,
+                    ),
+                    // Space(space: space),
+                    // TextEditingField(
+                    //     text: "Phone",
+                    //     controller: mobileNumberController,
+                    //     focusNode: mobileNumberFocus,
+                    //     space: space),
+                    Space(space: space),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "Blood Group",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: space * 0.1,
+                          width: space * 0.5,
+                          child: DropdownButton(
+                            key: Key("blood"),
+                            value: bloodValue,
+                            hint: Text("Select blood group"),
+                            items: [
+                              DropdownMenuItem<int>(
+                                child: Text('O-'),
+                                value: 1,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('O+'),
+                                value: 2,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('A-'),
+                                value: 3,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('A+'),
+                                value: 4,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('B-'),
+                                value: 5,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('B+'),
+                                value: 6,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('AB-'),
+                                value: 7,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('AB+'),
+                                value: 8,
+                              ),
+                            ],
+                            onChanged: (int value) {
+                              setState(() {
+                                bloodValue = value;
+                                setBloodGroup();
+                              });
+                            },
                           ),
                         ),
-                      );
-                    })
+                      ],
+                    ),
+                    Space(space: space),
+                    TextEditingField(
+                      text: "Age",
+                      space: space,
+                      controller: ageController,
+                      focusNode: ageFocus,
+                    ),
+                    Space(space: space),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "Gender",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: space * 0.1,
+                          width: space * 0.5,
+                          child: DropdownButton(
+                            key: Key("gender"),
+                            value: genderValue,
+                            hint: Text("Select gender"),
+                            items: [
+                              DropdownMenuItem<int>(
+                                child: Text('Male'),
+                                value: 1,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('Female'),
+                                value: 2,
+                              ),
+                              DropdownMenuItem<int>(
+                                child: Text('Transgender'),
+                                value: 3,
+                              ),
+                            ],
+                            onChanged: (int value) {
+                              setState(() {
+                                genderValue = value;
+                                setGender();
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Space(space: space),
+                    TextEditingField(
+                      text: "Weight",
+                      space: space,
+                      controller: weightController,
+                      focusNode: weightFocus,
+                    ),
+                    Space(space: space),
+                    TextEditingField(
+                        text: "Street 1",
+                        controller: street1Controller,
+                        focusNode: street1Focus,
+                        space: space),
+                    Space(space: space),
+                    TextEditingField(
+                        text: "Street 2",
+                        controller: street2Controller,
+                        focusNode: street2Focus,
+                        space: space),
+                    Space(space: space),
+                    TextEditingField(
+                        text: "Street 3",
+                        controller: street3Controller,
+                        focusNode: street3Focus,
+                        space: space),
+                    Space(space: space),
+                    TextEditingField(
+                        text: "City",
+                        controller: cityController,
+                        focusNode: cityFocus,
+                        space: space),
+                    Space(space: space),
+                    TextEditingField(
+                        text: "Country",
+                        controller: countryController,
+                        focusNode: countryFocus,
+                        space: space),
+                    Space(space: space),
+                    TextEditingField(
+                        text: "Zip",
+                        controller: zipController,
+                        focusNode: zipFocus,
+                        space: space),
+                    Space(space: space),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Consumer(builder: (context, watch, build) {
+                          return InkWell(
+                            onTap: () async {
+                              setState(() {
+                                _inProcess = true;
+                              });
+                              User user = User();
+                              AddressBooks addressBook = AddressBooks();
+                              // Degree degree = Degree();
+                              // Speciality speciality = Speciality();
+                              user.name = nameController.text.trim();
+                              user.email = emailController.text.trim();
+                              // user.mobileNumber =
+                              //     mobileNumberController.text.trim();
+                              user.bloodGroup = bloodGroup;
+                              user.weight =
+                                  double.parse(weightController.text.trim());
+                              user.gender = gender;
+                              user.age = int.parse(ageController.text.trim());
+                              addressBook.street1 =
+                                  street1Controller.text.trim();
+                              addressBook.street2 =
+                                  street2Controller.text.trim();
+                              addressBook.street3 =
+                                  street3Controller.text.trim();
+                              addressBook.city = cityController.text.trim();
+                              addressBook.country =
+                                  countryController.text.trim();
+                              addressBook.zip = zipController.text.trim();
+                              user.addressBooks = addressBook;
+                              bool status = await context
+                                  .read(userProvider)
+                                  .editUser(user);
+                              if (status == true) {
+                                setState(() {
+                                  _inProcess = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Successfully updated your profile!",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                Navigator.pop(context);
+                              } else {
+                                setState(() {
+                                  _inProcess = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Something went wrong! please try again.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Color(0xFF00BABA)),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: space * 0.02,
+                                  horizontal: space * 0.05),
+                              child: Text(
+                                'Update',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                            ),
+                          );
+                        })
+                      ],
+                    )
                   ],
-                )
+                ),
+                (_inProcess)
+                    ? Container(
+                        color: Colors.white,
+                        height: MediaQuery.of(context).size.height * 0.95,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Center()
               ],
             ),
           ),

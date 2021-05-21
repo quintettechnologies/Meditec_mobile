@@ -247,7 +247,9 @@ class PdfPrescriptionApi {
           ),
           SizedBox(width: PdfPageFormat.cm * 0.8),
           Text(
-            prescription.referredDoctor.name ?? "",
+            (prescription.referredDoctor != null)
+                ? prescription.referredDoctor.name
+                : "",
             style: TextStyle(
               fontSize: 12,
             ),

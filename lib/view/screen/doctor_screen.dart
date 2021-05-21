@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/user_provider.dart';
@@ -28,7 +29,9 @@ class DoctorScreen extends StatefulWidget {
 
 class _DoctorScreenState extends State<DoctorScreen> {
   bool expanded = false;
-
+  List<Category> categories = [];
+  List<User> doctors = [];
+  List<User> emergencyDoctors = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -37,16 +40,36 @@ class _DoctorScreenState extends State<DoctorScreen> {
   }
 
   initialize() async {
-    await context.read(userProvider).getCategories();
+    categories = context.read(userProvider).categories;
+    doctors = context.read(userProvider).doctors;
+    emergencyDoctors = context.read(userProvider).emergencyDoctors;
     setState(() {});
+    if (categories.isEmpty) {
+      fetchCategories();
+    }
+    if (emergencyDoctors.isEmpty) {
+      fetchEmergencyDoctors();
+    }
+  }
+
+  fetchCategories() async {
+    await context.read(userProvider).getCategories().then((value) {
+      categories = context.read(userProvider).categories;
+      setState(() {});
+    });
+  }
+
+  fetchEmergencyDoctors() async {
+    await context.read(userProvider).getEmergencyDoctorList().then((value) {
+      emergencyDoctors = context.read(userProvider).emergencyDoctors;
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
-    List<Category> categories = context.read(userProvider).categories;
-    List<User> doctors = context.read(userProvider).doctors;
-    List<User> emergencyDoctors = context.read(userProvider).emergencyDoctors;
+
     return PickupLayout(
       scaffold: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -137,6 +160,17 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                   .selectedCategory = category;
                                               Navigator.pushNamed(context,
                                                   CategoryDoctorScreen.id);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Sorry, no doctor found!",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
                                             }
                                           },
                                           child: Container(
@@ -227,6 +261,15 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                           .selectedCategory = categories[index];
                                       Navigator.pushNamed(
                                           context, CategoryDoctorScreen.id);
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "Sorry, no doctor found!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
                                     }
                                   },
                                   child: Container(
