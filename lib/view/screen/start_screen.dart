@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/dashboard_screen.dart';
@@ -66,8 +67,9 @@ class _StartScreenState extends State<StartScreen> {
         color: Color(0xFF00BABA),
         height: MediaQuery.of(context).size.height,
         child: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.white,
+          child: SpinKitCircle(
+            color: Colors.white,
+            size: 50.0,
           ),
         ),
       ),
