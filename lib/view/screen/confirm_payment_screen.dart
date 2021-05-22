@@ -2,20 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:meditec/model/appointment.dart';
-import 'package:meditec/model/doctor.dart';
-import 'package:meditec/model/doctorSlot.dart';
-import 'package:meditec/model/user.dart';
-import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import 'callscreens/pickup/pickup_layout.dart';
 
@@ -31,6 +29,38 @@ class ConfirmPaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
+  ProgressDialog pr;
+  @override
+  void initState() {
+    // TODO: implement initState
+    initialize();
+    super.initState();
+  }
+
+  initialize() async {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+    pr.style(
+      message: 'Making Payment',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: SpinKitCircle(
+        color: Color(0xFF00BABA),
+        size: 50.0,
+      ),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 19.0,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
@@ -157,7 +187,8 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                                     child: Center(
                                                       child: RichText(
                                                         text: TextSpan(
-                                                            text: DateFormat.E()
+                                                            text: intl.DateFormat
+                                                                    .E()
                                                                 .format(widget
                                                                     .appointment
                                                                     .doctorSlot
@@ -170,7 +201,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                                             children: [
                                                               TextSpan(
                                                                   text:
-                                                                      ' ${DateFormat.d().format(widget.appointment.doctorSlot.startTime)}',
+                                                                      ' ${intl.DateFormat.d().format(widget.appointment.doctorSlot.startTime)}',
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -198,7 +229,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                                             horizontal: 10),
                                                     child: Center(
                                                         child: Text(
-                                                      "${DateFormat.jm().format(widget.appointment.doctorSlot.startTime)}-${DateFormat.jm().format(widget.appointment.doctorSlot.endTime)}",
+                                                      "${intl.DateFormat.jm().format(widget.appointment.doctorSlot.startTime)}-${intl.DateFormat.jm().format(widget.appointment.doctorSlot.endTime)}",
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -287,14 +318,14 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${DateFormat.yMd().format(widget.appointment.doctorSlot.startTime)}",
+                                            "${intl.DateFormat.yMd().format(widget.appointment.doctorSlot.startTime)}",
                                             style: TextStyle(fontSize: 14),
                                           ),
                                           SizedBox(
                                             height: space * 0.02,
                                           ),
                                           Text(
-                                            "${DateFormat.jm().format(widget.appointment.doctorSlot.startTime)} ",
+                                            "${intl.DateFormat.jm().format(widget.appointment.doctorSlot.startTime)} ",
                                             style: TextStyle(fontSize: 14),
                                           ),
                                           SizedBox(
@@ -485,10 +516,13 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                               children: [
                                 TextButton(
                                   onPressed: () async {
+                                    pr.update(message: "Canceling appointment");
+                                    await pr.show();
                                     String status = await context
                                         .read(userProvider)
                                         .deleteAppointment(widget.appointment);
                                     if (status == "success") {
+                                      await pr.hide();
                                       Fluttertoast.showToast(
                                           msg: "Successully Deleted.",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -501,6 +535,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                       Navigator.pushNamed(
                                           context, AppointmentsScreen.id);
                                     } else {
+                                      await pr.hide();
                                       Fluttertoast.showToast(
                                           msg: "Failed to delete!",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -532,11 +567,14 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
+                                    pr.update(message: "Making Payment");
+                                    await pr.show();
                                     bool status = await context
                                         .read(userProvider)
                                         .confirmPayment(
                                             widget.appointment.id.toString());
                                     if (status) {
+                                      await pr.hide();
                                       Fluttertoast.showToast(
                                           msg: "Payment Successul",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -549,6 +587,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                       Navigator.pushNamed(
                                           context, AppointmentsScreen.id);
                                     } else {
+                                      await pr.hide();
                                       Fluttertoast.showToast(
                                           msg: "Payment Failed",
                                           toastLength: Toast.LENGTH_SHORT,

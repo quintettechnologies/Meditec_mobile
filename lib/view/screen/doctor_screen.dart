@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,6 +16,7 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/model/category.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import '../constants.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
@@ -28,6 +30,7 @@ class DoctorScreen extends StatefulWidget {
 }
 
 class _DoctorScreenState extends State<DoctorScreen> {
+  ProgressDialog pr;
   bool expanded = false;
   List<Category> categories = [];
   List<User> doctors = [];
@@ -40,6 +43,27 @@ class _DoctorScreenState extends State<DoctorScreen> {
   }
 
   initialize() async {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+    pr.style(
+      message: 'Searching Doctors',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: SpinKitCircle(
+        color: Color(0xFF00BABA),
+        size: 50.0,
+      ),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 19.0,
+      ),
+    );
     categories = context.read(userProvider).categories;
     doctors = context.read(userProvider).doctors;
     emergencyDoctors = context.read(userProvider).emergencyDoctors;
@@ -150,6 +174,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                             horizontal: 8),
                                         child: InkWell(
                                           onTap: () async {
+                                            pr.update(
+                                                message:
+                                                    "Searching ${category.name}");
+                                            await pr.show();
+
                                             bool list = await context
                                                 .read(userProvider)
                                                 .getCategoryDoctorList(
@@ -158,6 +187,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                               context
                                                   .read(userProvider)
                                                   .selectedCategory = category;
+                                              await pr.hide();
                                               Navigator.pushNamed(context,
                                                   CategoryDoctorScreen.id);
                                             } else {
@@ -171,6 +201,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                   backgroundColor: Colors.red,
                                                   textColor: Colors.white,
                                                   fontSize: 16.0);
+                                              await pr.hide();
                                             }
                                           },
                                           child: Container(

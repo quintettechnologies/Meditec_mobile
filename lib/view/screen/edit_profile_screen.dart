@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/addressBooks.dart';
@@ -11,6 +12,7 @@ import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const String id = 'new_user';
@@ -20,6 +22,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  ProgressDialog pr;
   bool _inProcess = false;
   TextEditingController nameController;
   FocusNode nameFocus;
@@ -100,6 +103,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     gender = userRepo.currentUser().gender ?? "";
     setGenderValue();
     setBloodValue();
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+    pr.style(
+      message: 'Updating your profile info',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: SpinKitCircle(
+        color: Color(0xFF00BABA),
+        size: 50.0,
+      ),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 19.0,
+      ),
+    );
   }
 
   setGenderValue() {
@@ -358,9 +382,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Consumer(builder: (context, watch, build) {
                           return InkWell(
                             onTap: () async {
-                              setState(() {
-                                _inProcess = true;
-                              });
+                              // setState(() {
+                              //   _inProcess = true;
+                              // });
+                              await pr.show();
                               User user = User();
                               AddressBooks addressBook = AddressBooks();
                               // Degree degree = Degree();
@@ -389,9 +414,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   .read(userProvider)
                                   .editUser(user);
                               if (status == true) {
-                                setState(() {
-                                  _inProcess = false;
-                                });
+                                // setState(() {
+                                //   _inProcess = false;
+                                // });
+                                await pr.hide();
                                 Fluttertoast.showToast(
                                     msg: "Successfully updated your profile!",
                                     toastLength: Toast.LENGTH_SHORT,
@@ -402,9 +428,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     fontSize: 16.0);
                                 Navigator.pop(context);
                               } else {
-                                setState(() {
-                                  _inProcess = false;
-                                });
+                                // setState(() {
+                                //   _inProcess = false;
+                                // });
+                                await pr.hide();
                                 Fluttertoast.showToast(
                                     msg:
                                         "Something went wrong! please try again.",

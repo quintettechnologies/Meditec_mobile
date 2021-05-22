@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
@@ -16,6 +18,7 @@ import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -30,6 +33,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenScreenState extends State<PaymentScreen> {
+  ProgressDialog pr;
   Appointment appointment = Appointment();
   bool forFNF = false;
   TextEditingController nameController;
@@ -52,6 +56,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     nameFocus = FocusNode();
     ageFocus = FocusNode();
     weightFocus = FocusNode();
+    initialize();
     super.initState();
   }
 
@@ -65,6 +70,30 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     ageFocus.dispose();
     weightFocus.dispose();
     super.dispose();
+  }
+
+  initialize() async {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+    pr.style(
+      message: 'Booking Appointment',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: SpinKitCircle(
+        color: Color(0xFF00BABA),
+        size: 50.0,
+      ),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 19.0,
+      ),
+    );
   }
 
   setAppointment(User user) {
@@ -295,10 +324,11 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                 child: Center(
                                                   child: RichText(
                                                     text: TextSpan(
-                                                        text: DateFormat.E()
-                                                            .format(widget
-                                                                .doctorSlot
-                                                                .startTime),
+                                                        text:
+                                                            intl.DateFormat.E()
+                                                                .format(widget
+                                                                    .doctorSlot
+                                                                    .startTime),
                                                         style: TextStyle(
                                                             fontSize: 16,
                                                             height: 1.5,
@@ -307,7 +337,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                         children: [
                                                           TextSpan(
                                                               text:
-                                                                  ' ${DateFormat.d().format(widget.doctorSlot.startTime)}',
+                                                                  ' ${intl.DateFormat.d().format(widget.doctorSlot.startTime)}',
                                                               style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -334,7 +364,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                     horizontal: 10),
                                                 child: Center(
                                                     child: Text(
-                                                  "${DateFormat.jm().format(widget.doctorSlot.startTime)}-${DateFormat.jm().format(widget.doctorSlot.endTime)}",
+                                                  "${intl.DateFormat.jm().format(widget.doctorSlot.startTime)}-${intl.DateFormat.jm().format(widget.doctorSlot.endTime)}",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -433,14 +463,14 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${DateFormat.yMd().format(widget.doctorSlot.startTime)}",
+                                            "${intl.DateFormat.yMd().format(widget.doctorSlot.startTime)}",
                                             style: TextStyle(fontSize: 14),
                                           ),
                                           SizedBox(
                                             height: space * 0.02,
                                           ),
                                           Text(
-                                            "${DateFormat.jm().format(widget.doctorSlot.startTime)} ",
+                                            "${intl.DateFormat.jm().format(widget.doctorSlot.startTime)} ",
                                             style: TextStyle(fontSize: 14),
                                           ),
                                           SizedBox(
@@ -854,6 +884,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () async {
+                                    await pr.show();
                                     setAppointment(user);
                                     bool valid = validate();
                                     if (valid) {
@@ -861,6 +892,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           .read(userProvider)
                                           .bookAppointmentPayLater(appointment);
                                       if (status == "success") {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "Appointment booked successfully!",
@@ -873,6 +905,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                         Navigator.pushNamed(
                                             context, AppointmentsScreen.id);
                                       } else if (status == "taken") {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "You have already booked an appointment at this time slot.",
@@ -883,6 +916,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       } else if (status == "overloaded") {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "Sorry this time slot is already full.",
@@ -893,6 +927,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       } else {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "Sorry, failed to book an appointment",
@@ -926,6 +961,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
+                                    await pr.show();
                                     setAppointment(user);
                                     bool valid = validate();
                                     if (valid) {
@@ -933,6 +969,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           .read(userProvider)
                                           .bookAppointment(appointment);
                                       if (status == "success") {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "Appointment booked successfully!",
@@ -945,6 +982,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                         Navigator.pushNamed(
                                             context, AppointmentsScreen.id);
                                       } else if (status == "taken") {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "You have already booked an appointment at this time slot.",
@@ -955,6 +993,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       } else if (status == "overloaded") {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "Sorry this time slot is already full.",
@@ -965,6 +1004,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       } else {
+                                        await pr.hide();
                                         Fluttertoast.showToast(
                                             msg:
                                                 "Sorry, failed to book an appointment",

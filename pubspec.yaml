@@ -59,6 +59,8 @@ dependencies:
   youtube_player_iframe: ^1.2.0+2
   flutter_inappwebview:
   flutter_launcher_icons: ^0.8.1
+  progress_dialog: ^1.2.4
+  flutter_spinkit: "^4.1.2"
 
 dev_dependencies:
   flutter_test:

@@ -170,7 +170,7 @@ class UserProvider extends ChangeNotifier {
       },
       body: jsonEncode(appointment.toJson()),
     );
-    // print(response.body);
+    print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
