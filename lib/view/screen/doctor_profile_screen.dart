@@ -276,9 +276,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               itemBuilder: (BuildContext ctx, index) {
                                 return FlatButton(
                                     padding: EdgeInsets.zero,
-                                    onPressed: (doctorSlots[index]
-                                                .appoinments
-                                                .isEmpty &&
+                                    onPressed: (!doctorSlots[index].booked &&
                                             doctorSlots[index]
                                                 .startTime
                                                 .isAfter(DateTime.now()))
@@ -297,9 +295,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                       height: space * 0.1,
                                       width: space * 0.36,
                                       decoration: BoxDecoration(
-                                          color: (doctorSlots[index]
-                                                      .appoinments
-                                                      .isNotEmpty ||
+                                          color: (doctorSlots[index].booked ||
                                                   doctorSlots[index]
                                                       .startTime
                                                       .isBefore(DateTime.now())
@@ -315,9 +311,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                         style: TextStyle(
                                           fontSize: space * 0.03,
                                           fontWeight: FontWeight.bold,
-                                          color: (doctorSlots[index]
-                                                      .appoinments
-                                                      .isNotEmpty ||
+                                          color: (doctorSlots[index].booked ||
                                                   doctorSlots[index]
                                                       .startTime
                                                       .isBefore(DateTime.now()))

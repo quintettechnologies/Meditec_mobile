@@ -25,7 +25,8 @@ DoctorSlot _$DoctorSlotFromJson(Map<String, dynamic> json) {
     ..appoinments = (json['appoinments'] as List)
         ?.map((e) =>
             e == null ? null : Appointment.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+        ?.toList()
+    ..booked = json['booked'] as bool;
 }
 
 Map<String, dynamic> _$DoctorSlotToJson(DoctorSlot instance) =>
@@ -40,5 +41,6 @@ Map<String, dynamic> _$DoctorSlotToJson(DoctorSlot instance) =>
       'chamber': instance.chamber,
       'dayName': instance.dayName,
       'weekToRepeat': instance.weekToRepeat,
-      'appoinments': instance.appoinments
+      'appoinments': instance.appoinments,
+      'booked': instance.booked
     };

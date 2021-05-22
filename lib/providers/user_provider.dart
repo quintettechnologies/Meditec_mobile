@@ -193,7 +193,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<String> deleteAppointment(Appointment appointment) async {
-    appointment.doctorSlot = null;
+    // appointment.doctorSlot = null;
     var uri = Uri.http('$url', '/deleteAppoinment');
     try {
       var response = await http.post(
@@ -226,31 +226,6 @@ class UserProvider extends ChangeNotifier {
     selectedSlot = doctorSlot;
   }
 
-  Future getDoctorSlots(String id) async {
-    var queryParameters = {
-      'id': '$id',
-    };
-    var uri = Uri.http('$url', '/getSlots', queryParameters);
-    var response = await http.get(
-      uri,
-      headers: {
-        HttpHeaders.authorizationHeader: authToken,
-        HttpHeaders.contentTypeHeader: 'application/json',
-      },
-    );
-
-    if (response.body != null && response.statusCode == 200) {
-      List<dynamic> slots = jsonDecode(response.body);
-      doctorSlots = (slots)
-          ?.map((e) =>
-              e == null ? null : DoctorSlot.fromJson(e as Map<String, dynamic>))
-          ?.toList();
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   Future getDoctorSlotsByDate(DateTime date, int chamberId) async {
     String year = date.year.toString();
     String month = date.month.toString();
@@ -267,7 +242,8 @@ class UserProvider extends ChangeNotifier {
       'date': '$formatDate',
       'chamberId': '$chamberId',
     };
-    var uri = Uri.http('$url', '/slotsByDate', queryParameters);
+    // var uri = Uri.http('$url', '/slotsByDate', queryParameters);
+    var uri = Uri.http('$url', '/doctorSlotsByDate', queryParameters);
     var response = await http.get(
       uri,
       headers: {

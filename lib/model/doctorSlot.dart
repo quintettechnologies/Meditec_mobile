@@ -19,6 +19,7 @@ class DoctorSlot {
   String dayName;
   num weekToRepeat;
   List<Appointment> appoinments;
+  bool booked;
 
   factory DoctorSlot.fromJson(Map<String, dynamic> json) =>
       _$DoctorSlotFromJson(json);
