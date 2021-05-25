@@ -156,40 +156,107 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           setState(() {
                             _inProcess = true;
                           });
-                          User user = new User();
-                          user.name = nameController.text;
-                          user.email = emailController.text;
-                          user.mobileNumber = mobileNumberController.text;
-                          user.password = passwordController.text;
-                          bool signUp =
-                              await context.read(userProvider).signUp(user);
-                          if (signUp) {
+
+                          if (nameController.text.isEmpty) {
                             setState(() {
                               _inProcess = false;
                             });
                             Fluttertoast.showToast(
-                                msg: "Successfully Signed Up",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.green,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                            Navigator.pushNamed(context, Dashboard.id);
-                            Navigator.pushNamed(context, ProfileScreen.id);
-                            Navigator.pushNamed(context, EditProfileScreen.id);
-                          } else {
-                            setState(() {
-                              _inProcess = false;
-                            });
-                            Fluttertoast.showToast(
-                                msg: "Signup Failed",
+                                msg: "Please enter your name...",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.BOTTOM,
                                 timeInSecForIosWeb: 1,
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
+                          } else if (emailController.text.isEmpty) {
+                            setState(() {
+                              _inProcess = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg: "Please enter your email...",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else if (mobileNumberController.text.isEmpty) {
+                            setState(() {
+                              _inProcess = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg: "Please enter your mobile number...",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else if (mobileNumberController.text.length < 9) {
+                            setState(() {
+                              _inProcess = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Mobile number cannot be less than 9 digits...",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else if (passwordController.text.isEmpty ||
+                              passwordController.text.length < 6) {
+                            setState(() {
+                              _inProcess = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Please enter a password at least 6 digits...",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else {
+                            User user = new User();
+                            user.name = nameController.text;
+                            user.email = emailController.text;
+                            user.mobileNumber = mobileNumberController.text;
+                            user.password = passwordController.text;
+                            bool signUp =
+                                await context.read(userProvider).signUp(user);
+                            if (signUp) {
+                              setState(() {
+                                _inProcess = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: "Successfully Signed Up",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              Navigator.pushNamed(context, Dashboard.id);
+                              Navigator.pushNamed(context, ProfileScreen.id);
+                              Navigator.pushNamed(
+                                  context, EditProfileScreen.id);
+                            } else {
+                              setState(() {
+                                _inProcess = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: "Signup failed! Please try again...",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            }
                           }
                         },
                         child: Container(

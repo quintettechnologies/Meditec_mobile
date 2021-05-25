@@ -21,7 +21,6 @@ import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../constants.dart';
-import '../constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class SampleListScreen extends StatefulWidget {

@@ -13,18 +13,18 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..email = json['email'] as String
     ..password = json['password'] as String
     ..mobileNumber = json['mobileNumber'] as String
-    ..createDate = json['createDate'] as String
-    ..modifiedDate = json['modifiedDate'] as String
-    ..reminderQueryQuestion = json['reminderQueryQuestion'] as String
-    ..facebookId = json['facebookId'] as String
-    ..gmailId = json['gmailId'] as String
-    ..twitterId = json['twitterId'] as String
-    ..loginDate = json['loginDate'] as String
-    ..loginIp = json['loginIp'] as String
-    ..lastLoginDate = json['lastLoginDate'] as String
-    ..lastLoginIp = json['lastLoginIp'] as String
-    ..lastFailedLoginDate = json['lastFailedLoginDate'] as String
-    ..adminNumber = json['adminNumber'] as String
+    // ..createDate = json['createDate'] as String
+    // ..modifiedDate = json['modifiedDate'] as String
+    // ..reminderQueryQuestion = json['reminderQueryQuestion'] as String
+    // ..facebookId = json['facebookId'] as String
+    // ..gmailId = json['gmailId'] as String
+    // ..twitterId = json['twitterId'] as String
+    // ..loginDate = json['loginDate'] as String
+    // ..loginIp = json['loginIp'] as String
+    // ..lastLoginDate = json['lastLoginDate'] as String
+    // ..lastLoginIp = json['lastLoginIp'] as String
+    // ..lastFailedLoginDate = json['lastFailedLoginDate'] as String
+    // ..adminNumber = json['adminNumber'] as String
     ..gender = json['gender'] as String
     ..weight = json['weight'] as num
     ..age = json['age'] as num
@@ -33,10 +33,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..doctorFee = json['doctorFee'] as num
     ..doctorSecondTimeFee = json['doctorSecondTimeFee'] as num
     ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as String
-    ..failedLoginAttempts = json['failedLoginAttempts'] as num
-    ..aggreedToTermOfUse = json['aggreedToTermOfUse'] as bool
-    ..emailVerified = json['emailVerified'] as bool
-    ..account = json['account'] as List
+    // ..failedLoginAttempts = json['failedLoginAttempts'] as num
+    // ..aggreedToTermOfUse = json['aggreedToTermOfUse'] as bool
+    // ..emailVerified = json['emailVerified'] as bool
+    // ..account = json['account'] as List
     ..roles = json['roles'] == null
         ? null
         : Role.fromJson(json['roles'] as Map<String, dynamic>)
@@ -68,18 +68,18 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
       'mobileNumber': instance.mobileNumber,
-      'createDate': instance.createDate,
-      'modifiedDate': instance.modifiedDate,
-      'reminderQueryQuestion': instance.reminderQueryQuestion,
-      'facebookId': instance.facebookId,
-      'gmailId': instance.gmailId,
-      'twitterId': instance.twitterId,
-      'loginDate': instance.loginDate,
-      'loginIp': instance.loginIp,
-      'lastLoginDate': instance.lastLoginDate,
-      'lastLoginIp': instance.lastLoginIp,
-      'lastFailedLoginDate': instance.lastFailedLoginDate,
-      'adminNumber': instance.adminNumber,
+      // 'createDate': instance.createDate,
+      // 'modifiedDate': instance.modifiedDate,
+      // 'reminderQueryQuestion': instance.reminderQueryQuestion,
+      // 'facebookId': instance.facebookId,
+      // 'gmailId': instance.gmailId,
+      // 'twitterId': instance.twitterId,
+      // 'loginDate': instance.loginDate,
+      // 'loginIp': instance.loginIp,
+      // 'lastLoginDate': instance.lastLoginDate,
+      // 'lastLoginIp': instance.lastLoginIp,
+      // 'lastFailedLoginDate': instance.lastFailedLoginDate,
+      // 'adminNumber': instance.adminNumber,
       'gender': instance.gender,
       'weight': instance.weight,
       'age': instance.age,
@@ -88,10 +88,10 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'doctorFee': instance.doctorFee,
       'doctorSecondTimeFee': instance.doctorSecondTimeFee,
       'doctorRegistrationNumber': instance.doctorRegistrationNumber,
-      'failedLoginAttempts': instance.failedLoginAttempts,
-      'aggreedToTermOfUse': instance.aggreedToTermOfUse,
-      'emailVerified': instance.emailVerified,
-      'account': instance.account,
+      // 'failedLoginAttempts': instance.failedLoginAttempts,
+      // 'aggreedToTermOfUse': instance.aggreedToTermOfUse,
+      // 'emailVerified': instance.emailVerified,
+      // 'account': instance.account,
       'roles': instance.roles,
       'userAvatar': instance.userAvatar,
       'addressBooks': instance.addressBooks,

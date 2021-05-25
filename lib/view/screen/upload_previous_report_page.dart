@@ -16,8 +16,7 @@ import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'dart:io';
 import 'package:meditec/model/user.dart';
-
-import '../constants.dart';
+import 'package:meditec/constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class UploadPreviousReportScreen extends StatefulWidget {
@@ -85,7 +84,7 @@ class _UploadPreviousReportScreenState
           compressFormat: ImageCompressFormat.jpg,
           androidUiSettings: AndroidUiSettings(
             toolbarColor: Color(0xFF00BABA),
-            toolbarTitle: "Meditec",
+            toolbarTitle: "Cicil",
             statusBarColor: Color(0xFF00BABA),
             backgroundColor: Colors.white,
           ));

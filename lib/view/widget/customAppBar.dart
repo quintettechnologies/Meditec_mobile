@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/view/screen/notificationScreen.dart';
 
 class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDashboard;
@@ -109,7 +111,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               )),
                       FlatButton(
                           onPressed: () {
-                            //Navigator.pushNamed(context, NotificationScreen.id);
+                            Navigator.pushNamed(context, NotificationScreen.id);
                           },
                           child: Container(
                             height: 40,
@@ -126,13 +128,16 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 Center(
-                  child: Text(
-                    "cicil",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        color: Color(0xFF00CACA)),
-                    textAlign: TextAlign.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      "cicil",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Color(0xFF00CACA)),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 )
               ],
@@ -160,11 +165,12 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             )),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(vertical: 6),
                             child: TextField(
                               controller: searchController,
                               onChanged: onChangedCallback,
                               focusNode: searchFocus,
+                              textAlignVertical: TextAlignVertical.center,
                               style: TextStyle(
                                   fontSize: 16, color: Color(0xFF777A95)),
                               decoration: InputDecoration(

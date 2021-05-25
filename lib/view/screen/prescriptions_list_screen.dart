@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
@@ -17,8 +18,7 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../constants.dart';
+import 'package:meditec/constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class PrescriptionListScreen extends StatefulWidget {
@@ -47,9 +47,14 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
   }
 
   fetchAppointments() async {
+    setState(() {
+      loading = true;
+    });
     await context.read(userProvider).getAppointments().then((value) {
       appointments = context.read(userProvider).appointments;
-      setState(() {});
+      setState(() {
+        loading = false;
+      });
     });
   }
 
@@ -60,6 +65,28 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
       }
     }
     setState(() {});
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
   }
 
   @override
@@ -193,8 +220,13 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              appointment.doctorSlot.chamber
-                                                  .user.categories[0].name,
+                                              buildCategories(appointment
+                                                  .doctorSlot
+                                                  .chamber
+                                                  .user
+                                                  .categories),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(fontSize: 12),
                                             ),
                                             Text(
@@ -253,7 +285,10 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
                         width: space,
                         color: Colors.white,
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: SpinKitCircle(
+                            color: Color(0xFF00BABA),
+                            size: 50,
+                          ),
                         ),
                       )
                     : Container()

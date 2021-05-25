@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/model/category.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -42,7 +43,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
-      isDismissible: true,
+      isDismissible: false,
     );
     pr.style(
       message: 'Making Payment',
@@ -59,6 +60,28 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
         fontSize: 19.0,
       ),
     );
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
   }
 
   @override
@@ -119,13 +142,10 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            widget
-                                                .appointment
-                                                .doctorSlot
-                                                .chamber
-                                                .user
-                                                .categories[0]
-                                                .name,
+                                            buildCategories(
+                                              widget.appointment.doctorSlot
+                                                  .chamber.user.categories,
+                                            ),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: Color(0xFF00BABA),

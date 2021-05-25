@@ -17,9 +17,8 @@ import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/model/category.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import '../constants.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-
+import 'package:meditec/constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 import 'chat_page.dart';
 
@@ -47,7 +46,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
-      isDismissible: true,
+      isDismissible: false,
     );
     pr.style(
       message: 'Searching Doctors',
@@ -88,6 +87,28 @@ class _DoctorScreenState extends State<DoctorScreen> {
       emergencyDoctors = context.read(userProvider).emergencyDoctors;
       setState(() {});
     });
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
   }
 
   @override
@@ -282,17 +303,23 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () async {
+                                    pr.update(
+                                        message:
+                                            "Searching ${categories[index].name}");
+                                    await pr.show();
                                     bool list = await context
                                         .read(userProvider)
                                         .getCategoryDoctorList(
                                             categories[index].id);
                                     if (list) {
+                                      await pr.hide();
                                       context
                                           .read(userProvider)
                                           .selectedCategory = categories[index];
                                       Navigator.pushNamed(
                                           context, CategoryDoctorScreen.id);
                                     } else {
+                                      await pr.hide();
                                       Fluttertoast.showToast(
                                           msg: "Sorry, no doctor found!",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -517,13 +544,16 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                                               .bold),
                                                                 ),
                                                                 Text(
-                                                                  (doctor.categories
-                                                                          .isNotEmpty)
-                                                                      ? doctor
-                                                                          .categories[
-                                                                              0]
-                                                                          .name
-                                                                      : "",
+                                                                  // (doctor.categories
+                                                                  //         .isNotEmpty)
+                                                                  //     ? doctor
+                                                                  //         .categories[
+                                                                  //             0]
+                                                                  //         .name
+                                                                  //     : "",
+                                                                  buildCategories(
+                                                                      doctor
+                                                                          .categories),
                                                                   maxLines: 1,
                                                                   overflow:
                                                                       TextOverflow

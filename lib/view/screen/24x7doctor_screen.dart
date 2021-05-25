@@ -14,7 +14,7 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/model/category.dart';
-import '../constants.dart';
+import 'package:meditec/constants.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import 'callscreens/pickup/pickup_layout.dart';

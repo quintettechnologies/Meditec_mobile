@@ -18,8 +18,7 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../constants.dart';
+import 'package:meditec/constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class AppointmentSampleListScreen extends StatefulWidget {
@@ -62,6 +61,28 @@ class _AppointmentSampleListScreenState
       }
     }
     setState(() {});
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
   }
 
   @override
@@ -165,8 +186,10 @@ class _AppointmentSampleListScreenState
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          appointment.doctorSlot.chamber.user
-                                              .categories[0].name,
+                                          buildCategories(appointment.doctorSlot
+                                              .chamber.user.categories),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(

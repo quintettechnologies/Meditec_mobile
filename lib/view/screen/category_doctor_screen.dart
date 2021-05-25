@@ -13,8 +13,8 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/model/category.dart';
-import '../constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
+import 'package:meditec/constants.dart';
 
 class CategoryDoctorScreen extends StatefulWidget {
   static const String id = 'category_doctor_screen';
@@ -28,6 +28,28 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
     final double space = MediaQuery.of(context).size.width;
     List<User> doctors = context.read(userProvider).categoryDoctors;
     Category selectedCategory = context.read(userProvider).selectedCategory;
+
+    String buildCategories(List<Category> categories) {
+      String category = "";
+      if (categories.length == 1) {
+        category = categories[0].name;
+        return category;
+      } else if (categories.length > 1) {
+        // for (Category cat in categories) {
+        //   category = category + cat.name + " ";
+        // }
+        for (int i = 0; i < categories.length; i++) {
+          if (i == categories.length - 1) {
+            category = category + categories[i].name;
+          } else {
+            category = category + categories[i].name + ", ";
+          }
+        }
+        return category;
+      } else {
+        return category;
+      }
+    }
 
     return PickupLayout(
       scaffold: Scaffold(
@@ -125,13 +147,27 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
+                                            buildCategories(doctor.categories),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
                                             doctor.degree.degreeName,
-                                            maxLines: 2,
+                                            maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(fontSize: 12),
                                           ),
                                           Text(
-                                            doctor.categories[0].name,
+                                            doctor.hospitalName,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          Text(
+                                            "${"Fee " + doctor.doctorFee.toString() ?? ""}",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(fontSize: 12),

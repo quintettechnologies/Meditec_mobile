@@ -39,13 +39,13 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
       File cropped = await ImageCropper.cropImage(
           sourcePath: image.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-          compressQuality: 100,
-          maxWidth: 700,
-          maxHeight: 700,
+          compressQuality: 40,
+          maxWidth: 400,
+          maxHeight: 400,
           compressFormat: ImageCompressFormat.jpg,
           androidUiSettings: AndroidUiSettings(
             toolbarColor: Color(0xFF00BABA),
-            toolbarTitle: "Meditec",
+            toolbarTitle: "Cicil",
             statusBarColor: Color(0xFF00BABA),
             backgroundColor: Colors.white,
           ));
@@ -184,7 +184,7 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
                           setState(() {
                             _inProcess = false;
                           });
-                          Navigator.pop(context, true);
+                          Navigator.popAndPushNamed(context, Dashboard.id);
                         } else {
                           Fluttertoast.showToast(
                               msg: "Something went wrong! please try again.",

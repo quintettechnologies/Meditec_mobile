@@ -10,6 +10,7 @@ import 'package:meditec/model/index.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
+import 'package:meditec/model/userNotification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -26,6 +27,7 @@ class UserProvider extends ChangeNotifier {
   List<Category> categories = [];
   Category selectedCategory;
   List<User> doctors = [];
+  List<UserNotification> notifications = [];
   List<AdvertisementCategory> advertisementCategories = [];
   List<Advertisement> advertisements = [];
   List<User> emergencyDoctors = [];
@@ -48,6 +50,32 @@ class UserProvider extends ChangeNotifier {
 
   User currentUser() {
     return _user;
+  }
+
+  Future getNotifications() async {
+    var queryParameters = {
+      'userId': '${_user.userId}',
+    };
+    var uri = Uri.http('$url', '/getNotifications', queryParameters);
+    var response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+    // print(response.body);
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> newNotifications = jsonDecode(response.body);
+      notifications = (newNotifications)
+          ?.map((e) => e == null
+              ? null
+              : UserNotification.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<List<User>> globalSearch(String query) async {
@@ -208,6 +236,7 @@ class UserProvider extends ChangeNotifier {
       if (response.body != null &&
           response.statusCode == 200 &&
           response.body == "archived") {
+        await getAppointments();
         return "success";
       } else if (response.body != null &&
           response.statusCode == 200 &&
@@ -303,6 +332,7 @@ class UserProvider extends ChangeNotifier {
     // print(res.statusCode);
     // print(res);
     if (res != null && res.statusCode == 200) {
+      await getAppointments();
       return true;
     } else {
       return false;
@@ -362,7 +392,7 @@ class UserProvider extends ChangeNotifier {
     // print(res.statusCode);
     // print(res);
     if (res != null && res.statusCode == 200) {
-      await _getUser();
+      await getAppointments();
       notifyListeners();
       return true;
     } else {
@@ -550,11 +580,18 @@ class UserProvider extends ChangeNotifier {
       HttpHeaders.authorizationHeader: authToken,
     });
     // print(response.body);
-    List<dynamic> updatedAppointments = jsonDecode(response.body);
-    appointments = (updatedAppointments)
-        ?.map((e) =>
-            e == null ? null : Appointment.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+    if (response.body != null && response.statusCode == 200) {
+      List<dynamic> updatedAppointments = jsonDecode(response.body);
+      appointments.clear();
+      appointments = (updatedAppointments)
+          ?.map((e) => e == null
+              ? null
+              : Appointment.fromJson(e as Map<String, dynamic>))
+          ?.toList();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future getCategories() async {

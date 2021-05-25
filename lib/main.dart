@@ -12,6 +12,7 @@ import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
 import 'package:meditec/view/screen/home_screen.dart';
 import 'package:meditec/view/screen/login_screen.dart';
+import 'package:meditec/view/screen/notificationScreen.dart';
 import 'package:meditec/view/screen/prescriptions_list_screen.dart';
 import 'package:meditec/view/screen/profile_screen.dart';
 import 'package:meditec/view/screen/signup_screen.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.id: (context) => SignUpScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         DoctorScreen.id: (context) => DoctorScreen(),
+        NotificationScreen.id: (context) => NotificationScreen(),
         CategoryDoctorScreen.id: (context) => CategoryDoctorScreen(),
         Dashboard.id: (context) => Dashboard(),
         EditProfileScreen.id: (context) => EditProfileScreen(),

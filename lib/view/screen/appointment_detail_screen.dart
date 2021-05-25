@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/model/category.dart';
 import 'package:meditec/model/message.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/resources/firebase_api.dart';
@@ -36,6 +37,28 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
   }
 
   @override
@@ -91,8 +114,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      widget.appointment.doctorSlot.chamber.user
-                                          .categories[0].name,
+                                      buildCategories(widget.appointment
+                                          .doctorSlot.chamber.user.categories),
                                       style: TextStyle(
                                         color: Color(0xFF00BABA),
                                         fontWeight: FontWeight.bold,

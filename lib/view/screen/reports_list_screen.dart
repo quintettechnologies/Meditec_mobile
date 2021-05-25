@@ -17,8 +17,8 @@ import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
+import 'package:meditec/constants.dart';
 
 class ReportsListScreen extends StatefulWidget {
   final Appointment appointment;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:meditec/model/advertisement.dart';
 import 'package:meditec/model/advertisementCategory.dart';
+import 'package:meditec/model/category.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
@@ -15,9 +16,8 @@ import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-
+import 'package:meditec/constants.dart';
 import '../../debouncer.dart';
-import '../constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 import 'doctor_profile_screen.dart';
 
@@ -142,6 +142,28 @@ class _DashboardState extends State<Dashboard> {
       for (Advertisement advertisement in advertisements) {
         advertisementsDisplay.add(advertisement);
       }
+    }
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
     }
   }
 
@@ -503,10 +525,8 @@ class _DashboardState extends State<Dashboard> {
                                                             FontWeight.bold),
                                                   ),
                                                   Text(
-                                                    doctors[0]
-                                                            .categories[0]
-                                                            .name ??
-                                                        "",
+                                                    buildCategories(
+                                                        doctors[0].categories),
                                                     maxLines: 1,
                                                     style: TextStyle(
                                                       color: Colors.white,
@@ -520,10 +540,13 @@ class _DashboardState extends State<Dashboard> {
                                                       scrollDirection:
                                                           Axis.horizontal,
                                                       child: Text(
-                                                        doctors[0]
-                                                                .degree
-                                                                .degreeName ??
-                                                            "",
+                                                        (doctors[0].degree !=
+                                                                null)
+                                                            ? doctors[0]
+                                                                    .degree
+                                                                    .degreeName ??
+                                                                ""
+                                                            : "",
                                                         maxLines: 1,
                                                         style: TextStyle(
                                                           color: Colors.white,

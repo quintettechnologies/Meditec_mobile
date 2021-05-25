@@ -22,6 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController numberController;
   TextEditingController passwordController;
   bool _inProcess = false;
+  bool _numberValidator = false;
+  bool _passWordValidator = false;
 
   @override
   void initState() {
@@ -38,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Color(0xFF00BABA),
       resizeToAvoidBottomInset: true,
-      // backgroundColor: Colors.white,
       body: Stack(
         children: [
           SafeArea(
@@ -102,12 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Container(
                                     child: TextFormField(
                                       controller: numberController,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Number is Empty';
-                                        }
-                                        return null;
-                                      },
                                       style: TextStyle(
                                         fontSize: 16,
                                         height: 0.8,
@@ -119,6 +114,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         filled: true,
                                         fillColor: Colors.white,
                                         hintText: 'Enter Number',
+                                        errorText: _numberValidator
+                                            ? 'Number Can\'t Be Empty'
+                                            : null,
+                                        errorStyle: TextStyle(fontSize: 16),
                                         hintStyle: TextStyle(fontSize: 16),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -151,12 +150,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Container(
                                     child: TextFormField(
                                       controller: passwordController,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Password is Empty';
-                                        }
-                                        return null;
-                                      },
                                       style: TextStyle(
                                         fontSize: 16,
                                         height: 0.8,
@@ -169,7 +162,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         filled: true,
                                         fillColor: Colors.white,
                                         hintText: 'Enter Password',
+                                        errorText: _passWordValidator
+                                            ? 'Password Can\'t Be Empty'
+                                            : null,
                                         hintStyle: TextStyle(fontSize: 16),
+                                        errorStyle: TextStyle(fontSize: 16),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(6),
@@ -189,40 +186,51 @@ class _LoginScreenState extends State<LoginScreen> {
                                   builder: (context, watch, child) {
                                     return GestureDetector(
                                       onTap: () async {
-                                        setState(() {
-                                          _inProcess = true;
-                                        });
-                                        // print('Tapped Login');
-                                        bool loginStatus = await context
-                                            .read(userProvider)
-                                            .login(numberController.text,
-                                                passwordController.text);
-                                        if (loginStatus) {
+                                        numberController.text.isEmpty
+                                            ? _numberValidator = true
+                                            : _numberValidator = false;
+                                        passwordController.text.isEmpty
+                                            ? _passWordValidator = true
+                                            : _passWordValidator = false;
+                                        if (!_numberValidator &&
+                                            !_passWordValidator) {
                                           setState(() {
-                                            _inProcess = false;
+                                            _inProcess = true;
                                           });
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully signed in",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 1,
-                                              backgroundColor: Colors.green,
-                                              textColor: Colors.white,
-                                              fontSize: 16.0);
-                                          Navigator.pushNamed(
-                                              context, Dashboard.id);
+                                          // print('Tapped Login');
+                                          bool loginStatus = await context
+                                              .read(userProvider)
+                                              .login(numberController.text,
+                                                  passwordController.text);
+                                          if (loginStatus) {
+                                            setState(() {
+                                              _inProcess = false;
+                                            });
+                                            Fluttertoast.showToast(
+                                                msg: "Login Successful",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.green,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                            Navigator.pushNamed(
+                                                context, Dashboard.id);
+                                          } else {
+                                            setState(() {
+                                              _inProcess = false;
+                                            });
+                                            Fluttertoast.showToast(
+                                                msg: "Login Failed",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                          }
                                         } else {
-                                          setState(() {
-                                            _inProcess = false;
-                                          });
-                                          Fluttertoast.showToast(
-                                              msg: "Sign in Failed",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 1,
-                                              backgroundColor: Colors.red,
-                                              textColor: Colors.white,
-                                              fontSize: 16.0);
+                                          setState(() {});
                                         }
                                       },
                                       child: Container(

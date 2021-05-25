@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/model/category.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
@@ -77,7 +78,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
-      isDismissible: true,
+      isDismissible: false,
     );
     pr.style(
       message: 'Booking Appointment',
@@ -212,6 +213,28 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     }
   }
 
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
@@ -265,7 +288,8 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        widget.doctor.categories[0].name,
+                                        buildCategories(
+                                            widget.doctor.categories),
                                         style: TextStyle(
                                           color: Color(0xFF00BABA),
                                           fontWeight: FontWeight.bold,

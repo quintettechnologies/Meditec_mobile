@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:meditec/view/constants.dart';
+import 'package:meditec/constants.dart';
 
 class CatagoryButtonDashBoard extends StatelessWidget {
   CatagoryButtonDashBoard({this.category, this.color, this.onTap});

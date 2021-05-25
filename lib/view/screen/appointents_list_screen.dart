@@ -1,9 +1,12 @@
 import 'dart:convert';
-
+import 'package:meditec/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:meditec/model/appointment.dart';
+import 'package:meditec/model/category.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/appointment_detail_screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
@@ -15,8 +18,8 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customDrawer.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
-import '../constants.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 import 'confirm_payment_screen.dart';
 
@@ -27,6 +30,7 @@ class AppointmentsScreen extends StatefulWidget {
 }
 
 class _AppointmentsScreenState extends State<AppointmentsScreen> {
+  ProgressDialog pr;
   List<Appointment> appointments = [];
   @override
   void initState() {
@@ -36,6 +40,27 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   }
 
   loadAppointments() async {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+    pr.style(
+      message: 'Loading your appointments',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: SpinKitCircle(
+        color: Color(0xFF00BABA),
+        size: 50.0,
+      ),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 19.0,
+      ),
+    );
     appointments = context.read(userProvider).appointments;
     if (appointments.isEmpty) {
       await fetchAppointments();
@@ -43,10 +68,34 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   }
 
   fetchAppointments() async {
+    await pr.show();
     await context.read(userProvider).getAppointments().then((value) {
       appointments = context.read(userProvider).appointments;
       setState(() {});
     });
+    await pr.hide();
+  }
+
+  String buildCategories(List<Category> categories) {
+    String category = "";
+    if (categories.length == 1) {
+      category = categories[0].name;
+      return category;
+    } else if (categories.length > 1) {
+      // for (Category cat in categories) {
+      //   category = category + cat.name + " ";
+      // }
+      for (int i = 0; i < categories.length; i++) {
+        if (i == categories.length - 1) {
+          category = category + categories[i].name;
+        } else {
+          category = category + categories[i].name + ", ";
+        }
+      }
+      return category;
+    } else {
+      return category;
+    }
   }
 
   @override
@@ -377,12 +426,15 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                     .bold),
                                                       ),
                                                       Text(
-                                                        appointment
-                                                            .doctorSlot
-                                                            .chamber
-                                                            .user
-                                                            .categories[0]
-                                                            .name,
+                                                        buildCategories(
+                                                            appointment
+                                                                .doctorSlot
+                                                                .chamber
+                                                                .user
+                                                                .categories),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                       ),
@@ -415,13 +467,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        "Date: ${DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
+                                                        "Date: ${intl.DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                         ),
                                                       ),
                                                       Text(
-                                                        "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
+                                                        "Start: ${intl.DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                         ),
@@ -577,12 +629,16 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                           .bold),
                                                             ),
                                                             Text(
-                                                              appointment
-                                                                  .doctorSlot
-                                                                  .chamber
-                                                                  .user
-                                                                  .categories[0]
-                                                                  .name,
+                                                              buildCategories(
+                                                                  appointment
+                                                                      .doctorSlot
+                                                                      .chamber
+                                                                      .user
+                                                                      .categories),
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
                                                               style: TextStyle(
                                                                   fontSize: 12),
                                                             ),
@@ -619,13 +675,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                   .start,
                                                           children: [
                                                             Text(
-                                                              "Date: ${DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
+                                                              "Date: ${intl.DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
                                                               style: TextStyle(
                                                                 fontSize: 14,
                                                               ),
                                                             ),
                                                             Text(
-                                                              "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
+                                                              "Start: ${intl.DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
                                                               style: TextStyle(
                                                                 fontSize: 14,
                                                               ),
@@ -775,12 +831,16 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                           .bold),
                                                             ),
                                                             Text(
-                                                              appointment
-                                                                  .doctorSlot
-                                                                  .chamber
-                                                                  .user
-                                                                  .categories[0]
-                                                                  .name,
+                                                              buildCategories(
+                                                                  appointment
+                                                                      .doctorSlot
+                                                                      .chamber
+                                                                      .user
+                                                                      .categories),
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
                                                               style: TextStyle(
                                                                   fontSize: 12),
                                                             ),
@@ -817,13 +877,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                                                                   .start,
                                                           children: [
                                                             Text(
-                                                              "Date: ${DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
+                                                              "Date: ${intl.DateFormat.yMEd().format(appointment.doctorSlot.startTime)}",
                                                               style: TextStyle(
                                                                 fontSize: 14,
                                                               ),
                                                             ),
                                                             Text(
-                                                              "Start: ${DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
+                                                              "Start: ${intl.DateFormat.jm().format(appointment.doctorSlot.startTime)} ",
                                                               style: TextStyle(
                                                                 fontSize: 14,
                                                               ),
@@ -884,8 +944,18 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
         //         child: Text("Doctors")),
         //   ),
         // ),
-        floatingActionButton: MyCustomFAB(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            await fetchAppointments();
+          },
+          child: Center(
+            child: Icon(
+              CupertinoIcons.arrow_2_circlepath_circle_fill,
+              size: 50,
+            ),
+          ),
+        ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: MyCustomNavBar(),
       ),
     );

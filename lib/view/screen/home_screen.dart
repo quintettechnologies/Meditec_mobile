@@ -6,8 +6,7 @@ import 'package:meditec/view/screen/login_screen.dart';
 import 'package:meditec/view/screen/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../constants.dart';
+import 'package:meditec/constants.dart';
 import '../home_background.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -107,7 +107,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
-      isDismissible: true,
+      isDismissible: false,
     );
     pr.style(
       message: 'Updating your profile info',
