@@ -149,11 +149,18 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                 style: TextStyle(
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
+
                               Text(
-                                buildCategories(widget.doctor.categories),
+                                widget.doctor.speciality.speciality,
                                 style: TextStyle(
                                   color: Color(0xFF00BABA),
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                buildCategories(widget.doctor.categories),
+                                style: TextStyle(
                                   fontSize: 16,
                                 ),
                               ),

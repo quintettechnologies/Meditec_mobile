@@ -166,27 +166,31 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 6),
-                            child: TextField(
-                              controller: searchController,
-                              onChanged: onChangedCallback,
-                              focusNode: searchFocus,
-                              textAlignVertical: TextAlignVertical.center,
-                              style: TextStyle(
-                                  fontSize: 16, color: Color(0xFF777A95)),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.search_outlined),
-                                suffixIcon: Icon(Icons.menu),
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: 'Doctor,Hospitals and more...',
-                                hintStyle: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFF777A95),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFA8A8A8),
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: TextField(
+                                autofocus: false,
+                                controller: searchController,
+                                onChanged: onChangedCallback,
+                                focusNode: searchFocus,
+                                textAlignVertical: TextAlignVertical.center,
+                                style: TextStyle(
+                                    fontSize: 16, color: Color(0xFF777A95)),
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.search_outlined),
+                                  suffixIcon: Icon(Icons.menu),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  hintText: 'Doctor,Hospitals and more...',
+                                  hintStyle: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFF777A95),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFA8A8A8),
+                                    ),
                                   ),
                                 ),
                               ),

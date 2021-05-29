@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _inProcess = false;
   bool _numberValidator = false;
   bool _passWordValidator = false;
+  bool hidePass = true;
 
   @override
   void initState() {
@@ -35,8 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double space = MediaQuery.of(context).size.width;
-    final double vSpace = MediaQuery.of(context).size.height;
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xFF00BABA),
       resizeToAvoidBottomInset: true,
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    height: vSpace * 0.3,
+                    height: size.height * 0.3,
                     color: Color(0xFF00BABA),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           tag: 'logo',
                           child: SvgPicture.asset(
                             'assets/images/meditec_logo.svg',
-                            height: space * 0.4,
+                            height: size.height * 0.4,
                             color: Colors.white,
                           ),
                         ),
@@ -69,17 +69,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   Container(
+                    height: size.height * 0.7,
                     color: Colors.white,
                     child: Column(
                       children: [
                         SizedBox(
-                          height: vSpace * 0.02,
+                          height: size.height * 0.02,
                         ),
                         Container(
-                          // width: space * 0.7,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: space * 0.15),
-                          height: vSpace * 0.67,
+                          height: size.height * 0.67,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.width * 0.15),
                           child: Column(
                             children: [
                               Column(
@@ -101,6 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Container(
+                                    height: size.height * 0.07,
+                                    alignment: Alignment.center,
                                     child: TextFormField(
                                       controller: numberController,
                                       style: TextStyle(
@@ -148,6 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Container(
+                                    height: size.height * 0.07,
+                                    alignment: Alignment.center,
                                     child: TextFormField(
                                       controller: passwordController,
                                       style: TextStyle(
@@ -155,10 +159,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                         height: 0.8,
                                         color: Colors.black,
                                       ),
-                                      obscureText: true,
+                                      obscureText: hidePass,
                                       keyboardType:
                                           TextInputType.visiblePassword,
                                       decoration: InputDecoration(
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              hidePass = !hidePass;
+                                            });
+                                          },
+                                          icon: Icon(hidePass
+                                              ? Icons.visibility
+                                              : Icons.visibility_off),
+                                        ),
                                         filled: true,
                                         fillColor: Colors.white,
                                         hintText: 'Enter Password',

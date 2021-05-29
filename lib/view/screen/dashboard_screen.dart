@@ -1,12 +1,17 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:meditec/model/advertisement.dart';
 import 'package:meditec/model/advertisementCategory.dart';
 import 'package:meditec/model/category.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:meditec/utils/notification_helper.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
 import 'package:meditec/view/widget/catagoryButton.dart';
 import 'package:meditec/view/widget/catagoryButtonDashboard.dart';
@@ -20,6 +25,7 @@ import 'package:meditec/constants.dart';
 import '../../debouncer.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 import 'doctor_profile_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Dashboard extends StatefulWidget {
   static const String id = 'dashboard';
@@ -55,6 +61,12 @@ class _DashboardState extends State<Dashboard> {
     // TODO: implement initState
     searchController = TextEditingController();
     searchFocus = FocusNode();
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      if (!visible) {
+        searchFocus.unfocus();
+      }
+    });
     initialize();
     super.initState();
   }
@@ -176,6 +188,11 @@ class _DashboardState extends State<Dashboard> {
     // advertisements = context.read(userProvider).advertisements;
     return WillPopScope(
       onWillPop: () async {
+        // if (searchFocus.hasFocus) {
+        //   setState(() {
+        //     searchFocus.unfocus();
+        //   });
+        // }
         return false;
       },
       key: Key("dashboard"),
@@ -518,6 +535,7 @@ class _DashboardState extends State<Dashboard> {
                                                 children: [
                                                   Text(
                                                     doctors[0].name,
+                                                    maxLines: 1,
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: space * 0.043,
@@ -710,143 +728,148 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                             ),
                                             SingleChildScrollView(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    doctors[1].name,
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: space * 0.043,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  Text(
-                                                    (doctors[1]
-                                                            .categories
-                                                            .isNotEmpty)
-                                                        ? doctors[1]
-                                                            .categories[0]
-                                                            .name
-                                                        : "",
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: space * 0.035,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: space * 0.35,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Text(
-                                                        (doctors[1].degree !=
-                                                                null)
-                                                            ? doctors[1]
-                                                                .degree
-                                                                .degreeName
-                                                            : "",
-                                                        maxLines: 1,
-                                                        style: TextStyle(
+                                              child: Container(
+                                                width: space * 0.4,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      doctors[1].name,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize:
-                                                              space * 0.035,
-                                                        ),
+                                                              space * 0.043,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Text(
+                                                      (doctors[1]
+                                                              .categories
+                                                              .isNotEmpty)
+                                                          ? doctors[1]
+                                                              .categories[0]
+                                                              .name
+                                                          : "",
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: space * 0.035,
                                                       ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    doctors[1].hospitalName ??
-                                                        "",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: space * 0.035,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    height: space * 0.05,
-                                                    //width: space * 0.15,
-                                                    child: RatingBar(
-                                                      itemSize: 15,
-                                                      wrapAlignment:
-                                                          WrapAlignment.end,
-                                                      initialRating: 5,
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      allowHalfRating: true,
-                                                      itemCount: 5,
-                                                      ratingWidget:
-                                                          RatingWidget(
-                                                        full: Icon(
-                                                          Icons.star,
-                                                          color: Colors.white,
-                                                        ),
-                                                        half: Icon(
-                                                          Icons.star_half,
-                                                          color: Colors.white,
-                                                        ),
-                                                        empty: Icon(
-                                                          Icons.star_border,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      itemPadding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 0),
-                                                      onRatingUpdate: (rating) {
-                                                        // print(rating);
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  DoctorProfileScreen(
-                                                                      doctor:
-                                                                          doctors[
-                                                                              1]),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xFFF5C7A0)),
-                                                              color: Color(
-                                                                  0xFFE59754)),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical:
-                                                                      space *
-                                                                          0.01,
-                                                                  horizontal:
-                                                                      space *
-                                                                          0.03),
-                                                          child: Text(
-                                                            'Appointment',
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    space *
-                                                                        0.04,
-                                                                color: Colors
-                                                                    .white),
+                                                    SizedBox(
+                                                      width: space * 0.35,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        child: Text(
+                                                          (doctors[1].degree !=
+                                                                  null)
+                                                              ? doctors[1]
+                                                                  .degree
+                                                                  .degreeName
+                                                              : "",
+                                                          maxLines: 1,
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                space * 0.035,
                                                           ),
                                                         ),
                                                       ),
-                                                    ],
-                                                  )
-                                                ],
+                                                    ),
+                                                    Text(
+                                                      doctors[1].hospitalName ??
+                                                          "",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: space * 0.035,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: space * 0.05,
+                                                      //width: space * 0.15,
+                                                      child: RatingBar(
+                                                        itemSize: 15,
+                                                        wrapAlignment:
+                                                            WrapAlignment.end,
+                                                        initialRating: 5,
+                                                        direction:
+                                                            Axis.horizontal,
+                                                        allowHalfRating: true,
+                                                        itemCount: 5,
+                                                        ratingWidget:
+                                                            RatingWidget(
+                                                          full: Icon(
+                                                            Icons.star,
+                                                            color: Colors.white,
+                                                          ),
+                                                          half: Icon(
+                                                            Icons.star_half,
+                                                            color: Colors.white,
+                                                          ),
+                                                          empty: Icon(
+                                                            Icons.star_border,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        itemPadding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 0),
+                                                        onRatingUpdate:
+                                                            (rating) {
+                                                          // print(rating);
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    DoctorProfileScreen(
+                                                                        doctor:
+                                                                            doctors[1]),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                border: Border.all(
+                                                                    color: Color(
+                                                                        0xFFF5C7A0)),
+                                                                color: Color(
+                                                                    0xFFE59754)),
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        space *
+                                                                            0.01,
+                                                                    horizontal:
+                                                                        space *
+                                                                            0.03),
+                                                            child: Text(
+                                                              'Appointment',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      space *
+                                                                          0.04,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             )
                                           ],

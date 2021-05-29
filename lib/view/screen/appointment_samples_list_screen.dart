@@ -63,28 +63,6 @@ class _AppointmentSampleListScreenState
     setState(() {});
   }
 
-  String buildCategories(List<Category> categories) {
-    String category = "";
-    if (categories.length == 1) {
-      category = categories[0].name;
-      return category;
-    } else if (categories.length > 1) {
-      // for (Category cat in categories) {
-      //   category = category + cat.name + " ";
-      // }
-      for (int i = 0; i < categories.length; i++) {
-        if (i == categories.length - 1) {
-          category = category + categories[i].name;
-        } else {
-          category = category + categories[i].name + ", ";
-        }
-      }
-      return category;
-    } else {
-      return category;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final double space = MediaQuery.of(context).size.width;
@@ -186,8 +164,8 @@ class _AppointmentSampleListScreenState
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          buildCategories(appointment.doctorSlot
-                                              .chamber.user.categories),
+                                          appointment.doctorSlot.chamber.user
+                                              .speciality.speciality,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(fontSize: 12),

@@ -193,7 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
-                          } else if (mobileNumberController.text.length < 9) {
+                          } else if (mobileNumberController.text.length < 11) {
                             setState(() {
                               _inProcess = false;
                             });
