@@ -11,7 +11,6 @@ import 'package:meditec/model/chamber.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
-import 'package:meditec/providers/doctors_provider.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/payment_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';

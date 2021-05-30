@@ -14,10 +14,9 @@ import 'package:meditec/model/userNotification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
-  // String url = "182.48.90.214:8080";
-  // String url = "139.162.19.50:8080";
+  String url = "139.162.19.50:8080"; // server address
   // String url = "192.168.0.100:8080";
-  String url = "192.168.0.105:8080";
+  // String url = "192.168.0.105:8080";
   User _user;
   String number;
   // String password;

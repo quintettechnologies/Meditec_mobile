@@ -1,16 +1,12 @@
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meditec/model/call.dart';
-import 'package:meditec/utils/notification_helper.dart';
 import 'package:meditec/view/screen/24x7doctor_screen.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
-import 'package:meditec/view/screen/callscreens/call_screen.dart';
 import 'package:meditec/view/screen/category_doctor_screen.dart';
 import 'package:meditec/view/screen/changePassword_Screen.dart';
 import 'package:meditec/view/screen/doctor_screen.dart';
@@ -25,21 +21,12 @@ import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/start_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'constants.dart';
-
-// AndroidNotificationChannel channel = AndroidNotificationChannel(
-//     'high_importance_channel', // id
-//     'High Importance Notifications', // title
-//     'This channel is used for important notifications.', // description
-//     importance: Importance.high,
-//     playSound: true);
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future _firebaseMessagingBackgroundHandler(Map<String, dynamic> message) async {
-  // await Firebase.initializeApp();
   print('A bg message just showed up : $message');
   if (message['data'] != null) {
     await showNotification(
@@ -62,8 +49,6 @@ Future showNotification({String title, String body}) async {
       ledColor: Color(0xFF00BABA),
       ledOffMs: 100,
       ledOnMs: 100,
-      sound: RawResourceAndroidNotificationSound('ringtone'),
-      ongoing: true,
       showWhen: true);
   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
 
@@ -104,13 +89,11 @@ class _MyAppState extends State<MyApp> {
     if (payload != null) {
       debugPrint('notification payload: $payload');
     }
-    // await Navigator.pushNamed(context, Dashboard.id);
   }
 
   initializeFCM() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('ic_launcher');
     final InitializationSettings initializationSettings =
@@ -119,13 +102,12 @@ class _MyAppState extends State<MyApp> {
         onSelectNotification: selectNotification);
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-            'high_importance_channel', // id
-            'High Importance Notifications', // title
+            'high_importance_channel',
+            'High Importance Notifications',
             'This channel is used for important notifications.',
             importance: Importance.max,
             priority: Priority.high,
             playSound: true,
-            // sound: RawResourceAndroidNotificationSound('arrive'),
             showWhen: true);
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -140,7 +122,6 @@ class _MyAppState extends State<MyApp> {
             platformChannelSpecifics,
           );
         }
-        // _showItemDialog(message);
       },
       onBackgroundMessage:
           Platform.isAndroid ? _firebaseMessagingBackgroundHandler : null,
@@ -154,11 +135,9 @@ class _MyAppState extends State<MyApp> {
             platformChannelSpecifics,
           );
         }
-        // _navigateToItemDetail(message);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-        // _navigateToItemDetail(message);
         if (message['data'] == null) {
           await flutterLocalNotificationsPlugin.show(
             1,
