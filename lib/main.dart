@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,27 +28,55 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'constants.dart';
 
-// const AndroidNotificationChannel channel = AndroidNotificationChannel(
+// AndroidNotificationChannel channel = AndroidNotificationChannel(
 //     'high_importance_channel', // id
 //     'High Importance Notifications', // title
 //     'This channel is used for important notifications.', // description
 //     importance: Importance.high,
 //     playSound: true);
 
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 Future _firebaseMessagingBackgroundHandler(Map<String, dynamic> message) async {
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   print('A bg message just showed up : $message');
   if (message['data'] != null) {
-    NotificationHelper.showNotification(
+    await showNotification(
       title: message['data']['title'],
       body: message['data']['body'],
     );
-  } else {
-    NotificationHelper.showNotification(
-      title: message['notification']['title'],
-      body: message['notification']['body'],
-    );
   }
+}
+
+Future showNotification({String title, String body}) async {
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_id', 'channel_name', 'channel_description',
+      icon: 'ic_launcher',
+      importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
+      enableVibration: true,
+      enableLights: true,
+      fullScreenIntent: true,
+      ledColor: Color(0xFF00BABA),
+      ledOffMs: 100,
+      ledOnMs: 100,
+      sound: RawResourceAndroidNotificationSound('ringtone'),
+      ongoing: true,
+      showWhen: true);
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+  var platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    title,
+    body,
+    platformChannelSpecifics,
+  );
 }
 
 Future<void> main() async {
@@ -102,34 +132,41 @@ class _MyAppState extends State<MyApp> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        await flutterLocalNotificationsPlugin.show(
-          1,
-          message['notification']['title'],
-          message['notification']['body'],
-          platformChannelSpecifics,
-        );
+        if (message['data'] == null) {
+          await flutterLocalNotificationsPlugin.show(
+            1,
+            message['notification']['title'],
+            message['notification']['body'],
+            platformChannelSpecifics,
+          );
+        }
         // _showItemDialog(message);
       },
-      onBackgroundMessage: _firebaseMessagingBackgroundHandler,
+      onBackgroundMessage:
+          Platform.isAndroid ? _firebaseMessagingBackgroundHandler : null,
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        await flutterLocalNotificationsPlugin.show(
-          1,
-          message['notification']['title'],
-          message['notification']['body'],
-          platformChannelSpecifics,
-        );
+        if (message['data'] == null) {
+          await flutterLocalNotificationsPlugin.show(
+            1,
+            message['notification']['title'],
+            message['notification']['body'],
+            platformChannelSpecifics,
+          );
+        }
         // _navigateToItemDetail(message);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
         // _navigateToItemDetail(message);
-        await flutterLocalNotificationsPlugin.show(
-          1,
-          message['notification']['title'],
-          message['notification']['body'],
-          platformChannelSpecifics,
-        );
+        if (message['data'] == null) {
+          await flutterLocalNotificationsPlugin.show(
+            1,
+            message['notification']['title'],
+            message['notification']['body'],
+            platformChannelSpecifics,
+          );
+        }
       },
     );
     _firebaseMessaging.requestNotificationPermissions(

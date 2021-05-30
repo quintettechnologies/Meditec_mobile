@@ -311,7 +311,7 @@ class ProfileScreen extends HookWidget {
 class DetailsWidget extends StatelessWidget {
   const DetailsWidget(
       {Key key,
-      @required this.icon,
+      this.icon,
       @required this.title,
       @required this.text,
       @required this.space})
@@ -329,11 +329,13 @@ class DetailsWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: Color(0xFF00BABA),
-              size: space * 0.06,
-            ),
+            (icon != null)
+                ? Icon(
+                    icon,
+                    color: Color(0xFF00BABA),
+                    size: space * 0.06,
+                  )
+                : Container(),
             SizedBox(
               width: space * 0.02,
             ),

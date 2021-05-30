@@ -296,14 +296,16 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                                 //     .asset(
                                                                 //   "assets/icons/doctor_page/${category.name}.svg",
                                                                 // ),
-                                                                child: Image(
-                                                                  image: Image.memory(
-                                                                          base64
-                                                                              .decode(category.icon))
-                                                                      .image,
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                ),
+                                                                child: (category
+                                                                            .icon !=
+                                                                        null)
+                                                                    ? Image(
+                                                                        image: Image.memory(base64.decode(category.icon))
+                                                                            .image,
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      )
+                                                                    : Container(),
                                                               ),
                                                             ),
                                                           ),
@@ -396,15 +398,18 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                         //   size: space * 0.1,
                                                         //   color: Color(0xFF00BABA),
                                                         // )
-                                                        child: Image(
-                                                          image: Image.memory(
-                                                                  base64.decode(
-                                                                      categories[
-                                                                              index]
-                                                                          .icon))
-                                                              .image,
-                                                          fit: BoxFit.contain,
-                                                        ),
+                                                        child:
+                                                            (categories[index]
+                                                                        .icon !=
+                                                                    null)
+                                                                ? Image(
+                                                                    image: Image.memory(
+                                                                            base64.decode(categories[index].icon))
+                                                                        .image,
+                                                                    fit: BoxFit
+                                                                        .contain,
+                                                                  )
+                                                                : Container(),
                                                       ),
                                                     ),
                                                   ),
