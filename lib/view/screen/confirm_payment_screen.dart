@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aamarpay/aamarpay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -31,6 +32,7 @@ class ConfirmPaymentScreen extends StatefulWidget {
 
 class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
   ProgressDialog pr;
+  bool isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,7 +45,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
-      isDismissible: false,
+      isDismissible: true,
     );
     pr.style(
       message: 'Making Payment',
@@ -81,6 +83,50 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
       return category;
     } else {
       return category;
+    }
+  }
+
+  bookAppointment(String paymentStatus) async {
+    if (paymentStatus == "success") {
+      pr.update(message: "Making Payment");
+      await pr.show();
+      bool status = await context
+          .read(userProvider)
+          .confirmPayment(widget.appointment.id.toString());
+      if (status) {
+        await pr.hide();
+        Fluttertoast.showToast(
+            msg: "Payment Successul",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        Navigator.pop(context);
+        Navigator.pushNamed(context, AppointmentsScreen.id);
+      } else {
+        await pr.hide();
+        Fluttertoast.showToast(
+            msg: "Payment Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } else if (paymentStatus == "fail") {
+      Fluttertoast.showToast(
+          msg: "Sorry, your payment failed!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      await pr.hide();
     }
   }
 
@@ -585,58 +631,110 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                     ),
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () async {
-                                    pr.update(message: "Making Payment");
-                                    await pr.show();
-                                    bool status = await context
-                                        .read(userProvider)
-                                        .confirmPayment(
-                                            widget.appointment.id.toString());
-                                    if (status) {
-                                      await pr.hide();
-                                      Fluttertoast.showToast(
-                                          msg: "Payment Successul",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.green,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      Navigator.pop(context);
-                                      Navigator.pushNamed(
-                                          context, AppointmentsScreen.id);
-                                    } else {
-                                      await pr.hide();
-                                      Fluttertoast.showToast(
-                                          msg: "Payment Failed",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    }
-                                  },
-                                  child: Container(
-                                    height: space * .12,
-                                    width: space * 0.36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xFF00BABA),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Pay Now",
-                                        style: TextStyle(
-                                            fontSize: space * 0.04,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                                AamarpayData(
+                                    returnUrl: (url) {
+                                      print(url);
+                                    },
+                                    isLoading: (v) async {
+                                      setState(() {
+                                        isLoading = v;
+                                      });
+                                      if (isLoading) {
+                                        pr.update(message: "Loading Payment");
+                                        await pr.show();
+                                      }
+                                    },
+                                    paymentStatus: (paymentStatus) async {
+                                      print(paymentStatus);
+                                      await bookAppointment(paymentStatus);
+                                    },
+                                    cancelUrl: "example.com/payment/cancel",
+                                    successUrl: "example.com/payment/confirm",
+                                    failUrl: "example.com/payment/fail",
+                                    customerEmail:
+                                        widget.appointment.user.email,
+                                    customerMobile:
+                                        widget.appointment.user.mobileNumber,
+                                    customerName: widget.appointment.user.name,
+                                    signature:
+                                        "dbb74894e82415a2f7ff0ec3a97e4183",
+                                    storeID: "aamarpaytest",
+                                    transactionAmount: 100,
+                                    transactionID:
+                                        "slot:${widget.appointment.doctorSlot.id}:${DateTime.now().toIso8601String()}",
+                                    description: "Appointment",
+                                    url: "https://sandbox.aamarpay.com",
+                                    child: Container(
+                                      height: space * .12,
+                                      width: space * 0.36,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFF00BABA),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "Pay Now",
+                                          style: TextStyle(
+                                              fontSize: space * 0.04,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
+                                    )),
+                                // TextButton(
+                                //   onPressed: () async {
+                                //     pr.update(message: "Making Payment");
+                                //     await pr.show();
+                                //     bool status = await context
+                                //         .read(userProvider)
+                                //         .confirmPayment(
+                                //             widget.appointment.id.toString());
+                                //     if (status) {
+                                //       await pr.hide();
+                                //       Fluttertoast.showToast(
+                                //           msg: "Payment Successul",
+                                //           toastLength: Toast.LENGTH_SHORT,
+                                //           gravity: ToastGravity.BOTTOM,
+                                //           timeInSecForIosWeb: 1,
+                                //           backgroundColor: Colors.green,
+                                //           textColor: Colors.white,
+                                //           fontSize: 16.0);
+                                //       Navigator.pop(context);
+                                //       Navigator.pushNamed(
+                                //           context, AppointmentsScreen.id);
+                                //     } else {
+                                //       await pr.hide();
+                                //       Fluttertoast.showToast(
+                                //           msg: "Payment Failed",
+                                //           toastLength: Toast.LENGTH_SHORT,
+                                //           gravity: ToastGravity.BOTTOM,
+                                //           timeInSecForIosWeb: 1,
+                                //           backgroundColor: Colors.red,
+                                //           textColor: Colors.white,
+                                //           fontSize: 16.0);
+                                //     }
+                                //   },
+                                //   child: Container(
+                                //     height: space * .12,
+                                //     width: space * 0.36,
+                                //     alignment: Alignment.center,
+                                //     decoration: BoxDecoration(
+                                //         color: Color(0xFF00BABA),
+                                //         borderRadius: BorderRadius.circular(5)),
+                                //     child: Padding(
+                                //       padding: const EdgeInsets.all(8.0),
+                                //       child: Text(
+                                //         "Pay Now",
+                                //         style: TextStyle(
+                                //             fontSize: space * 0.04,
+                                //             fontWeight: FontWeight.bold,
+                                //             color: Colors.white),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                             SizedBox(

@@ -35,6 +35,7 @@ dependencies:
   hooks_riverpod:
   shared_preferences:
   http: ^0.12.2
+  aamarpay: ^0.0.7
   basic_utils: ^1.4.0
   flutter_svg: any
   adobe_xd: ^1.0.0+1

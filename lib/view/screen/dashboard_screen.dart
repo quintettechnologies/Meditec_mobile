@@ -984,6 +984,43 @@ class _DashboardState extends State<Dashboard> {
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
+                                                // RichText(
+                                                //   text: new TextSpan(
+                                                //       // Note: Styles for TextSpans must be explicitly defined.
+                                                //       // Child text spans will inherit styles from parent
+                                                //       style: new TextStyle(
+                                                //           fontSize: 14.0,
+                                                //           color: Colors.black,
+                                                //           fontWeight:
+                                                //               FontWeight.bold),
+                                                //       children: doctor.name
+                                                //               .startsWith(
+                                                //                   searchController
+                                                //                       .text)
+                                                //           ? <TextSpan>[
+                                                //               new TextSpan(
+                                                //                   text: doctor.name.splitMapJoin(
+                                                //                       searchController
+                                                //                           .text,
+                                                //                       onMatch:
+                                                //                           (m) =>
+                                                //                               '${m.group(0)}',
+                                                //                       onNonMatch:
+                                                //                           (n) =>
+                                                //                               '')),
+                                                //               new TextSpan(
+                                                //                   text: doctor
+                                                //                       .name
+                                                //                       .substring(searchController
+                                                //                           .text
+                                                //                           .length),
+                                                //                   style: new TextStyle(
+                                                //                       fontWeight:
+                                                //                           FontWeight
+                                                //                               .normal)),
+                                                //             ]
+                                                //           : null),
+                                                // ),
                                                 (doctor.roles.name
                                                             .toUpperCase() ==
                                                         "DOCTOR")

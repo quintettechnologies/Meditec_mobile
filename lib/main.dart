@@ -38,17 +38,19 @@ Future _firebaseMessagingBackgroundHandler(Map<String, dynamic> message) async {
 
 Future showNotification({String title, String body}) async {
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'channel_id', 'channel_name', 'channel_description',
+      'channel_id', 'Incoming Calls', 'channel_description',
       icon: 'ic_launcher',
       importance: Importance.max,
       priority: Priority.max,
       playSound: true,
+      visibility: NotificationVisibility.public,
       enableVibration: true,
       enableLights: true,
       fullScreenIntent: true,
+      ongoing: true,
       ledColor: Color(0xFF00BABA),
-      ledOffMs: 100,
       ledOnMs: 100,
+      ledOffMs: 100,
       showWhen: true);
   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
 

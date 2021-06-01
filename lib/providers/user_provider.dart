@@ -93,13 +93,15 @@ class UserProvider extends ChangeNotifier {
     );
 
     if (response.body != null && response.statusCode == 200) {
+      // List<dynamic> docs = jsonDecode(response.body);
+      // for (dynamic d in docs) {
+      //   searchResult.add(User.fromJson(d));
+      // }
       List<dynamic> docs = jsonDecode(response.body);
-      for (dynamic d in docs) {
-        searchResult.add(User.fromJson(d));
-      }
-      for (User d in searchResult) {
-        // print(d.name);
-      }
+      searchResult = (docs)
+          ?.map((e) =>
+              e == null ? null : User.fromJson(e as Map<String, dynamic>))
+          ?.toList();
       return searchResult;
     } else {
       return searchResult;

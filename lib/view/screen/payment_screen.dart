@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:aamarpay/aamarpay.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'amarPay_screen.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -46,6 +48,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
   String gender;
   int bloodValue;
   int genderValue;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -77,7 +80,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
       context,
       type: ProgressDialogType.Normal,
       textDirection: TextDirection.rtl,
-      isDismissible: false,
+      isDismissible: true,
     );
     pr.style(
       message: 'Booking Appointment',
@@ -231,6 +234,73 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
       return category;
     } else {
       return category;
+    }
+  }
+
+  bookAppointment(String paymentStatus) async {
+    User user = context.read(userProvider).currentUser();
+    if (paymentStatus == "success") {
+      pr.update(message: "Booking Appointment");
+      await pr.show();
+      setAppointment(user);
+      bool valid = validate();
+      if (valid) {
+        String status =
+            await context.read(userProvider).bookAppointment(appointment);
+        if (status == "success") {
+          await pr.hide();
+          Fluttertoast.showToast(
+              msg: "Appointment booked successfully!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Navigator.popAndPushNamed(context, AppointmentsScreen.id);
+        } else if (status == "taken") {
+          await pr.hide();
+          Fluttertoast.showToast(
+              msg: "You have already booked an appointment at this time slot.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else if (status == "overloaded") {
+          await pr.hide();
+          Fluttertoast.showToast(
+              msg: "Sorry this time slot is already full.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          await pr.hide();
+          Fluttertoast.showToast(
+              msg: "Sorry, failed to book an appointment",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+      }
+    } else if (paymentStatus == "fail") {
+      Fluttertoast.showToast(
+          msg: "Sorry, your payment failed!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      await pr.hide();
     }
   }
 
@@ -879,6 +949,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                           children: [
                             GestureDetector(
                               onTap: () async {
+                                pr.update(message: "Booking Appointment");
                                 await pr.show();
                                 setAppointment(user);
                                 bool valid = validate();
@@ -953,82 +1024,155 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                await pr.show();
-                                setAppointment(user);
-                                bool valid = validate();
-                                if (valid) {
-                                  String status = await context
-                                      .read(userProvider)
-                                      .bookAppointment(appointment);
-                                  if (status == "success") {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg: "Appointment booked successfully!",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.green,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                    Navigator.pushNamed(
-                                        context, AppointmentsScreen.id);
-                                  } else if (status == "taken") {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "You have already booked an appointment at this time slot.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  } else if (status == "overloaded") {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Sorry this time slot is already full.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  } else {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Sorry, failed to book an appointment",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
+                            AamarpayData(
+                                returnUrl: (url) {
+                                  print(url);
+                                },
+                                isLoading: (v) async {
+                                  setState(() {
+                                    isLoading = v;
+                                  });
+                                  if (isLoading) {
+                                    pr.update(message: "Loading Payment");
+                                    await pr.show();
                                   }
-                                }
-                              },
-                              child: Container(
-                                height: space * .12,
-                                width: space * 0.60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF00BABA),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Pay Now",
-                                    style: TextStyle(
-                                        fontSize: space * 0.04,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                },
+                                paymentStatus: (paymentStatus) async {
+                                  print(paymentStatus);
+                                  await bookAppointment(paymentStatus);
+                                },
+                                cancelUrl: "example.com/payment/cancel",
+                                successUrl: "example.com/payment/confirm",
+                                failUrl: "example.com/payment/fail",
+                                customerEmail: user.email,
+                                customerMobile: user.mobileNumber,
+                                customerName: user.name,
+                                signature: "dbb74894e82415a2f7ff0ec3a97e4183",
+                                storeID: "aamarpaytest",
+                                transactionAmount: widget.doctor.doctorFee,
+                                transactionID:
+                                    "slot:${widget.doctorSlot.id}:${DateTime.now().toIso8601String()}",
+                                description:
+                                    "E-Appointment of ${widget.doctor.name} on ${widget.doctorSlot.startTime}",
+                                url: "https://sandbox.aamarpay.com",
+                                child: Container(
+                                  height: space * .12,
+                                  width: space * 0.60,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF00BABA),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Pay Now",
+                                      style: TextStyle(
+                                          fontSize: space * 0.04,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
+                                )),
+                            // GestureDetector(
+                            //   onTap: () => Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => MyPay())),
+                            //   child: Container(
+                            //     height: space * .12,
+                            //     width: space * 0.60,
+                            //     alignment: Alignment.center,
+                            //     decoration: BoxDecoration(
+                            //         color: Color(0xFF00BABA),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Padding(
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       child: Text(
+                            //         "Pay Now",
+                            //         style: TextStyle(
+                            //             fontSize: space * 0.04,
+                            //             fontWeight: FontWeight.bold,
+                            //             color: Colors.white),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // GestureDetector(
+                            //   onTap: () async {
+                            //     await pr.show();
+                            //     setAppointment(user);
+                            //     bool valid = validate();
+                            //     if (valid) {
+                            //       String status = await context
+                            //           .read(userProvider)
+                            //           .bookAppointment(appointment);
+                            //       if (status == "success") {
+                            //         await pr.hide();
+                            //         Fluttertoast.showToast(
+                            //             msg: "Appointment booked successfully!",
+                            //             toastLength: Toast.LENGTH_SHORT,
+                            //             gravity: ToastGravity.BOTTOM,
+                            //             timeInSecForIosWeb: 1,
+                            //             backgroundColor: Colors.green,
+                            //             textColor: Colors.white,
+                            //             fontSize: 16.0);
+                            //         Navigator.pushNamed(
+                            //             context, AppointmentsScreen.id);
+                            //       } else if (status == "taken") {
+                            //         await pr.hide();
+                            //         Fluttertoast.showToast(
+                            //             msg:
+                            //                 "You have already booked an appointment at this time slot.",
+                            //             toastLength: Toast.LENGTH_SHORT,
+                            //             gravity: ToastGravity.BOTTOM,
+                            //             timeInSecForIosWeb: 1,
+                            //             backgroundColor: Colors.red,
+                            //             textColor: Colors.white,
+                            //             fontSize: 16.0);
+                            //       } else if (status == "overloaded") {
+                            //         await pr.hide();
+                            //         Fluttertoast.showToast(
+                            //             msg:
+                            //                 "Sorry this time slot is already full.",
+                            //             toastLength: Toast.LENGTH_SHORT,
+                            //             gravity: ToastGravity.BOTTOM,
+                            //             timeInSecForIosWeb: 1,
+                            //             backgroundColor: Colors.red,
+                            //             textColor: Colors.white,
+                            //             fontSize: 16.0);
+                            //       } else {
+                            //         await pr.hide();
+                            //         Fluttertoast.showToast(
+                            //             msg:
+                            //                 "Sorry, failed to book an appointment",
+                            //             toastLength: Toast.LENGTH_SHORT,
+                            //             gravity: ToastGravity.BOTTOM,
+                            //             timeInSecForIosWeb: 1,
+                            //             backgroundColor: Colors.red,
+                            //             textColor: Colors.white,
+                            //             fontSize: 16.0);
+                            //       }
+                            //     }
+                            //   },
+                            //   child: Container(
+                            //     height: space * .12,
+                            //     width: space * 0.60,
+                            //     alignment: Alignment.center,
+                            //     decoration: BoxDecoration(
+                            //         color: Color(0xFF00BABA),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Padding(
+                            //       padding: const EdgeInsets.all(8.0),
+                            //       child: Text(
+                            //         "Pay Now",
+                            //         style: TextStyle(
+                            //             fontSize: space * 0.04,
+                            //             fontWeight: FontWeight.bold,
+                            //             color: Colors.white),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(
