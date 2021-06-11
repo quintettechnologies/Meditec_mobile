@@ -1,4 +1,5 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController;
   FocusNode passwordFocus;
   bool _inProcess = false;
+  bool hidePass = true;
 
   @override
   void initState() {
@@ -143,10 +145,71 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: mobileNumberController,
                         focus: mobileNumberFocus,
                       ),
-                      TextInputField(
-                        text: "Password",
-                        controller: passwordController,
-                        focus: passwordFocus,
+                      // TextInputField(
+                      //   text: "Password",
+                      //   controller: passwordController,
+                      //   focus: passwordFocus,
+                      // ),
+                      Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Password",
+                                  style: TextStyle(
+                                      fontSize: space * 0.043,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints.tight(
+                                Size(space * 0.75, space * 0.14)),
+                            child: TextFormField(
+                              focusNode: passwordFocus,
+                              controller: passwordController,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Password is Empty';
+                                }
+                                return null;
+                              },
+                              textAlignVertical: TextAlignVertical.center,
+                              style: TextStyle(
+                                fontSize: space * 0.04,
+                                color: Colors.black,
+                              ),
+                              obscureText: hidePass,
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      hidePass = !hidePass;
+                                    });
+                                  },
+                                  icon: Icon(hidePass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Enter Password',
+                                hintStyle: TextStyle(fontSize: space * 0.04),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(6),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 20,
@@ -313,11 +376,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           (_inProcess)
               ? Container(
-                  color: Colors.blue,
+                  color: Color(0xFF00BABA),
                   height: MediaQuery.of(context).size.height,
                   child: Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.white,
+                    child: SpinKitCircle(
+                      color: Colors.white,
+                      size: 50.0,
                     ),
                   ),
                 )

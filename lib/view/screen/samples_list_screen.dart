@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/index.dart';
@@ -394,7 +395,10 @@ class _SampleListScreenState extends State<SampleListScreen> {
                         width: space,
                         color: Colors.white,
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: SpinKitCircle(
+                            color: Color(0xFF00BABA),
+                            size: 50.0,
+                          ),
                         ),
                       )
                     : Container()

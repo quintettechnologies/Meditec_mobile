@@ -34,6 +34,8 @@ class _StartScreenState extends State<StartScreen> {
     if (newUser == false) {
       context.read(userProvider).number = loginData.getString("number");
       context.read(userProvider).authToken = loginData.getString("authToken");
+      context.read(userProvider).newNotification =
+          loginData.getBool("newNotification") ?? false;
       bool login = await context.read(userProvider).loginRenew();
       if (login) {
         Fluttertoast.showToast(

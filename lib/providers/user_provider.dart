@@ -7,6 +7,7 @@ import 'package:meditec/model/auth.dart';
 import 'package:meditec/model/category.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/index.dart';
+import 'package:meditec/model/review.dart';
 import 'package:meditec/model/user.dart';
 import 'package:meditec/model/appointment.dart';
 import 'package:http/http.dart' as http;
@@ -16,11 +17,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserProvider extends ChangeNotifier {
   String url = "139.162.19.50:8080"; // server address
   // String url = "192.168.0.100:8080";
-  // String url = "192.168.0.105:8080";
+  // String url = "192.168.0.107:8080";
   User _user;
   String number;
   // String password;
   bool loginStatus = false;
+  bool newNotification = false;
   String authToken;
   // var image1;
   File selectedImage;
@@ -50,6 +52,15 @@ class UserProvider extends ChangeNotifier {
 
   User currentUser() {
     return _user;
+  }
+
+  Future<void> setNewNotification(bool status) async {
+    this.newNotification = status;
+    loginData = await SharedPreferences.getInstance();
+    loginData.setBool("newNotification", status);
+    // print("new shared notification: ${loginData.getBool("newNotification")}");
+    // print("new notification ${this.newNotification}");
+    notifyListeners();
   }
 
   Future getNotifications() async {
@@ -132,6 +143,27 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<Map> bookInitialAppointment(Appointment appointment) async {
+    appointment.user.userAvatar = null;
+    var uri = Uri.http('$url', '/takeInitialAppoinment');
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode(appointment.toJson()),
+    );
+    // print(response.body);
+    if (response.body != null && response.statusCode == 200) {
+      Map appointmentMap = jsonDecode(response.body);
+      _getUser();
+      return appointmentMap;
+    } else {
+      _getUser();
+    }
+  }
+
   Future<String> bookAppointment(Appointment appointment) async {
     appointment.user.userAvatar = null;
     var uri = Uri.http('$url', '/takeAppoinment');
@@ -149,18 +181,22 @@ class UserProvider extends ChangeNotifier {
         response.body == "success") {
       selectedSlot = DoctorSlot();
       await getAppointments();
+      _getUser();
       return "success";
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "taken") {
       // print(response.body.toString());
+      _getUser();
       return "taken";
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "overloaded") {
       // print(response.body.toString());
+      _getUser();
       return "overloaded";
     } else {
+      _getUser();
       return "failed";
     }
   }
@@ -206,18 +242,22 @@ class UserProvider extends ChangeNotifier {
         response.body == "success") {
       selectedSlot = DoctorSlot();
       await getAppointments();
+      _getUser();
       return "success";
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "taken") {
       // print(response.body.toString());
+      _getUser();
       return "taken";
     } else if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "overloaded") {
       // print(response.body.toString());
+      _getUser();
       return "overloaded";
     } else {
+      _getUser();
       return "failed";
     }
   }
@@ -441,6 +481,26 @@ class UserProvider extends ChangeNotifier {
       return true;
     } else {
       // print(response.body.toString());
+      return false;
+    }
+  }
+
+  Future submitReview(Review review) async {
+    var uri = Uri.http('$url', '/giveFeedback');
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode(review.toJson()),
+    );
+
+    if (response.body != null &&
+        response.statusCode == 200 &&
+        response.body == "success") {
+      return true;
+    } else {
       return false;
     }
   }

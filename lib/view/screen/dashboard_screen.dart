@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -193,6 +194,58 @@ class _DashboardState extends State<Dashboard> {
         //     searchFocus.unfocus();
         //   });
         // }
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                color: Color(0xFF00BABA),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Do you want to exit?",
+                        style: kButtonTextStyle.copyWith(color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Container(
+                                width: space * 0.15,
+                                height: space * 0.1,
+                                decoration: kButtonDecoration,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No",
+                                  style: kButtonTextStyle,
+                                ),
+                              )),
+                          TextButton(
+                              onPressed: () => exit(0),
+                              child: Container(
+                                width: space * 0.15,
+                                height: space * 0.1,
+                                decoration: kButtonDecoration,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Yes",
+                                  style: kButtonTextStyle,
+                                ),
+                              )),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
         return false;
       },
       key: Key("dashboard"),

@@ -18,6 +18,8 @@ class Appointment {
   String friendlyUserBloodGroup;
   String friendlyUserGender;
   bool originalUser;
+  num fee;
+  num adminFee;
   bool prescriptionExist;
   bool samplePictureExist;
   bool previousReportExist;

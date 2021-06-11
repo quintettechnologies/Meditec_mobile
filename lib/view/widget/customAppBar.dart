@@ -81,8 +81,8 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 Padding(
                                   padding: EdgeInsets.only(left: space * 0.02),
                                   child: Text(
-                                    // "Welcome\n${context.read(userProvider).currentUser().name}",
-                                    "Welcome",
+                                    "Welcome\n${context.read(userProvider).currentUser().name.split(" ").first}",
+                                    // "Welcome",
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Color(0xFF00CACA),
@@ -109,21 +109,34 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   color: Color(0xFF00CACA),
                                 ),
                               )),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, NotificationScreen.id);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFEDF0F0),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Icon(
-                              Icons.notifications,
-                              color: Color(0xFF00CACA),
-                            ),
-                          )),
+                      Consumer(
+                        builder: (context, watch, child) {
+                          final value = watch(userProvider);
+                          return FlatButton(
+                              onPressed: () {
+                                context
+                                    .read(userProvider)
+                                    .setNewNotification(false);
+                                Navigator.pushNamed(
+                                    context, NotificationScreen.id);
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    color: value.newNotification
+                                        ? Colors.redAccent
+                                        : Color(0xFFEDF0F0),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Icon(
+                                  Icons.notifications,
+                                  color: value.newNotification
+                                      ? Colors.white
+                                      : Color(0xFF00CACA),
+                                ),
+                              ));
+                        },
+                      ),
                     ],
                   ),
                 ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -223,8 +224,9 @@ class _UploadProfileImageScreenState extends State<UploadProfileImageScreen> {
                         color: Colors.white,
                         height: MediaQuery.of(context).size.height * 0.95,
                         child: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
+                          child: SpinKitCircle(
+                            color: Color(0xFF00BABA),
+                            size: 50.0,
                           ),
                         ),
                       )

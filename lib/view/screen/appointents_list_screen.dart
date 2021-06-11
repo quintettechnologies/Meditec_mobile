@@ -25,6 +25,9 @@ import 'confirm_payment_screen.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   static const String id = 'AppointmentsScreen';
+  AppointmentsScreen({this.reload = false});
+
+  final bool reload;
   @override
   _AppointmentsScreenState createState() => _AppointmentsScreenState();
 }
@@ -62,7 +65,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
       ),
     );
     appointments = context.read(userProvider).appointments;
-    if (appointments.isEmpty) {
+    if (appointments.isEmpty || widget.reload) {
       await fetchAppointments();
     }
   }

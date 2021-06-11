@@ -188,17 +188,20 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      height: space * 0.09,
-                                      width: space * 0.09,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Icon(
-                                        Icons.chat_bubble_rounded,
-                                        color: Colors.white,
-                                        size: space * 0.06,
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: space * 0.09,
+                                        width: space * 0.09,
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Icon(
+                                          Icons.chat_bubble_rounded,
+                                          color: Colors.white,
+                                          size: space * 0.06,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(

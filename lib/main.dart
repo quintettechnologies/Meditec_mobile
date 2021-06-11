@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/view/screen/24x7doctor_screen.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
@@ -21,6 +22,8 @@ import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/start_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -42,12 +45,12 @@ Future showNotification({String title, String body}) async {
       icon: 'ic_launcher',
       importance: Importance.max,
       priority: Priority.max,
+      ongoing: true,
       playSound: true,
       visibility: NotificationVisibility.public,
       enableVibration: true,
       enableLights: true,
       fullScreenIntent: true,
-      ongoing: true,
       ledColor: Color(0xFF00BABA),
       ledOnMs: 100,
       ledOffMs: 100,
@@ -80,11 +83,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  // SharedPreferences prefs;
   @override
   void initState() {
     // TODO: implement initState
     initializeFCM();
     super.initState();
+    getBatteryOptimizationPermission();
   }
 
   Future selectNotification(String payload) async {
@@ -116,6 +121,7 @@ class _MyAppState extends State<MyApp> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+        setNewNotification();
         if (message['data'] == null) {
           await flutterLocalNotificationsPlugin.show(
             1,
@@ -129,6 +135,7 @@ class _MyAppState extends State<MyApp> {
           Platform.isAndroid ? _firebaseMessagingBackgroundHandler : null,
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        setNewNotification();
         if (message['data'] == null) {
           await flutterLocalNotificationsPlugin.show(
             1,
@@ -140,6 +147,7 @@ class _MyAppState extends State<MyApp> {
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
+        setNewNotification();
         if (message['data'] == null) {
           await flutterLocalNotificationsPlugin.show(
             1,
@@ -155,8 +163,23 @@ class _MyAppState extends State<MyApp> {
             sound: true, badge: true, alert: true, provisional: true));
     _firebaseMessaging.onIosSettingsRegistered
         .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
+      // print("Settings registered: $settings");
     });
+  }
+
+  getBatteryOptimizationPermission() async {
+    var status = await Permission.ignoreBatteryOptimizations.status;
+    // print(status.isGranted);
+    if (!status.isGranted) {
+      Permission.ignoreBatteryOptimizations.request();
+    }
+  }
+
+  setNewNotification() async {
+    // prefs = await SharedPreferences.getInstance();
+    // prefs.setBool("newNotification", true);
+    // print("new shared notification: ${prefs.getBool("newNotification")}");
+    context.read(userProvider).setNewNotification(true);
   }
 
   @override

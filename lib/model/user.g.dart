@@ -33,6 +33,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..doctorFee = json['doctorFee'] as num
     ..doctorSecondTimeFee = json['doctorSecondTimeFee'] as num
     ..doctorRegistrationNumber = json['doctorRegistrationNumber'] as String
+    ..feedBackAvg = json['feedBackAvg'] as num
     // ..failedLoginAttempts = json['failedLoginAttempts'] as num
     // ..aggreedToTermOfUse = json['aggreedToTermOfUse'] as bool
     // ..emailVerified = json['emailVerified'] as bool
@@ -88,6 +89,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'doctorFee': instance.doctorFee,
       'doctorSecondTimeFee': instance.doctorSecondTimeFee,
       'doctorRegistrationNumber': instance.doctorRegistrationNumber,
+      'feedBackAvg': instance.feedBackAvg,
       // 'failedLoginAttempts': instance.failedLoginAttempts,
       // 'aggreedToTermOfUse': instance.aggreedToTermOfUse,
       // 'emailVerified': instance.emailVerified,

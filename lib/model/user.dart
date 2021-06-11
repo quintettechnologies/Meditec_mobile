@@ -37,6 +37,7 @@ class User {
   num doctorFee;
   num doctorSecondTimeFee;
   String doctorRegistrationNumber;
+  num feedBackAvg;
   // num failedLoginAttempts;
   // bool aggreedToTermOfUse;
   // bool emailVerified;

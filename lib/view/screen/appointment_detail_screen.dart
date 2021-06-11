@@ -592,7 +592,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                         height: space * 0.02,
                                       ),
                                       Text(
-                                        widget.appointment.doctorSlot.fees
+                                        (widget.appointment.fee +
+                                                widget.appointment.adminFee)
                                             .toString(),
                                         style: TextStyle(fontSize: 14),
                                       ),

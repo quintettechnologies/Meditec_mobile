@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "14.0.0"
-  aamarpay:
-    dependency: "direct main"
-    description:
-      name: aamarpay
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.7"
   adobe_xd:
     dependency: "direct main"
     description:

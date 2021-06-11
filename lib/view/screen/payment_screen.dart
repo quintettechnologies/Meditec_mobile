@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:ui';
-import 'package:aamarpay/aamarpay.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +13,13 @@ import 'package:meditec/model/category.dart';
 import 'package:meditec/model/doctor.dart';
 import 'package:meditec/model/doctorSlot.dart';
 import 'package:meditec/model/user.dart';
+import 'package:meditec/payment/aamarpayData.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
 import 'package:meditec/view/widget/customFAB.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'amarPay_screen.dart';
 import 'callscreens/pickup/pickup_layout.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -97,6 +96,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
         fontSize: 19.0,
       ),
     );
+    setAppointment(context.read(userProvider).currentUser());
   }
 
   setAppointment(User user) {
@@ -301,6 +301,65 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
           fontSize: 16.0);
     } else {
       await pr.hide();
+    }
+  }
+
+  Appointment bookInitialAppointment() {
+    User user = context.read(userProvider).currentUser();
+    setAppointment(user);
+    bool valid = validate();
+    if (valid) {
+      return appointment;
+    }
+  }
+
+  handlePayment(String paymentStatus) async {
+    await pr.hide();
+    if (paymentStatus == "success") {
+      Fluttertoast.showToast(
+          msg: "You have already booked and payment is successfully done.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppointmentsScreen(
+                    reload: true,
+                  )));
+    } else if (paymentStatus == "fail") {
+      Fluttertoast.showToast(
+          msg: "You have already booked but payment failed.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppointmentsScreen(
+                    reload: true,
+                  )));
+    } else if (paymentStatus == "cancel") {
+      Fluttertoast.showToast(
+          msg: "You have already booked but payment canceled.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppointmentsScreen(
+                    reload: true,
+                  )));
     }
   }
 
@@ -559,7 +618,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                         height: space * 0.02,
                                       ),
                                       Text(
-                                        widget.doctorSlot.fees.toString(),
+                                        "${widget.doctor.doctorFee.toString()} tk / ${widget.doctor.doctorSecondTimeFee.toString()} tk",
                                         style: TextStyle(fontSize: 14),
                                       ),
                                     ],
@@ -630,6 +689,11 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           height: space * 0.02,
                                         ),
                                         TextEditingField(
+                                          onChanged: (value) {
+                                            setState(() {
+                                              setAppointment(user);
+                                            });
+                                          },
                                           text: "Name",
                                           space: space,
                                           controller: nameController,
@@ -639,6 +703,11 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           height: space * 0.02,
                                         ),
                                         TextEditingField(
+                                          onChanged: (value) {
+                                            setState(() {
+                                              setAppointment(user);
+                                            });
+                                          },
                                           text: "Age",
                                           space: space,
                                           controller: ageController,
@@ -648,6 +717,11 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                           height: space * 0.02,
                                         ),
                                         TextEditingField(
+                                          onChanged: (value) {
+                                            setState(() {
+                                              setAppointment(user);
+                                            });
+                                          },
                                           text: "Weight",
                                           space: space,
                                           controller: weightController,
@@ -714,6 +788,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                 ],
                                                 onChanged: (int value) {
                                                   setState(() {
+                                                    setAppointment(user);
                                                     bloodValue = value;
                                                     setBloodGroup();
                                                   });
@@ -770,6 +845,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                                 ],
                                                 onChanged: (int value) {
                                                   setState(() {
+                                                    setAppointment(user);
                                                     genderValue = value;
                                                     setGender();
                                                   });
@@ -1025,6 +1101,8 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             AamarpayData(
+                                appointment: bookInitialAppointment(),
+                                newAppointment: true,
                                 returnUrl: (url) {
                                   print(url);
                                 },
@@ -1035,11 +1113,14 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                   if (isLoading) {
                                     pr.update(message: "Loading Payment");
                                     await pr.show();
+                                  } else {
+                                    await pr.hide();
                                   }
                                 },
                                 paymentStatus: (paymentStatus) async {
                                   print(paymentStatus);
-                                  await bookAppointment(paymentStatus);
+                                  // await bookAppointment(paymentStatus);
+                                  handlePayment(paymentStatus);
                                 },
                                 cancelUrl: "example.com/payment/cancel",
                                 successUrl: "example.com/payment/confirm",
@@ -1047,14 +1128,14 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                 customerEmail: user.email,
                                 customerMobile: user.mobileNumber,
                                 customerName: user.name,
-                                signature: "dbb74894e82415a2f7ff0ec3a97e4183",
-                                storeID: "aamarpaytest",
+                                signature: "8ac6f09527bd4b9f7e14350ed330fe95",
+                                storeID: "dacicil",
                                 transactionAmount: widget.doctor.doctorFee,
                                 transactionID:
                                     "slot:${widget.doctorSlot.id}:${DateTime.now().toIso8601String()}",
                                 description:
                                     "E-Appointment of ${widget.doctor.name} on ${widget.doctorSlot.startTime}",
-                                url: "https://sandbox.aamarpay.com",
+                                url: "https://secure.aamarpay.com",
                                 child: Container(
                                   height: space * .12,
                                   width: space * 0.60,
@@ -1234,16 +1315,21 @@ class Space extends StatelessWidget {
 }
 
 class TextEditingField extends StatelessWidget {
-  TextEditingField(
-      {@required this.text,
-      @required this.controller,
-      @required this.space,
-      @required this.focusNode});
+  TextEditingField({
+    @required this.text,
+    @required this.controller,
+    @required this.space,
+    @required this.focusNode,
+    @required this.onChanged,
+    this.validator,
+  });
 
   final double space;
   final TextEditingController controller;
   final String text;
   final FocusNode focusNode;
+  final Function onChanged;
+  final Function validator;
 
   @override
   Widget build(BuildContext context) {
@@ -1258,8 +1344,10 @@ class TextEditingField extends StatelessWidget {
           height: space * 0.1,
           width: space * 0.5,
           child: TextFormField(
+            onChanged: onChanged,
             controller: controller,
             focusNode: focusNode,
+            validator: validator,
             decoration: InputDecoration(
               hintStyle: TextStyle(fontSize: 16),
               border: OutlineInputBorder(

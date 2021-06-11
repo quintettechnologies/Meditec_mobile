@@ -152,59 +152,59 @@ class PdfPrescriptionApi {
     }).toList();
 
     return Container(
-        height: PdfPageFormat.a4.height * 0.3,
+        // height: PdfPageFormat.a4.height * 0.3,
         child: Column(children: [
-          Table.fromTextArray(
-            headers: headers,
-            data: data,
-            border: null,
-            headerStyle:
-                TextStyle(fontWeight: FontWeight.bold, color: PdfColors.white),
-            headerDecoration: BoxDecoration(color: PdfColor(0, 0.72, 0.72, 0)),
-            cellHeight: 30,
-            cellAlignments: {
-              0: Alignment.centerLeft,
-              1: Alignment.center,
-              2: Alignment.center,
-              3: Alignment.center,
-              4: Alignment.center,
-              5: Alignment.centerRight,
-            },
-          )
-        ]));
+      Table.fromTextArray(
+        headers: headers,
+        data: data,
+        border: null,
+        headerStyle:
+            TextStyle(fontWeight: FontWeight.bold, color: PdfColors.white),
+        headerDecoration: BoxDecoration(color: PdfColor(0, 0.72, 0.72, 0)),
+        cellHeight: 30,
+        cellAlignments: {
+          0: Alignment.centerLeft,
+          1: Alignment.center,
+          2: Alignment.center,
+          3: Alignment.center,
+          4: Alignment.center,
+          5: Alignment.centerRight,
+        },
+      )
+    ]));
   }
 
   static Widget buildPrescriptionTest(Prescription prescription) {
     return Container(
-        height: PdfPageFormat.a4.height * 0.15,
+        // height: PdfPageFormat.a4.height * 0.15,
         child: Column(children: [
-          Container(
-            padding: EdgeInsets.all(6),
-            color: PdfColor(0, 0.72, 0.72, 0),
+      Container(
+        padding: EdgeInsets.all(6),
+        color: PdfColor(0, 0.72, 0.72, 0),
+        child: Row(children: [
+          Text(
+            "Tests",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: PdfColors.white,
+            ),
+          ),
+        ]),
+      ),
+      for (Test test in prescription.tests)
+        Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Row(children: [
+              SizedBox(width: PdfPageFormat.cm * 0.8),
               Text(
-                "Tests",
+                test.testName,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: PdfColors.white,
                 ),
               ),
-            ]),
-          ),
-          for (Test test in prescription.tests)
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Row(children: [
-                  SizedBox(width: PdfPageFormat.cm * 0.8),
-                  Text(
-                    test.testName,
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                ]))
-        ]));
+            ]))
+    ]));
   }
 
   static Widget buildPrescriptionAdvice(Prescription prescription) {

@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/call.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/resources/call_methods.dart';
+import 'package:meditec/view/screen/callscreens/feedbackScreen.dart';
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -62,6 +63,12 @@ class _CallScreenState extends State<CallScreen> {
             // snapshot is null which means that call is hanged and documents are deleted
             Navigator.pop(context);
             await JitsiMeet.closeMeeting();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FeedbackScreen(
+                          call: widget.call,
+                        )));
             break;
 
           default:

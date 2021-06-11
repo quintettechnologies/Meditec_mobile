@@ -697,12 +697,18 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                                                       //width: space * 0.15,
                                                                       child:
                                                                           RatingBar(
+                                                                        ignoreGestures:
+                                                                            true,
+                                                                        updateOnDrag:
+                                                                            false,
+                                                                        maxRating:
+                                                                            doctor.feedBackAvg,
+                                                                        initialRating:
+                                                                            doctor.feedBackAvg,
                                                                         itemSize:
                                                                             10,
                                                                         wrapAlignment:
                                                                             WrapAlignment.end,
-                                                                        initialRating:
-                                                                            5,
                                                                         direction:
                                                                             Axis.horizontal,
                                                                         allowHalfRating:

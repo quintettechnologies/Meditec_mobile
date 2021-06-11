@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:aamarpay/aamarpay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:meditec/model/appointment.dart';
 import 'package:meditec/model/category.dart';
+import 'package:meditec/payment/aamarpayData.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/widget/customAppBar.dart';
 import 'package:meditec/view/widget/customBottomNavBar.dart';
@@ -398,7 +398,8 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                             height: space * 0.02,
                                           ),
                                           Text(
-                                            widget.appointment.doctorSlot.fees
+                                            (widget.appointment.fee +
+                                                    widget.appointment.adminFee)
                                                 .toString(),
                                             style: TextStyle(fontSize: 14),
                                           ),
@@ -577,6 +578,176 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                             SizedBox(
                               height: space * 0.05,
                             ),
+                            // SingleChildScrollView(
+                            //   scrollDirection: Axis.horizontal,
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceAround,
+                            //     children: [
+                            //       TextButton(
+                            //         onPressed: () async {
+                            //           pr.update(
+                            //               message: "Canceling appointment");
+                            //           await pr.show();
+                            //           String status = await context
+                            //               .read(userProvider)
+                            //               .deleteAppointment(
+                            //                   widget.appointment);
+                            //           if (status == "success") {
+                            //             await pr.hide();
+                            //             Fluttertoast.showToast(
+                            //                 msg: "Successully Deleted.",
+                            //                 toastLength: Toast.LENGTH_SHORT,
+                            //                 gravity: ToastGravity.BOTTOM,
+                            //                 timeInSecForIosWeb: 1,
+                            //                 backgroundColor: Colors.green,
+                            //                 textColor: Colors.white,
+                            //                 fontSize: 16.0);
+                            //             Navigator.pop(context);
+                            //             Navigator.pushNamed(
+                            //                 context, AppointmentsScreen.id);
+                            //           } else {
+                            //             await pr.hide();
+                            //             Fluttertoast.showToast(
+                            //                 msg: "Failed to delete!",
+                            //                 toastLength: Toast.LENGTH_SHORT,
+                            //                 gravity: ToastGravity.BOTTOM,
+                            //                 timeInSecForIosWeb: 1,
+                            //                 backgroundColor: Colors.red,
+                            //                 textColor: Colors.white,
+                            //                 fontSize: 16.0);
+                            //           }
+                            //         },
+                            //         child: Container(
+                            //           height: space * .12,
+                            //           width: space * 0.36,
+                            //           alignment: Alignment.center,
+                            //           decoration: BoxDecoration(
+                            //               color: Colors.deepOrange,
+                            //               borderRadius:
+                            //                   BorderRadius.circular(5)),
+                            //           child: Padding(
+                            //             padding: const EdgeInsets.all(8.0),
+                            //             child: Text(
+                            //               "Cancel",
+                            //               style: TextStyle(
+                            //                   fontSize: space * 0.04,
+                            //                   fontWeight: FontWeight.bold,
+                            //                   color: Colors.white),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       AamarpayData(
+                            //           newAppointment: false,
+                            //           returnUrl: (url) {
+                            //             print(url);
+                            //           },
+                            //           isLoading: (v) async {
+                            //             setState(() {
+                            //               isLoading = v;
+                            //             });
+                            //             if (isLoading) {
+                            //               pr.update(message: "Loading Payment");
+                            //               await pr.show();
+                            //             }
+                            //           },
+                            //           paymentStatus: (paymentStatus) async {
+                            //             print(paymentStatus);
+                            //             await bookAppointment(paymentStatus);
+                            //           },
+                            //           cancelUrl: "example.com/payment/cancel",
+                            //           successUrl: "example.com/payment/confirm",
+                            //           failUrl: "example.com/payment/fail",
+                            //           customerEmail:
+                            //               widget.appointment.user.email,
+                            //           customerMobile:
+                            //               widget.appointment.user.mobileNumber,
+                            //           customerName:
+                            //               widget.appointment.user.name,
+                            //           signature:
+                            //               "8ac6f09527bd4b9f7e14350ed330fe95",
+                            //           storeID: "dacicil",
+                            //           transactionAmount: widget.appointment.fee,
+                            //           transactionID:
+                            //               "slot:${widget.appointment.doctorSlot.id}:${DateTime.now().toIso8601String()}",
+                            //           description: "Appointment",
+                            //           url: "https://secure.aamarpay.com",
+                            //           child: Container(
+                            //             height: space * .12,
+                            //             width: space * 0.36,
+                            //             alignment: Alignment.center,
+                            //             decoration: BoxDecoration(
+                            //                 color: Color(0xFF00BABA),
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(5)),
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(8.0),
+                            //               child: Text(
+                            //                 "Pay Now",
+                            //                 style: TextStyle(
+                            //                     fontSize: space * 0.04,
+                            //                     fontWeight: FontWeight.bold,
+                            //                     color: Colors.white),
+                            //               ),
+                            //             ),
+                            //           )),
+                            //       // TextButton(
+                            //       //   onPressed: () async {
+                            //       //     pr.update(message: "Making Payment");
+                            //       //     await pr.show();
+                            //       //     bool status = await context
+                            //       //         .read(userProvider)
+                            //       //         .confirmPayment(
+                            //       //             widget.appointment.id.toString());
+                            //       //     if (status) {
+                            //       //       await pr.hide();
+                            //       //       Fluttertoast.showToast(
+                            //       //           msg: "Payment Successul",
+                            //       //           toastLength: Toast.LENGTH_SHORT,
+                            //       //           gravity: ToastGravity.BOTTOM,
+                            //       //           timeInSecForIosWeb: 1,
+                            //       //           backgroundColor: Colors.green,
+                            //       //           textColor: Colors.white,
+                            //       //           fontSize: 16.0);
+                            //       //       Navigator.pop(context);
+                            //       //       Navigator.pushNamed(
+                            //       //           context, AppointmentsScreen.id);
+                            //       //     } else {
+                            //       //       await pr.hide();
+                            //       //       Fluttertoast.showToast(
+                            //       //           msg: "Payment Failed",
+                            //       //           toastLength: Toast.LENGTH_SHORT,
+                            //       //           gravity: ToastGravity.BOTTOM,
+                            //       //           timeInSecForIosWeb: 1,
+                            //       //           backgroundColor: Colors.red,
+                            //       //           textColor: Colors.white,
+                            //       //           fontSize: 16.0);
+                            //       //     }
+                            //       //   },
+                            //       //   child: Container(
+                            //       //     height: space * .12,
+                            //       //     width: space * 0.36,
+                            //       //     alignment: Alignment.center,
+                            //       //     decoration: BoxDecoration(
+                            //       //         color: Color(0xFF00BABA),
+                            //       //         borderRadius:
+                            //       //             BorderRadius.circular(5)),
+                            //       //     child: Padding(
+                            //       //       padding: const EdgeInsets.all(8.0),
+                            //       //       child: Text(
+                            //       //         "Pay Now",
+                            //       //         style: TextStyle(
+                            //       //             fontSize: space * 0.04,
+                            //       //             fontWeight: FontWeight.bold,
+                            //       //             color: Colors.white),
+                            //       //       ),
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //     ],
+                            //   ),
+                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -632,6 +803,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                   ),
                                 ),
                                 AamarpayData(
+                                    newAppointment: false,
                                     returnUrl: (url) {
                                       print(url);
                                     },
@@ -657,13 +829,14 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                         widget.appointment.user.mobileNumber,
                                     customerName: widget.appointment.user.name,
                                     signature:
-                                        "dbb74894e82415a2f7ff0ec3a97e4183",
-                                    storeID: "aamarpaytest",
-                                    transactionAmount: 100,
+                                        "8ac6f09527bd4b9f7e14350ed330fe95",
+                                    storeID: "dacicil",
+                                    transactionAmount: (widget.appointment.fee +
+                                        widget.appointment.adminFee),
                                     transactionID:
                                         "slot:${widget.appointment.doctorSlot.id}:${DateTime.now().toIso8601String()}",
                                     description: "Appointment",
-                                    url: "https://sandbox.aamarpay.com",
+                                    url: "https://secure.aamarpay.com",
                                     child: Container(
                                       height: space * .12,
                                       width: space * 0.36,
@@ -722,7 +895,8 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                 //     alignment: Alignment.center,
                                 //     decoration: BoxDecoration(
                                 //         color: Color(0xFF00BABA),
-                                //         borderRadius: BorderRadius.circular(5)),
+                                //         borderRadius:
+                                //             BorderRadius.circular(5)),
                                 //     child: Padding(
                                 //       padding: const EdgeInsets.all(8.0),
                                 //       child: Text(

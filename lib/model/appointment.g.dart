@@ -18,6 +18,8 @@ Appointment _$AppointmentFromJson(Map<String, dynamic> json) {
     ..friendlyUserBloodGroup = json['friendlyUserBloodGroup'] as String
     ..friendlyUserGender = json['friendlyUserGender'] as String
     ..originalUser = json['originalUser'] as bool
+    ..fee = json['fee'] as num
+    ..adminFee = json['adminFee'] as num
     ..prescriptionExist = json['prescriptionExist'] as bool
     ..samplePictureExist = json['samplePictureExist'] as bool
     ..previousReportExist = json['previousReportExist'] as bool
@@ -44,6 +46,8 @@ Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
       'friendlyUserBloodGroup': instance.friendlyUserBloodGroup,
       'friendlyUserGender': instance.friendlyUserGender,
       'originalUser': instance.originalUser,
+      'fee': instance.fee,
+      'adminFee': instance.adminFee,
       'prescriptionExist': instance.prescriptionExist,
       'samplePictureExist': instance.samplePictureExist,
       'previousReportExist': instance.previousReportExist,
