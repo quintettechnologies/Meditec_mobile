@@ -34,9 +34,11 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenScreenState extends State<PaymentScreen> {
+  final formKey = GlobalKey<FormState>();
   ProgressDialog pr;
   Appointment appointment = Appointment();
   bool forFNF = false;
+  bool isValid = false;
   TextEditingController nameController;
   TextEditingController ageController;
   TextEditingController weightController;
@@ -97,6 +99,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
       ),
     );
     setAppointment(context.read(userProvider).currentUser());
+    validate();
   }
 
   setAppointment(User user) {
@@ -124,63 +127,90 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     if (forFNF) {
       if (appointment.friendlyUserName == null ||
           appointment.friendlyUserName == "") {
-        Fluttertoast.showToast(
-            msg: "Patient Name Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: "Patient Name Cannot Be Empty!",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+        setState(() {
+          isValid = false;
+        });
+        print("valid: $isValid");
         return false;
       } else if (appointment.friendlyUserAge == null ||
           appointment.friendlyUserAge == 0) {
-        Fluttertoast.showToast(
-            msg: "Patient Age Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: "Patient Age Cannot Be Empty!",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+        setState(() {
+          isValid = false;
+        });
+        print("valid: $isValid");
         return false;
       } else if (appointment.friendlyUserWeight == null ||
           appointment.friendlyUserWeight == 0) {
-        Fluttertoast.showToast(
-            msg: "Patient Weight Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: "Patient Weight Cannot Be Empty!",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+        setState(() {
+          isValid = false;
+        });
+        print("valid: $isValid");
         return false;
       } else if (appointment.friendlyUserBloodGroup == null ||
           appointment.friendlyUserBloodGroup == "") {
-        Fluttertoast.showToast(
-            msg: "Patient Blood Group Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: "Patient Blood Group Cannot Be Empty!",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+        setState(() {
+          isValid = false;
+        });
+        print("valid: $isValid");
         return false;
       } else if (appointment.friendlyUserGender == null ||
           appointment.friendlyUserGender == "") {
-        Fluttertoast.showToast(
-            msg: "Patient Gender Cannot Be Empty!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: "Patient Gender Cannot Be Empty!",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+        setState(() {
+          isValid = false;
+        });
+        print("valid: $isValid");
         return false;
       } else {
+        setState(() {
+          isValid = true;
+        });
         return true;
       }
     } else {
+      setState(() {
+        isValid = true;
+      });
+      print("valid: $isValid");
       return true;
     }
   }
@@ -369,7 +399,7 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
     final User user = context.read(userProvider).currentUser();
     return PickupLayout(
       scaffold: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: MyCustomAppBar(),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -647,6 +677,8 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                 setState(() {
                                   forFNF = value;
                                 });
+                                setAppointment(user);
+                                validate();
                               },
                             ),
                           ],
@@ -671,190 +703,223 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                       ],
                                     ),
                                     padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Patient Details",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: space * 0.02,
-                                        ),
-                                        TextEditingField(
-                                          onChanged: (value) {
-                                            setState(() {
-                                              setAppointment(user);
-                                            });
-                                          },
-                                          text: "Name",
-                                          space: space,
-                                          controller: nameController,
-                                          focusNode: nameFocus,
-                                        ),
-                                        SizedBox(
-                                          height: space * 0.02,
-                                        ),
-                                        TextEditingField(
-                                          onChanged: (value) {
-                                            setState(() {
-                                              setAppointment(user);
-                                            });
-                                          },
-                                          text: "Age",
-                                          space: space,
-                                          controller: ageController,
-                                          focusNode: ageFocus,
-                                        ),
-                                        SizedBox(
-                                          height: space * 0.02,
-                                        ),
-                                        TextEditingField(
-                                          onChanged: (value) {
-                                            setState(() {
-                                              setAppointment(user);
-                                            });
-                                          },
-                                          text: "Weight",
-                                          space: space,
-                                          controller: weightController,
-                                          focusNode: weightFocus,
-                                        ),
-                                        SizedBox(
-                                          height: space * 0.02,
-                                        ),
-                                        // TextEditingField(
-                                        //   text: "Blood Group",
-                                        //   space: space,
-                                        //   controller: bloodGroupController,
-                                        //   focusNode: bloodGroupFocus,
-                                        // ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              "Blood Group",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            SizedBox(
-                                              height: space * 0.1,
-                                              width: space * 0.5,
-                                              child: DropdownButton(
-                                                key: Key("gender"),
-                                                value: bloodValue,
-                                                hint: Text(
-                                                    "Select your blood group"),
-                                                items: [
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('O-'),
-                                                    value: 1,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('O+'),
-                                                    value: 2,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('A-'),
-                                                    value: 3,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('A+'),
-                                                    value: 4,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('B-'),
-                                                    value: 5,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('B+'),
-                                                    value: 6,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('AB-'),
-                                                    value: 7,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('AB+'),
-                                                    value: 8,
-                                                  ),
-                                                ],
-                                                onChanged: (int value) {
-                                                  setState(() {
-                                                    setAppointment(user);
-                                                    bloodValue = value;
-                                                    setBloodGroup();
-                                                  });
-                                                },
+                                    child: Form(
+                                      key: formKey,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Patient Details",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: space * 0.02,
-                                        ),
-                                        // TextEditingField(
-                                        //   text: "Gender",
-                                        //   space: space,
-                                        //   controller: genderController,
-                                        //   focusNode: genderFocus,
-                                        // )
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              "Gender",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            //     if (genderValue == 1) {
-                                            //   gender = "Male";
-                                            // } else if (genderValue == 2) {
-                                            // gender = "Female";
-                                            // } else if (genderValue == 3) {
-                                            // gender = "Transgender";
-                                            // }
-                                            SizedBox(
-                                              height: space * 0.1,
-                                              width: space * 0.5,
-                                              child: DropdownButton(
-                                                key: Key("gender"),
-                                                value: genderValue,
-                                                hint:
-                                                    Text("Select your gender"),
-                                                items: [
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('Male'),
-                                                    value: 1,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('Female'),
-                                                    value: 2,
-                                                  ),
-                                                  DropdownMenuItem<int>(
-                                                    child: Text('Transgender'),
-                                                    value: 3,
-                                                  ),
-                                                ],
-                                                onChanged: (int value) {
-                                                  setState(() {
-                                                    setAppointment(user);
-                                                    genderValue = value;
-                                                    setGender();
-                                                  });
-                                                },
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: space * 0.02,
+                                          ),
+                                          TextEditingField(
+                                            onChanged: (value) {
+                                              setState(() {
+                                                setAppointment(user);
+                                                validate();
+                                              });
+                                            },
+                                            text: "Name",
+                                            validator: (value) {
+                                              if (value.toString().isEmpty) {
+                                                return "Text Cannot Be Empty";
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                            space: space,
+                                            controller: nameController,
+                                            focusNode: nameFocus,
+                                          ),
+                                          SizedBox(
+                                            height: space * 0.02,
+                                          ),
+                                          TextEditingField(
+                                            onChanged: (value) {
+                                              setState(() {
+                                                setAppointment(user);
+                                                validate();
+                                              });
+                                            },
+                                            text: "Age",
+                                            space: space,
+                                            controller: ageController,
+                                            focusNode: ageFocus,
+                                          ),
+                                          SizedBox(
+                                            height: space * 0.02,
+                                          ),
+                                          TextEditingField(
+                                            onChanged: (value) {
+                                              setState(() {
+                                                setAppointment(user);
+                                                validate();
+                                              });
+                                            },
+                                            text: "Weight",
+                                            space: space,
+                                            controller: weightController,
+                                            focusNode: weightFocus,
+                                          ),
+                                          SizedBox(
+                                            height: space * 0.02,
+                                          ),
+                                          // TextEditingField(
+                                          //   text: "Blood Group",
+                                          //   space: space,
+                                          //   controller: bloodGroupController,
+                                          //   focusNode: bloodGroupFocus,
+                                          // ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                "Blood Group",
+                                                style: TextStyle(fontSize: 16),
                                               ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                                              SizedBox(
+                                                height: space * 0.1,
+                                                width: space * 0.5,
+                                                child: DropdownButton(
+                                                  key: Key("gender"),
+                                                  value: bloodValue,
+                                                  hint: Text(
+                                                      "Select your blood group"),
+                                                  items: [
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('O-'),
+                                                      value: 1,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('O+'),
+                                                      value: 2,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('A-'),
+                                                      value: 3,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('A+'),
+                                                      value: 4,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('B-'),
+                                                      value: 5,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('B+'),
+                                                      value: 6,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('AB-'),
+                                                      value: 7,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('AB+'),
+                                                      value: 8,
+                                                    ),
+                                                  ],
+                                                  onChanged: (int value) {
+                                                    setState(() {
+                                                      bloodValue = value;
+                                                      setBloodGroup();
+                                                      setAppointment(user);
+                                                      validate();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: space * 0.02,
+                                          ),
+                                          // TextEditingField(
+                                          //   text: "Gender",
+                                          //   space: space,
+                                          //   controller: genderController,
+                                          //   focusNode: genderFocus,
+                                          // )
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                "Gender",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                              //     if (genderValue == 1) {
+                                              //   gender = "Male";
+                                              // } else if (genderValue == 2) {
+                                              // gender = "Female";
+                                              // } else if (genderValue == 3) {
+                                              // gender = "Transgender";
+                                              // }
+                                              SizedBox(
+                                                height: space * 0.1,
+                                                width: space * 0.5,
+                                                child: DropdownButton(
+                                                  key: Key("gender"),
+                                                  value: genderValue,
+                                                  hint: Text(
+                                                      "Select your gender"),
+                                                  items: [
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('Male'),
+                                                      value: 1,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child: Text('Female'),
+                                                      value: 2,
+                                                    ),
+                                                    DropdownMenuItem<int>(
+                                                      child:
+                                                          Text('Transgender'),
+                                                      value: 3,
+                                                    ),
+                                                  ],
+                                                  onChanged: (int value) {
+                                                    setState(() {
+                                                      genderValue = value;
+                                                      setGender();
+                                                      setAppointment(user);
+                                                      validate();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          !isValid
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Please fill out this form.",
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -863,402 +928,650 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                 ],
                               )
                             : Container(),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Payment via',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: space * 0.05,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                        // forFNF
+                        //     ? Column(
+                        //         children: [
+                        //           Container(
+                        //             decoration: BoxDecoration(
+                        //               color: Colors.white,
+                        //               borderRadius: BorderRadius.circular(10),
+                        //               boxShadow: [
+                        //                 BoxShadow(
+                        //                     color: Color(0xFF000000)
+                        //                         .withOpacity(0.1),
+                        //                     offset: Offset.fromDirection(1),
+                        //                     blurRadius: 10,
+                        //                     spreadRadius: 1)
+                        //               ],
+                        //             ),
+                        //             padding: EdgeInsets.all(10),
+                        //             child: Column(
+                        //               children: [
+                        //                 Row(
+                        //                   mainAxisAlignment:
+                        //                       MainAxisAlignment.spaceBetween,
+                        //                   children: [
+                        //                     Text(
+                        //                       "Patient Details",
+                        //                       style: TextStyle(
+                        //                           fontSize: 16,
+                        //                           fontWeight: FontWeight.bold),
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //                 SizedBox(
+                        //                   height: space * 0.02,
+                        //                 ),
+                        //                 TextEditingField(
+                        //                   onChanged: (value) {
+                        //                     setState(() {
+                        //                       setAppointment(user);
+                        //                     });
+                        //                   },
+                        //                   text: "Name",
+                        //                   space: space,
+                        //                   controller: nameController,
+                        //                   focusNode: nameFocus,
+                        //                 ),
+                        //                 SizedBox(
+                        //                   height: space * 0.02,
+                        //                 ),
+                        //                 TextEditingField(
+                        //                   onChanged: (value) {
+                        //                     setState(() {
+                        //                       setAppointment(user);
+                        //                     });
+                        //                   },
+                        //                   text: "Age",
+                        //                   space: space,
+                        //                   controller: ageController,
+                        //                   focusNode: ageFocus,
+                        //                 ),
+                        //                 SizedBox(
+                        //                   height: space * 0.02,
+                        //                 ),
+                        //                 TextEditingField(
+                        //                   onChanged: (value) {
+                        //                     setState(() {
+                        //                       setAppointment(user);
+                        //                     });
+                        //                   },
+                        //                   text: "Weight",
+                        //                   space: space,
+                        //                   controller: weightController,
+                        //                   focusNode: weightFocus,
+                        //                 ),
+                        //                 SizedBox(
+                        //                   height: space * 0.02,
+                        //                 ),
+                        //                 // TextEditingField(
+                        //                 //   text: "Blood Group",
+                        //                 //   space: space,
+                        //                 //   controller: bloodGroupController,
+                        //                 //   focusNode: bloodGroupFocus,
+                        //                 // ),
+                        //                 Row(
+                        //                   mainAxisAlignment:
+                        //                       MainAxisAlignment.spaceBetween,
+                        //                   children: <Widget>[
+                        //                     Text(
+                        //                       "Blood Group",
+                        //                       style: TextStyle(fontSize: 16),
+                        //                     ),
+                        //                     SizedBox(
+                        //                       height: space * 0.1,
+                        //                       width: space * 0.5,
+                        //                       child: DropdownButton(
+                        //                         key: Key("gender"),
+                        //                         value: bloodValue,
+                        //                         hint: Text(
+                        //                             "Select your blood group"),
+                        //                         items: [
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('O-'),
+                        //                             value: 1,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('O+'),
+                        //                             value: 2,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('A-'),
+                        //                             value: 3,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('A+'),
+                        //                             value: 4,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('B-'),
+                        //                             value: 5,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('B+'),
+                        //                             value: 6,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('AB-'),
+                        //                             value: 7,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('AB+'),
+                        //                             value: 8,
+                        //                           ),
+                        //                         ],
+                        //                         onChanged: (int value) {
+                        //                           setState(() {
+                        //                             setAppointment(user);
+                        //                             bloodValue = value;
+                        //                             setBloodGroup();
+                        //                           });
+                        //                         },
+                        //                       ),
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //                 SizedBox(
+                        //                   height: space * 0.02,
+                        //                 ),
+                        //                 // TextEditingField(
+                        //                 //   text: "Gender",
+                        //                 //   space: space,
+                        //                 //   controller: genderController,
+                        //                 //   focusNode: genderFocus,
+                        //                 // )
+                        //                 Row(
+                        //                   mainAxisAlignment:
+                        //                       MainAxisAlignment.spaceBetween,
+                        //                   children: <Widget>[
+                        //                     Text(
+                        //                       "Gender",
+                        //                       style: TextStyle(fontSize: 16),
+                        //                     ),
+                        //                     //     if (genderValue == 1) {
+                        //                     //   gender = "Male";
+                        //                     // } else if (genderValue == 2) {
+                        //                     // gender = "Female";
+                        //                     // } else if (genderValue == 3) {
+                        //                     // gender = "Transgender";
+                        //                     // }
+                        //                     SizedBox(
+                        //                       height: space * 0.1,
+                        //                       width: space * 0.5,
+                        //                       child: DropdownButton(
+                        //                         key: Key("gender"),
+                        //                         value: genderValue,
+                        //                         hint:
+                        //                             Text("Select your gender"),
+                        //                         items: [
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('Male'),
+                        //                             value: 1,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('Female'),
+                        //                             value: 2,
+                        //                           ),
+                        //                           DropdownMenuItem<int>(
+                        //                             child: Text('Transgender'),
+                        //                             value: 3,
+                        //                           ),
+                        //                         ],
+                        //                         onChanged: (int value) {
+                        //                           setState(() {
+                        //                             setAppointment(user);
+                        //                             genderValue = value;
+                        //                             setGender();
+                        //                           });
+                        //                         },
+                        //                       ),
+                        //                     ),
+                        //                   ],
+                        //                 )
+                        //               ],
+                        //             ),
+                        //           ),
+                        //           SizedBox(
+                        //             height: space * 0.05,
+                        //           ),
+                        //         ],
+                        //       )
+                        //     : Container(),
+                        isValid
+                            ? Column(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Payment via',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: space * 0.05,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFF000000)
+                                                          .withOpacity(0.1),
+                                                      offset:
+                                                          Offset.fromDirection(
+                                                              1),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 1)
+                                                ],
+                                              ),
+                                              padding: EdgeInsets.all(10),
+                                              height: space * 0.18,
+                                              width: space * 0.25,
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/images/payments/bkash.png'),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: space * 0.18,
+                                              width: space * 0.25,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFF000000)
+                                                          .withOpacity(0.1),
+                                                      offset:
+                                                          Offset.fromDirection(
+                                                              1),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 1)
+                                                ],
+                                              ),
+                                              padding: EdgeInsets.all(10),
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/images/payments/nagad.png'),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: space * 0.18,
+                                              width: space * 0.25,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFF000000)
+                                                          .withOpacity(0.1),
+                                                      offset:
+                                                          Offset.fromDirection(
+                                                              1),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 1)
+                                                ],
+                                              ),
+                                              padding: EdgeInsets.all(10),
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/images/payments/rocket.png'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: space * 0.05,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFF000000)
+                                                          .withOpacity(0.1),
+                                                      offset:
+                                                          Offset.fromDirection(
+                                                              1),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 1)
+                                                ],
+                                              ),
+                                              padding: EdgeInsets.all(10),
+                                              height: space * 0.18,
+                                              width: space * 0.25,
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/images/payments/visa.png'),
+                                              ),
+                                            ),
+                                            Container(
+                                                height: space * 0.18,
+                                                width: space * 0.25,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Color(0xFF000000)
+                                                            .withOpacity(0.1),
+                                                        offset: Offset
+                                                            .fromDirection(1),
+                                                        blurRadius: 10,
+                                                        spreadRadius: 1)
+                                                  ],
+                                                ),
+                                                padding: EdgeInsets.all(20),
+                                                child: SvgPicture.asset(
+                                                  'assets/images/payments/mastercard.svg',
+                                                )),
+                                            Container(
+                                              height: space * 0.18,
+                                              width: space * 0.25,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFF000000)
+                                                          .withOpacity(0.1),
+                                                      offset:
+                                                          Offset.fromDirection(
+                                                              1),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 1)
+                                                ],
+                                              ),
+                                              padding: EdgeInsets.all(10),
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/images/payments/nexuspay.png'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                    padding: EdgeInsets.all(10),
-                                    height: space * 0.18,
-                                    width: space * 0.25,
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/payments/bkash.png'),
-                                    ),
                                   ),
-                                  Container(
-                                    height: space * 0.18,
-                                    width: space * 0.25,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/payments/nagad.png'),
-                                    ),
+                                  SizedBox(
+                                    height: space * 0.05,
                                   ),
-                                  Container(
-                                    height: space * 0.18,
-                                    width: space * 0.25,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/payments/rocket.png'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: space * 0.05,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                    height: space * 0.18,
-                                    width: space * 0.25,
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/payments/visa.png'),
-                                    ),
-                                  ),
-                                  Container(
-                                      height: space * 0.18,
-                                      width: space * 0.25,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0xFF000000)
-                                                  .withOpacity(0.1),
-                                              offset: Offset.fromDirection(1),
-                                              blurRadius: 10,
-                                              spreadRadius: 1)
-                                        ],
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          pr.update(
+                                              message: "Booking Appointment");
+                                          await pr.show();
+                                          setAppointment(user);
+                                          bool valid = validate();
+                                          if (valid) {
+                                            String status = await context
+                                                .read(userProvider)
+                                                .bookAppointmentPayLater(
+                                                    appointment);
+                                            if (status == "success") {
+                                              await pr.hide();
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Appointment booked successfully!",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.green,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                              Navigator.pushNamed(context,
+                                                  AppointmentsScreen.id);
+                                            } else if (status == "taken") {
+                                              await pr.hide();
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "You have already booked an appointment at this time slot.",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                            } else if (status == "overloaded") {
+                                              await pr.hide();
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Sorry this time slot is already full.",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                            } else {
+                                              await pr.hide();
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Sorry, failed to book an appointment",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0);
+                                            }
+                                          }
+                                        },
+                                        child: Container(
+                                          height: space * .12,
+                                          width: space * 0.24,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "Pay Later",
+                                              style: TextStyle(
+                                                  fontSize: space * 0.04,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black87),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      padding: EdgeInsets.all(20),
-                                      child: SvgPicture.asset(
-                                        'assets/images/payments/mastercard.svg',
-                                      )),
-                                  Container(
-                                    height: space * 0.18,
-                                    width: space * 0.25,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF000000)
-                                                .withOpacity(0.1),
-                                            offset: Offset.fromDirection(1),
-                                            blurRadius: 10,
-                                            spreadRadius: 1)
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/payments/nexuspay.png'),
-                                    ),
+                                      AamarpayData(
+                                          appointment: bookInitialAppointment(),
+                                          newAppointment: true,
+                                          returnUrl: (url) {
+                                            print(url);
+                                          },
+                                          isLoading: (v) async {
+                                            setState(() {
+                                              isLoading = v;
+                                            });
+                                            if (isLoading) {
+                                              pr.update(
+                                                  message: "Loading Payment");
+                                              await pr.show();
+                                            } else {
+                                              await pr.hide();
+                                            }
+                                          },
+                                          paymentStatus: (paymentStatus) async {
+                                            print(paymentStatus);
+                                            // await bookAppointment(paymentStatus);
+                                            handlePayment(paymentStatus);
+                                          },
+                                          cancelUrl:
+                                              "example.com/payment/cancel",
+                                          successUrl:
+                                              "example.com/payment/confirm",
+                                          failUrl: "example.com/payment/fail",
+                                          customerEmail: user.email,
+                                          customerMobile: user.mobileNumber,
+                                          customerName: user.name,
+                                          signature:
+                                              "8ac6f09527bd4b9f7e14350ed330fe95",
+                                          storeID: "dacicil",
+                                          transactionAmount:
+                                              widget.doctor.doctorFee,
+                                          transactionID:
+                                              "slot:${widget.doctorSlot.id}:${DateTime.now().toIso8601String()}",
+                                          description:
+                                              "E-Appointment of ${widget.doctor.name} on ${widget.doctorSlot.startTime}",
+                                          url: "https://secure.aamarpay.com",
+                                          child: Container(
+                                            height: space * .12,
+                                            width: space * 0.60,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xFF00BABA),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                "Pay Now",
+                                                style: TextStyle(
+                                                    fontSize: space * 0.04,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          )),
+                                      // GestureDetector(
+                                      //   onTap: () => Navigator.push(
+                                      //       context,
+                                      //       MaterialPageRoute(
+                                      //           builder: (context) => MyPay())),
+                                      //   child: Container(
+                                      //     height: space * .12,
+                                      //     width: space * 0.60,
+                                      //     alignment: Alignment.center,
+                                      //     decoration: BoxDecoration(
+                                      //         color: Color(0xFF00BABA),
+                                      //         borderRadius: BorderRadius.circular(5)),
+                                      //     child: Padding(
+                                      //       padding: const EdgeInsets.all(8.0),
+                                      //       child: Text(
+                                      //         "Pay Now",
+                                      //         style: TextStyle(
+                                      //             fontSize: space * 0.04,
+                                      //             fontWeight: FontWeight.bold,
+                                      //             color: Colors.white),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // GestureDetector(
+                                      //   onTap: () async {
+                                      //     await pr.show();
+                                      //     setAppointment(user);
+                                      //     bool valid = validate();
+                                      //     if (valid) {
+                                      //       String status = await context
+                                      //           .read(userProvider)
+                                      //           .bookAppointment(appointment);
+                                      //       if (status == "success") {
+                                      //         await pr.hide();
+                                      //         Fluttertoast.showToast(
+                                      //             msg: "Appointment booked successfully!",
+                                      //             toastLength: Toast.LENGTH_SHORT,
+                                      //             gravity: ToastGravity.BOTTOM,
+                                      //             timeInSecForIosWeb: 1,
+                                      //             backgroundColor: Colors.green,
+                                      //             textColor: Colors.white,
+                                      //             fontSize: 16.0);
+                                      //         Navigator.pushNamed(
+                                      //             context, AppointmentsScreen.id);
+                                      //       } else if (status == "taken") {
+                                      //         await pr.hide();
+                                      //         Fluttertoast.showToast(
+                                      //             msg:
+                                      //                 "You have already booked an appointment at this time slot.",
+                                      //             toastLength: Toast.LENGTH_SHORT,
+                                      //             gravity: ToastGravity.BOTTOM,
+                                      //             timeInSecForIosWeb: 1,
+                                      //             backgroundColor: Colors.red,
+                                      //             textColor: Colors.white,
+                                      //             fontSize: 16.0);
+                                      //       } else if (status == "overloaded") {
+                                      //         await pr.hide();
+                                      //         Fluttertoast.showToast(
+                                      //             msg:
+                                      //                 "Sorry this time slot is already full.",
+                                      //             toastLength: Toast.LENGTH_SHORT,
+                                      //             gravity: ToastGravity.BOTTOM,
+                                      //             timeInSecForIosWeb: 1,
+                                      //             backgroundColor: Colors.red,
+                                      //             textColor: Colors.white,
+                                      //             fontSize: 16.0);
+                                      //       } else {
+                                      //         await pr.hide();
+                                      //         Fluttertoast.showToast(
+                                      //             msg:
+                                      //                 "Sorry, failed to book an appointment",
+                                      //             toastLength: Toast.LENGTH_SHORT,
+                                      //             gravity: ToastGravity.BOTTOM,
+                                      //             timeInSecForIosWeb: 1,
+                                      //             backgroundColor: Colors.red,
+                                      //             textColor: Colors.white,
+                                      //             fontSize: 16.0);
+                                      //       }
+                                      //     }
+                                      //   },
+                                      //   child: Container(
+                                      //     height: space * .12,
+                                      //     width: space * 0.60,
+                                      //     alignment: Alignment.center,
+                                      //     decoration: BoxDecoration(
+                                      //         color: Color(0xFF00BABA),
+                                      //         borderRadius: BorderRadius.circular(5)),
+                                      //     child: Padding(
+                                      //       padding: const EdgeInsets.all(8.0),
+                                      //       child: Text(
+                                      //         "Pay Now",
+                                      //         style: TextStyle(
+                                      //             fontSize: space * 0.04,
+                                      //             fontWeight: FontWeight.bold,
+                                      //             color: Colors.white),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: space * 0.1,
                                   ),
                                 ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: space * 0.05,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                pr.update(message: "Booking Appointment");
-                                await pr.show();
-                                setAppointment(user);
-                                bool valid = validate();
-                                if (valid) {
-                                  String status = await context
-                                      .read(userProvider)
-                                      .bookAppointmentPayLater(appointment);
-                                  if (status == "success") {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg: "Appointment booked successfully!",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.green,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                    Navigator.pushNamed(
-                                        context, AppointmentsScreen.id);
-                                  } else if (status == "taken") {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "You have already booked an appointment at this time slot.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  } else if (status == "overloaded") {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Sorry this time slot is already full.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  } else {
-                                    await pr.hide();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Sorry, failed to book an appointment",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  }
-                                }
-                              },
-                              child: Container(
-                                height: space * .12,
-                                width: space * 0.24,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Pay Later",
-                                    style: TextStyle(
-                                        fontSize: space * 0.04,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            AamarpayData(
-                                appointment: bookInitialAppointment(),
-                                newAppointment: true,
-                                returnUrl: (url) {
-                                  print(url);
-                                },
-                                isLoading: (v) async {
-                                  setState(() {
-                                    isLoading = v;
-                                  });
-                                  if (isLoading) {
-                                    pr.update(message: "Loading Payment");
-                                    await pr.show();
-                                  } else {
-                                    await pr.hide();
-                                  }
-                                },
-                                paymentStatus: (paymentStatus) async {
-                                  print(paymentStatus);
-                                  // await bookAppointment(paymentStatus);
-                                  handlePayment(paymentStatus);
-                                },
-                                cancelUrl: "example.com/payment/cancel",
-                                successUrl: "example.com/payment/confirm",
-                                failUrl: "example.com/payment/fail",
-                                customerEmail: user.email,
-                                customerMobile: user.mobileNumber,
-                                customerName: user.name,
-                                signature: "8ac6f09527bd4b9f7e14350ed330fe95",
-                                storeID: "dacicil",
-                                transactionAmount: widget.doctor.doctorFee,
-                                transactionID:
-                                    "slot:${widget.doctorSlot.id}:${DateTime.now().toIso8601String()}",
-                                description:
-                                    "E-Appointment of ${widget.doctor.name} on ${widget.doctorSlot.startTime}",
-                                url: "https://secure.aamarpay.com",
-                                child: Container(
-                                  height: space * .12,
-                                  width: space * 0.60,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF00BABA),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Pay Now",
-                                      style: TextStyle(
-                                          fontSize: space * 0.04,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                )),
-                            // GestureDetector(
-                            //   onTap: () => Navigator.push(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //           builder: (context) => MyPay())),
-                            //   child: Container(
-                            //     height: space * .12,
-                            //     width: space * 0.60,
-                            //     alignment: Alignment.center,
-                            //     decoration: BoxDecoration(
-                            //         color: Color(0xFF00BABA),
-                            //         borderRadius: BorderRadius.circular(5)),
-                            //     child: Padding(
-                            //       padding: const EdgeInsets.all(8.0),
-                            //       child: Text(
-                            //         "Pay Now",
-                            //         style: TextStyle(
-                            //             fontSize: space * 0.04,
-                            //             fontWeight: FontWeight.bold,
-                            //             color: Colors.white),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            // GestureDetector(
-                            //   onTap: () async {
-                            //     await pr.show();
-                            //     setAppointment(user);
-                            //     bool valid = validate();
-                            //     if (valid) {
-                            //       String status = await context
-                            //           .read(userProvider)
-                            //           .bookAppointment(appointment);
-                            //       if (status == "success") {
-                            //         await pr.hide();
-                            //         Fluttertoast.showToast(
-                            //             msg: "Appointment booked successfully!",
-                            //             toastLength: Toast.LENGTH_SHORT,
-                            //             gravity: ToastGravity.BOTTOM,
-                            //             timeInSecForIosWeb: 1,
-                            //             backgroundColor: Colors.green,
-                            //             textColor: Colors.white,
-                            //             fontSize: 16.0);
-                            //         Navigator.pushNamed(
-                            //             context, AppointmentsScreen.id);
-                            //       } else if (status == "taken") {
-                            //         await pr.hide();
-                            //         Fluttertoast.showToast(
-                            //             msg:
-                            //                 "You have already booked an appointment at this time slot.",
-                            //             toastLength: Toast.LENGTH_SHORT,
-                            //             gravity: ToastGravity.BOTTOM,
-                            //             timeInSecForIosWeb: 1,
-                            //             backgroundColor: Colors.red,
-                            //             textColor: Colors.white,
-                            //             fontSize: 16.0);
-                            //       } else if (status == "overloaded") {
-                            //         await pr.hide();
-                            //         Fluttertoast.showToast(
-                            //             msg:
-                            //                 "Sorry this time slot is already full.",
-                            //             toastLength: Toast.LENGTH_SHORT,
-                            //             gravity: ToastGravity.BOTTOM,
-                            //             timeInSecForIosWeb: 1,
-                            //             backgroundColor: Colors.red,
-                            //             textColor: Colors.white,
-                            //             fontSize: 16.0);
-                            //       } else {
-                            //         await pr.hide();
-                            //         Fluttertoast.showToast(
-                            //             msg:
-                            //                 "Sorry, failed to book an appointment",
-                            //             toastLength: Toast.LENGTH_SHORT,
-                            //             gravity: ToastGravity.BOTTOM,
-                            //             timeInSecForIosWeb: 1,
-                            //             backgroundColor: Colors.red,
-                            //             textColor: Colors.white,
-                            //             fontSize: 16.0);
-                            //       }
-                            //     }
-                            //   },
-                            //   child: Container(
-                            //     height: space * .12,
-                            //     width: space * 0.60,
-                            //     alignment: Alignment.center,
-                            //     decoration: BoxDecoration(
-                            //         color: Color(0xFF00BABA),
-                            //         borderRadius: BorderRadius.circular(5)),
-                            //     child: Padding(
-                            //       padding: const EdgeInsets.all(8.0),
-                            //       child: Text(
-                            //         "Pay Now",
-                            //         style: TextStyle(
-                            //             fontSize: space * 0.04,
-                            //             fontWeight: FontWeight.bold,
-                            //             color: Colors.white),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: space * 0.1,
-                        ),
+                              )
+                            : Container(),
                       ],
                     ),
                     Center(
