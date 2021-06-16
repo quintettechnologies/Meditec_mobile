@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/providers/user_provider.dart';
+import 'package:meditec/utils/utils.dart';
 import 'package:meditec/view/screen/24x7doctor_screen.dart';
 import 'package:meditec/view/screen/appointents_list_screen.dart';
 import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
@@ -22,6 +25,7 @@ import 'package:meditec/view/screen/dashboard_screen.dart';
 import 'package:meditec/view/screen/start_screen.dart';
 import 'package:meditec/view/screen/upload_profile_image_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
@@ -77,6 +81,7 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  static final String title = 'Has Internet?';
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -84,12 +89,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   // SharedPreferences prefs;
+  StreamSubscription subscription;
   @override
   void initState() {
     // TODO: implement initState
     initializeFCM();
     super.initState();
     getBatteryOptimizationPermission();
+    subscription =
+        Connectivity().onConnectivityChanged.listen(showConnectivitySnackBar);
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+
+    super.dispose();
   }
 
   Future selectNotification(String payload) async {
@@ -182,37 +197,49 @@ class _MyAppState extends State<MyApp> {
     context.read(userProvider).setNewNotification(true);
   }
 
+  void showConnectivitySnackBar(ConnectivityResult result) {
+    final hasInternet = result != ConnectivityResult.none;
+    final message = hasInternet
+        ? 'You are connected ${result == ConnectivityResult.mobile ? "to mobile data" : result == ConnectivityResult.wifi ? "to wifi" : ""}'
+        : 'You have no internet';
+    final color = hasInternet ? Colors.green : Colors.red;
+
+    Utils.showTopSnackBar(context, message, color);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Source Sans Pro',
-        scaffoldBackgroundColor: kBackgroundColor,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return OverlaySupport(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Source Sans Pro',
+          scaffoldBackgroundColor: kBackgroundColor,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: StartScreen.id,
+        routes: {
+          StartScreen.id: (context) => StartScreen(),
+          HomeScreen.id: (context) => HomeScreen(),
+          SignUpScreen.id: (context) => SignUpScreen(),
+          LoginScreen.id: (context) => LoginScreen(),
+          DoctorScreen.id: (context) => DoctorScreen(),
+          NotificationScreen.id: (context) => NotificationScreen(),
+          CategoryDoctorScreen.id: (context) => CategoryDoctorScreen(),
+          Dashboard.id: (context) => Dashboard(),
+          EditProfileScreen.id: (context) => EditProfileScreen(),
+          ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
+          UploadProfileImageScreen.id: (context) => UploadProfileImageScreen(),
+          AppointmentsScreen.id: (context) => AppointmentsScreen(),
+          ProfileScreen.id: (context) => ProfileScreen(),
+          PrescriptionListScreen.id: (context) => PrescriptionListScreen(),
+          AppointmentReportListScreen.id: (context) =>
+              AppointmentReportListScreen(),
+          AppointmentSampleListScreen.id: (context) =>
+              AppointmentSampleListScreen(),
+          EmergencyDoctorScreen.id: (context) => EmergencyDoctorScreen(),
+        },
       ),
-      initialRoute: StartScreen.id,
-      routes: {
-        StartScreen.id: (context) => StartScreen(),
-        HomeScreen.id: (context) => HomeScreen(),
-        SignUpScreen.id: (context) => SignUpScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
-        DoctorScreen.id: (context) => DoctorScreen(),
-        NotificationScreen.id: (context) => NotificationScreen(),
-        CategoryDoctorScreen.id: (context) => CategoryDoctorScreen(),
-        Dashboard.id: (context) => Dashboard(),
-        EditProfileScreen.id: (context) => EditProfileScreen(),
-        ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
-        UploadProfileImageScreen.id: (context) => UploadProfileImageScreen(),
-        AppointmentsScreen.id: (context) => AppointmentsScreen(),
-        ProfileScreen.id: (context) => ProfileScreen(),
-        PrescriptionListScreen.id: (context) => PrescriptionListScreen(),
-        AppointmentReportListScreen.id: (context) =>
-            AppointmentReportListScreen(),
-        AppointmentSampleListScreen.id: (context) =>
-            AppointmentSampleListScreen(),
-        EmergencyDoctorScreen.id: (context) => EmergencyDoctorScreen(),
-      },
     );
   }
 }

@@ -18,7 +18,7 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
       child: BottomAppBar(
         child: Container(
           color: Color(0xFF00BABA),
-          height: height * 0.07,
+          height: height * 0.08,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: height * 0.01),
             //padding: EdgeInsets.zero,
@@ -36,7 +36,7 @@ class _MyCustomNavBarState extends State<MyCustomNavBar> {
                 ),
                 GestureDetector(
                     child: Container(
-                      width: height * 0.05,
+                      width: height * 0.06,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(color: Colors.white, width: 2)),

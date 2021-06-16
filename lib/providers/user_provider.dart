@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserProvider extends ChangeNotifier {
   String url = "139.162.19.50:8080"; // server address
   // String url = "192.168.0.100:8080";
-  // String url = "192.168.0.107:8080";
+  // String url = "192.168.0.105:8080";
   User _user;
   String number;
   // String password;
@@ -952,6 +952,7 @@ class UserProvider extends ChangeNotifier {
       this.authToken = null;
       // this.image1 = null;
       this.selectedImage = null;
+      this.appointments.clear();
       notifyListeners();
       loginData = await SharedPreferences.getInstance();
       loginData.clear();

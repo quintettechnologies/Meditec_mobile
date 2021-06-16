@@ -10,6 +10,7 @@ import 'package:meditec/view/screen/appointment_reports_list_screen.dart';
 import 'package:meditec/view/screen/appointment_samples_list_screen.dart';
 import 'package:meditec/view/screen/changePassword_Screen.dart';
 import 'package:meditec/view/screen/edit_profile_screen.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:meditec/view/screen/home_screen.dart';
 import 'package:meditec/view/screen/prescriptions_list_screen.dart';
 import 'package:meditec/view/screen/profile_screen.dart';
@@ -19,6 +20,7 @@ class MyCustomDrawer extends HookWidget {
   Widget build(BuildContext context) {
     bool isSwitched = false;
     UserProvider user = useProvider(userProvider);
+    double height = MediaQuery.of(context).size.height;
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
@@ -177,10 +179,130 @@ class MyCustomDrawer extends HookWidget {
               MenuHeader(text: 'More'),
               MenuItem(text: 'Language'),
               MenuItem(text: 'Rating'),
-              MenuItem(text: 'Facebook Page'),
-              MenuItem(text: 'About Us'),
-              MenuItem(text: 'Contact Us'),
-              MenuItem(text: 'Support & FAQ'),
+              GestureDetector(
+                  onTap: () {
+                    UrlLauncher.launch("https://www.facebook.com/dacicilbd");
+                  },
+                  child: MenuItem(text: 'Facebook Page')), // facebook page
+              GestureDetector(
+                  onTap: () => showAboutDialog(
+                          context: context,
+                          applicationName: "Cicil",
+                          applicationIcon: SvgPicture.asset(
+                            'assets/images/meditec_logo.svg',
+                            height: height * 0.12,
+                            color: Color(0xFF00BABA),
+                          ),
+                          applicationLegalese: "Ⓒ 2021 Cicil",
+                          applicationVersion: "June 2021",
+                          children: [
+                            SizedBox(
+                              height: height * 0.03,
+                            ),
+                            Text(
+                                "About us:\n\nCicil Limited is a one-stop digital Medical service provider app for the people, from anywhere anyone can get medical consultation from reputed doctors for her/his any kind of health issues.\n\nCicil\'s mission is to bring Excellency in health sector by providing outstanding services to every  patient across the worldwide.")
+                          ]),
+                  child: MenuItem(text: 'About Us')), // about us
+              GestureDetector(
+                  onTap: () => showAboutDialog(
+                        context: context,
+                        applicationName: "Cicil",
+                        applicationIcon: SvgPicture.asset(
+                          'assets/images/meditec_logo.svg',
+                          height: height * 0.12,
+                          color: Color(0xFF00BABA),
+                        ),
+                        applicationLegalese: "Ⓒ 2021 Cicil",
+                        applicationVersion: "June 2021",
+                        children: [
+                          SizedBox(
+                            height: height * 0.03,
+                          ),
+                          Text("Contact Us"),
+                          GestureDetector(
+                            onTap: () =>
+                                UrlLauncher.launch("http://www.dacicil.com"),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.globe,
+                                    color: Color(0xFF00BABA),
+                                  ),
+                                  SizedBox(
+                                    width: height * 0.03,
+                                  ),
+                                  Text("www.dacicil.com"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => UrlLauncher.launch(
+                                "mailto:cicillimited@gmail.com"),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.at,
+                                    color: Color(0xFF00BABA),
+                                  ),
+                                  SizedBox(
+                                    width: height * 0.03,
+                                  ),
+                                  Text("cicillimited@gmail.com"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () =>
+                                UrlLauncher.launch("tel://01683418416"),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.phone,
+                                    color: Color(0xFF00BABA),
+                                  ),
+                                  SizedBox(
+                                    width: height * 0.03,
+                                  ),
+                                  Text("01683418416"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.location,
+                                  color: Color(0xFF00BABA),
+                                ),
+                                SizedBox(
+                                  width: height * 0.03,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                      "House: 03, Block: A, Section: 04 , Housing State Cumilla, Bangladesh"),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                  child: MenuItem(text: 'Contact Us')), // contact us
+              // MenuItem(text: 'Support & FAQ'),
               user.loginStatus
                   ? Padding(
                       padding: const EdgeInsets.all(20.0),

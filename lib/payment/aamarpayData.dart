@@ -139,7 +139,7 @@ class _AamarpayDataState<T> extends State<AamarpayData<T>> {
               });
             }
           } else {
-            getPayment().then((value) {
+            getPayment(fee: widget.transactionAmount).then((value) {
               var url = "${widget.url}$value";
               print(url);
               Future.delayed(Duration(milliseconds: 200), () async {
@@ -167,12 +167,41 @@ class _AamarpayDataState<T> extends State<AamarpayData<T>> {
               });
             });
           }
+        } else {
+          getPayment().then((value) {
+            var url = "${widget.url}$value";
+            print(url);
+            Future.delayed(Duration(milliseconds: 200), () async {
+              Route route =
+                  MaterialPageRoute(builder: (context) => PaymentView(url));
+              Navigator.push(context, route).then((value) async {
+                if (value.split('/').contains("confirm")) {
+                  urlHandler(value);
+                  paymentHandler("success");
+                  loadingHandler(false);
+                } else if (value.split('/').contains("cancel")) {
+                  urlHandler(value);
+                  paymentHandler("cancel");
+                  loadingHandler(false);
+                } else if (value.split("/").contains("fail")) {
+                  urlHandler(value);
+                  paymentHandler("fail");
+                  loadingHandler(false);
+                } else {
+                  urlHandler(value);
+                  paymentHandler("fail");
+                  loadingHandler(false);
+                }
+              });
+            });
+          });
         }
       },
     );
   }
 
   Future getPayment({String fee}) async {
+    print("get payment");
     http.Response response = await http.post("${widget.url}/index.php", body: {
       "store_id": widget.storeID.toString(),
       "tran_id": widget.transactionID.toString(),

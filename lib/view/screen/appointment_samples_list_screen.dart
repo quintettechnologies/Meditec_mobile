@@ -80,10 +80,15 @@ class _AppointmentSampleListScreenState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Samples',
-                    style: TextStyle(
-                        fontSize: space * 0.05, color: kPrimaryTextColor),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Samples',
+                        style: TextStyle(
+                            fontSize: space * 0.05, color: kPrimaryTextColor),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 10,
@@ -215,7 +220,20 @@ class _AppointmentSampleListScreenState
                           )
                       ],
                     ),
-                  )
+                  ),
+                  appointmentsDisplay.isEmpty
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'You have no previous disease sample.',
+                              style: TextStyle(
+                                  fontSize: space * 0.04,
+                                  color: kPrimaryTextColor),
+                            ),
+                          ],
+                        )
+                      : Container(),
                 ],
               ),
             ),

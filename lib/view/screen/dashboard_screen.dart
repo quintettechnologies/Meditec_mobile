@@ -7,6 +7,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:meditec/model/advertisement.dart';
 import 'package:meditec/model/advertisementCategory.dart';
 import 'package:meditec/model/category.dart';
@@ -1211,9 +1212,11 @@ class _DashboardState extends State<Dashboard> {
                         color: Colors.white,
                         height: MediaQuery.of(context).size.height * 0.35,
                         child: Center(
-                            child: CircularProgressIndicator(
-                          backgroundColor: Colors.blue,
-                        )),
+                          child: SpinKitCircle(
+                            color: Color(0xFF00BABA),
+                            size: 50.0,
+                          ),
+                        ),
                       )
                     : Center()
               ],

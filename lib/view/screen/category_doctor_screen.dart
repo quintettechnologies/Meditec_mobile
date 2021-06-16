@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meditec/model/user.dart';
@@ -522,9 +523,11 @@ class _CategoryDoctorScreenState extends State<CategoryDoctorScreen> {
                       color: Colors.white,
                       height: MediaQuery.of(context).size.height * 0.35,
                       child: Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: Colors.blue,
-                      )),
+                        child: SpinKitCircle(
+                          color: Color(0xFF00BABA),
+                          size: 50.0,
+                        ),
+                      ),
                     )
                   : Center()
             ],

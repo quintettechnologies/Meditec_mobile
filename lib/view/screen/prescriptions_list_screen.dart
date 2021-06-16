@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -59,6 +60,7 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
   }
 
   filterAppointments() {
+    appointmentsDisplay.clear();
     for (Appointment appointment in appointments) {
       if (appointment.prescriptionExist) {
         appointmentsDisplay.add(appointment);
@@ -85,10 +87,16 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Prescriptions',
-                        style: TextStyle(
-                            fontSize: space * 0.05, color: kPrimaryTextColor),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Prescriptions',
+                            style: TextStyle(
+                                fontSize: space * 0.05,
+                                color: kPrimaryTextColor),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 10,
@@ -250,7 +258,20 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
                               )
                           ],
                         ),
-                      )
+                      ),
+                      appointmentsDisplay.isEmpty
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'You have no prescriptions.',
+                                  style: TextStyle(
+                                      fontSize: space * 0.04,
+                                      color: kPrimaryTextColor),
+                                ),
+                              ],
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -280,8 +301,17 @@ class _PrescriptionListScreenState extends State<PrescriptionListScreen> {
         //         child: Text("Doctors")),
         //   ),
         // ),
-        floatingActionButton: MyCustomFAB(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFF00BABA),
+          onPressed: () async {
+            await fetchAppointments();
+            filterAppointments();
+          },
+          child: Icon(
+            Icons.refresh,
+            size: 40,
+          ),
+        ),
         bottomNavigationBar: MyCustomNavBar(),
       ),
     );

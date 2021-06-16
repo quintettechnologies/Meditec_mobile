@@ -4,6 +4,7 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:meditec/model/category.dart';
@@ -294,7 +295,10 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               width: space,
                               color: Colors.white,
                               child: Center(
-                                child: CircularProgressIndicator(),
+                                child: SpinKitCircle(
+                                  color: Color(0xFF00BABA),
+                                  size: 50.0,
+                                ),
                               ),
                             )
                           : GridView.builder(

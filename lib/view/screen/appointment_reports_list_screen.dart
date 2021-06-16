@@ -79,10 +79,15 @@ class _AppointmentReportListScreenState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Reports',
-                    style: TextStyle(
-                        fontSize: space * 0.05, color: kPrimaryTextColor),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Reports',
+                        style: TextStyle(
+                            fontSize: space * 0.05, color: kPrimaryTextColor),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 10,
@@ -214,7 +219,20 @@ class _AppointmentReportListScreenState
                           )
                       ],
                     ),
-                  )
+                  ),
+                  appointmentsDisplay.isEmpty
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'You have no previous reports.',
+                              style: TextStyle(
+                                  fontSize: space * 0.04,
+                                  color: kPrimaryTextColor),
+                            ),
+                          ],
+                        )
+                      : Container(),
                 ],
               ),
             ),

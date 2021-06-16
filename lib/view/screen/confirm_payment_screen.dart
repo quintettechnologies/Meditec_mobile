@@ -835,7 +835,8 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                         widget.appointment.adminFee),
                                     transactionID:
                                         "slot:${widget.appointment.doctorSlot.id}:${DateTime.now().toIso8601String()}",
-                                    description: "Appointment",
+                                    description:
+                                        "E-Appointment of ${widget.appointment.user.name} on ${widget.appointment.doctorSlot.startTime}",
                                     url: "https://secure.aamarpay.com",
                                     child: Container(
                                       height: space * .12,
@@ -895,8 +896,7 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                 //     alignment: Alignment.center,
                                 //     decoration: BoxDecoration(
                                 //         color: Color(0xFF00BABA),
-                                //         borderRadius:
-                                //             BorderRadius.circular(5)),
+                                //         borderRadius: BorderRadius.circular(5)),
                                 //     child: Padding(
                                 //       padding: const EdgeInsets.all(8.0),
                                 //       child: Text(

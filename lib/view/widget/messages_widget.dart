@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:meditec/model/message.dart';
 import 'package:meditec/providers/user_provider.dart';
 import 'package:meditec/resources/firebase_api.dart';
@@ -21,7 +22,12 @@ class MessagesWidget extends StatelessWidget {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: SpinKitCircle(
+                  color: Color(0xFF00BABA),
+                  size: 50.0,
+                ),
+              );
             default:
               if (snapshot.hasError) {
                 return buildText('Something Went Wrong Try later');

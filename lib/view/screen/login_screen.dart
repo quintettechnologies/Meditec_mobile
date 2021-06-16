@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    height: size.height * 0.3,
+                    height: size.height * 0.33,
                     color: Color(0xFF00BABA),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           tag: 'logo',
                           child: SvgPicture.asset(
                             'assets/images/meditec_logo.svg',
-                            height: size.height * 0.4,
+                            height: size.width * 0.45,
                             color: Colors.white,
                           ),
                         ),
@@ -69,15 +69,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   Container(
-                    height: size.height * 0.7,
+                    height: size.height * 0.67,
                     color: Colors.white,
                     child: Column(
                       children: [
                         SizedBox(
-                          height: size.height * 0.02,
+                          height: size.height * 0.05,
                         ),
                         Container(
-                          height: size.height * 0.67,
+                          height: size.height * 0.6,
                           padding: EdgeInsets.symmetric(
                               horizontal: size.width * 0.15),
                           child: Column(
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Number',
+                                          'Mobile Number',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       decoration: InputDecoration(
                                         filled: true,
                                         fillColor: Colors.white,
-                                        hintText: 'Enter Number',
+                                        hintText: 'Enter Mobile Number',
                                         errorText: _numberValidator
                                             ? 'Number Can\'t Be Empty'
                                             : null,
@@ -279,97 +279,100 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Login with social account',
-                                  style: TextStyle(
-                                      fontFamily: 'Source Sans Pro',
-                                      fontSize: 14,
-                                      color: Colors.black54),
-                                ),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0xFF000000)
-                                                  .withOpacity(0.1),
-                                              offset: Offset.fromDirection(1),
-                                              blurRadius: 10,
-                                              spreadRadius: -10)
-                                        ]),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/social/facebook.svg',
-                                      height: 60,
-                                      width: 60,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0xFF000000)
-                                                  .withOpacity(0.1),
-                                              offset: Offset.fromDirection(1),
-                                              blurRadius: 10,
-                                              spreadRadius: -10)
-                                        ]),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/social/google.svg',
-                                      height: 60,
-                                      width: 60,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0xFF000000)
-                                                  .withOpacity(0.1),
-                                              offset: Offset.fromDirection(1),
-                                              blurRadius: 10,
-                                              spreadRadius: -10)
-                                        ]),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/social/twitter.svg',
-                                      height: 60,
-                                      width: 60,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  // print('Tapped Sign Up');
-                                  Navigator.pushNamed(context, SignUpScreen.id);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 20),
-                                  alignment: Alignment.center,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: 'Don\'t Have an account? ',
-                                      style:
-                                          TextStyle(color: Color(0xFF00BABA)),
-                                      children: [
-                                        TextSpan(
-                                          text: 'Create Now',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                              // Container(
+                              //   padding: EdgeInsets.symmetric(vertical: 20),
+                              //   alignment: Alignment.center,
+                              //   child: Text(
+                              //     'Login with social account',
+                              //     style: TextStyle(
+                              //         fontFamily: 'Source Sans Pro',
+                              //         fontSize: 14,
+                              //         color: Colors.black54),
+                              //   ),
+                              // ),
+                              // Row(
+                              //   crossAxisAlignment: CrossAxisAlignment.center,
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Container(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       decoration: BoxDecoration(
+                              //           borderRadius: BorderRadius.circular(50),
+                              //           boxShadow: [
+                              //             BoxShadow(
+                              //                 color: Color(0xFF000000)
+                              //                     .withOpacity(0.1),
+                              //                 offset: Offset.fromDirection(1),
+                              //                 blurRadius: 10,
+                              //                 spreadRadius: -10)
+                              //           ]),
+                              //       child: SvgPicture.asset(
+                              //         'assets/icons/social/facebook.svg',
+                              //         height: 60,
+                              //         width: 60,
+                              //       ),
+                              //     ),
+                              //     Container(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       decoration: BoxDecoration(
+                              //           borderRadius: BorderRadius.circular(50),
+                              //           boxShadow: [
+                              //             BoxShadow(
+                              //                 color: Color(0xFF000000)
+                              //                     .withOpacity(0.1),
+                              //                 offset: Offset.fromDirection(1),
+                              //                 blurRadius: 10,
+                              //                 spreadRadius: -10)
+                              //           ]),
+                              //       child: SvgPicture.asset(
+                              //         'assets/icons/social/google.svg',
+                              //         height: 60,
+                              //         width: 60,
+                              //       ),
+                              //     ),
+                              //     Container(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       decoration: BoxDecoration(
+                              //           borderRadius: BorderRadius.circular(50),
+                              //           boxShadow: [
+                              //             BoxShadow(
+                              //                 color: Color(0xFF000000)
+                              //                     .withOpacity(0.1),
+                              //                 offset: Offset.fromDirection(1),
+                              //                 blurRadius: 10,
+                              //                 spreadRadius: -10)
+                              //           ]),
+                              //       child: SvgPicture.asset(
+                              //         'assets/icons/social/twitter.svg',
+                              //         height: 60,
+                              //         width: 60,
+                              //       ),
+                              //     )
+                              //   ],
+                              // ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // print('Tapped Sign Up');
+                                    Navigator.pushNamed(
+                                        context, SignUpScreen.id);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    alignment: Alignment.center,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: 'Don\'t Have an account? ',
+                                        style:
+                                            TextStyle(color: Color(0xFF00BABA)),
+                                        children: [
+                                          TextSpan(
+                                            text: 'Create Now',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

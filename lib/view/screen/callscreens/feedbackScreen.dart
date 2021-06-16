@@ -24,7 +24,7 @@ class FeedbackScreen extends StatefulWidget {
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
   ProgressDialog pr;
-  double rating = 0;
+  double rating = 5;
   TextEditingController reviewController;
   FocusNode reviewFocus;
 
@@ -116,7 +116,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     RatingBar(
                       itemSize: space * 0.1,
                       wrapAlignment: WrapAlignment.end,
-                      initialRating: 5,
+                      initialRating: rating,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
                       itemCount: 5,

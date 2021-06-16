@@ -134,11 +134,24 @@ class PdfPrescriptionApi {
             fontSize: 14,
           ),
         ),
+        RichText(
+          text: TextSpan(
+              text: "Date: ",
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              children: [
+                TextSpan(
+                    text:
+                        "${DateFormat.yMd().format(prescription.appoinment.doctorSlot.startTime)}",
+                    style: TextStyle(fontWeight: FontWeight.bold))
+              ]),
+        ),
       ],
     );
   }
 
-  static Widget buildPrescriptionMedicine(Prescription prescription) {
+  static SpanningWidget buildPrescriptionMedicine(Prescription prescription) {
     final headers = ['Medicine', 'Morning', 'Day', 'Evening', 'Days', 'Take'];
     final data = prescription.scedules.map((item) {
       return [
@@ -151,27 +164,23 @@ class PdfPrescriptionApi {
       ];
     }).toList();
 
-    return Container(
-        // height: PdfPageFormat.a4.height * 0.3,
-        child: Column(children: [
-      Table.fromTextArray(
-        headers: headers,
-        data: data,
-        border: null,
-        headerStyle:
-            TextStyle(fontWeight: FontWeight.bold, color: PdfColors.white),
-        headerDecoration: BoxDecoration(color: PdfColor(0, 0.72, 0.72, 0)),
-        cellHeight: 30,
-        cellAlignments: {
-          0: Alignment.centerLeft,
-          1: Alignment.center,
-          2: Alignment.center,
-          3: Alignment.center,
-          4: Alignment.center,
-          5: Alignment.centerRight,
-        },
-      )
-    ]));
+    return Table.fromTextArray(
+      headers: headers,
+      data: data,
+      border: null,
+      headerStyle:
+          TextStyle(fontWeight: FontWeight.bold, color: PdfColors.white),
+      headerDecoration: BoxDecoration(color: PdfColor(0, 0.72, 0.72, 0)),
+      cellHeight: 30,
+      cellAlignments: {
+        0: Alignment.centerLeft,
+        1: Alignment.center,
+        2: Alignment.center,
+        3: Alignment.center,
+        4: Alignment.center,
+        5: Alignment.centerRight,
+      },
+    );
   }
 
   static Widget buildPrescriptionTest(Prescription prescription) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class PaymentView extends StatefulWidget {
   final url;
@@ -64,7 +65,12 @@ class _PaymentViewState extends State<PaymentView> {
                 initialUrl: '${widget.url}',
               ),
               _isLoadingPage
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(
+                      child: SpinKitCircle(
+                        color: Color(0xFF00BABA),
+                        size: 50.0,
+                      ),
+                    )
                   : Container(),
             ],
           ),

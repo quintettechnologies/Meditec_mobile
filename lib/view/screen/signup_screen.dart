@@ -158,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Password",
+                                  "Password *",
                                   style: TextStyle(
                                       fontSize: space * 0.043,
                                       fontWeight: FontWeight.bold,
@@ -415,7 +415,7 @@ class TextInputField extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                text,
+                "$text *",
                 style: TextStyle(
                     fontSize: space * 0.043,
                     fontWeight: FontWeight.bold,

@@ -337,6 +337,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                               ),
                               shrinkWrap: true,
                               itemCount: categories.length,
+                              physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext ctx, index) {
                                 if (categories[index].name != "24/7") {
                                   return Padding(
@@ -1324,9 +1325,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       color: Colors.white,
                       height: MediaQuery.of(context).size.height * 0.35,
                       child: Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: Colors.blue,
-                      )),
+                        child: SpinKitCircle(
+                          color: Color(0xFF00BABA),
+                          size: 50.0,
+                        ),
+                      ),
                     )
                   : Center()
             ],

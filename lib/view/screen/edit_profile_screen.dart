@@ -467,8 +467,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         color: Colors.white,
                         height: MediaQuery.of(context).size.height * 0.95,
                         child: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
+                          child: SpinKitCircle(
+                            color: Color(0xFF00BABA),
+                            size: 50.0,
                           ),
                         ),
                       )

@@ -951,10 +951,11 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
           onPressed: () async {
             await fetchAppointments();
           },
+          backgroundColor: Color(0xFF00BABA),
           child: Center(
             child: Icon(
-              CupertinoIcons.arrow_2_circlepath_circle_fill,
-              size: 50,
+              Icons.refresh,
+              size: 40,
             ),
           ),
         ),
