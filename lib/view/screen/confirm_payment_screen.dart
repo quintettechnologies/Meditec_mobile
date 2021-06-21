@@ -820,9 +820,9 @@ class _PaymentScreenScreenState extends State<ConfirmPaymentScreen> {
                                       print(paymentStatus);
                                       await bookAppointment(paymentStatus);
                                     },
-                                    cancelUrl: "example.com/payment/cancel",
-                                    successUrl: "example.com/payment/confirm",
-                                    failUrl: "example.com/payment/fail",
+                                    cancelUrl: "dacicil.com/payment/cancel",
+                                    successUrl: "dacicil.com/payment/confirm",
+                                    failUrl: "dacicil.com/payment/fail",
                                     customerEmail:
                                         widget.appointment.user.email,
                                     customerMobile:

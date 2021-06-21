@@ -356,10 +356,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16,
+                                                              fontSize:
+                                                                  space * 0.032,
                                                               color:
                                                                   Colors.white),
                                                         ),

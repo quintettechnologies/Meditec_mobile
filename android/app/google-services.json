@@ -7,6 +7,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1049842981844:android:f27ce3ce36d17c09f71441",
+        "android_client_info": {
+          "package_name": "com.dacicil.cicil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049842981844-s9n10a6dpskn7frlqmkivg99gu8uokjl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dacicil.cicil",
+            "certificate_hash": "9c8888f3c0dd1e638fa558cc89aaffcc6663bdfb"
+          }
+        },
+        {
+          "client_id": "1049842981844-1ktinnt373g35h45h4ef3jtcoqqkkbad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHnJBr71wVXEXw53A09Dvp-bWcaHn3h4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049842981844-1ktinnt373g35h45h4ef3jtcoqqkkbad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1049842981844:android:ae3ff8356492bb5ff71441",
         "android_client_info": {
           "package_name": "com.meditec.mobile.meditec_mobile_doctor"

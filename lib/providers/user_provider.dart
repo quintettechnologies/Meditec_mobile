@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserProvider extends ChangeNotifier {
   String url = "139.162.19.50:8080"; // server address
   // String url = "192.168.0.100:8080";
-  // String url = "192.168.0.105:8080";
+  // String url = "192.168.0.104:8080";
   User _user;
   String number;
   // String password;
@@ -126,6 +126,7 @@ class UserProvider extends ChangeNotifier {
     var uri = Uri.http('$url', '/getFullPrescription', queryParameters);
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
     // print(response.body);
     if (response.body != null && response.statusCode == 200) {
@@ -365,8 +366,19 @@ class UserProvider extends ChangeNotifier {
   // }
 
   Future uploadSample(File _image, int id) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse("http://$url/uploadSample?appoinmentId=$id"));
+    var request =
+        http.MultipartRequest('POST', Uri.parse("http://$url/uploadSample"));
+    request.fields.addAll(
+      {
+        'appoinmentId': '$id',
+      },
+    );
+    request.headers.addAll(
+      {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
     request.files.add(http.MultipartFile.fromBytes(
         'samples', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
@@ -388,6 +400,7 @@ class UserProvider extends ChangeNotifier {
     var uri = Uri.http('$url', '/getSamples', queryParameters);
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
     // print(response.body);
 
@@ -425,8 +438,19 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future uploadReports(File _image, int id) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse("http://$url/uploadReports?appoinmentId=$id"));
+    var request =
+        http.MultipartRequest('POST', Uri.parse("http://$url/uploadReports"));
+    request.fields.addAll(
+      {
+        'appoinmentId': '$id',
+      },
+    );
+    request.headers.addAll(
+      {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
     request.files.add(http.MultipartFile.fromBytes(
         'reports', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
@@ -449,6 +473,7 @@ class UserProvider extends ChangeNotifier {
     var uri = Uri.http('$url', '/getPreviousReports', queryParameters);
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
     // print(response.body);
 
@@ -506,8 +531,19 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future uploadImage(File _image) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse("http://$url/updateAvatar?userId=${_user.userId}"));
+    var request =
+        http.MultipartRequest('POST', Uri.parse("http://$url/updateAvatar"));
+    request.fields.addAll(
+      {
+        'userId': '${_user.userId}',
+      },
+    );
+    request.headers.addAll(
+      {
+        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
     request.files.add(http.MultipartFile.fromBytes(
         'profileImage', File(_image.path).readAsBytesSync(),
         filename: _image.path.split("/").last));
@@ -585,22 +621,24 @@ class UserProvider extends ChangeNotifier {
       'mobileNumber': '$number',
     };
     var uri = Uri.http('$url', '/changePassword', queryParameters);
+    String token = "Basic " +
+        base64.encode(utf8.encode(_user.mobileNumber + ":" + previousPassword));
     var response = await http.post(
       uri,
       headers: {
-        HttpHeaders.authorizationHeader: authToken,
+        HttpHeaders.authorizationHeader: token,
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
 
-    // print(response.body);
+    print(response.body);
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
       this.authToken = "Basic " +
           base64.encode(utf8.encode(_user.mobileNumber + ":" + newPassword));
       loginData = await SharedPreferences.getInstance();
-      loginData.setString("authToken", authToken);
+      await loginData.setString("authToken", authToken);
       return loginStatus;
     } else {
       return false;
@@ -640,6 +678,7 @@ class UserProvider extends ChangeNotifier {
     var uri = Uri.http('$url', '/myAppoinments', queryParameters);
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
     // print(response.body);
     if (response.body != null && response.statusCode == 200) {
@@ -660,6 +699,7 @@ class UserProvider extends ChangeNotifier {
     var uri = Uri.http('$url', '/getCategories');
     var response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
     List<dynamic> cats = jsonDecode(response.body);
     //print(cats);
@@ -830,6 +870,7 @@ class UserProvider extends ChangeNotifier {
       // HttpHeaders.authorizationHeader:
       //     "Basic " + base64.encode(utf8.encode(number + ":" + password)),
       HttpHeaders.authorizationHeader: authToken,
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
 
     // print(response.body);
@@ -869,7 +910,7 @@ class UserProvider extends ChangeNotifier {
     if (response.body != null &&
         response.statusCode == 200 &&
         response.body == "success") {
-      this.number = number;
+      // this.number = number;
       await _getUser().timeout(Duration(seconds: 60), onTimeout: () {
         // time has run out, do what you wanted to do
         timedOut = true;
@@ -907,9 +948,8 @@ class UserProvider extends ChangeNotifier {
       if (_auth.authorities[0].authority == "patient") {
         this.number = number;
         // this.password = password;
-        this.authToken = "Basic " +
-            base64.encode(utf8.encode(
-                _auth.principal.username + ":" + _auth.principal.password));
+        this.authToken =
+            "Basic " + base64.encode(utf8.encode(number + ":" + password));
         await _getUser().timeout(Duration(seconds: 60), onTimeout: () {
           // time has run out, do what you wanted to do
           timedOut = true;

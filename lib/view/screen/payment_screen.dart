@@ -1427,10 +1427,10 @@ class _PaymentScreenScreenState extends State<PaymentScreen> {
                                             handlePayment(paymentStatus);
                                           },
                                           cancelUrl:
-                                              "example.com/payment/cancel",
+                                              "dacicil.com/payment/cancel",
                                           successUrl:
-                                              "example.com/payment/confirm",
-                                          failUrl: "example.com/payment/fail",
+                                              "dacicil.com/payment/confirm",
+                                          failUrl: "dacicil.com/payment/fail",
                                           customerEmail: user.email,
                                           customerMobile: user.mobileNumber,
                                           customerName: user.name,
